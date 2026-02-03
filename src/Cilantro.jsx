@@ -1,181 +1,487 @@
 import React, { useState, useEffect } from 'react';
 
+// Enhanced questions with hashtags, fine print, media, and clearer wording
 const questions = [
-  // Deep & Reflective (mostly medium/hard)
-  { text: "Did you feel at peace today?", type: "deep", difficulty: 2 },
-  { text: "Are you proud of who you're becoming?", type: "deep", difficulty: 3 },
-  { text: "Did you listen to your intuition recently?", type: "deep", difficulty: 2 },
-  { text: "Is there something you need to forgive yourself for?", type: "deep", difficulty: 3 },
-  { text: "Are you being honest with yourself?", type: "deep", difficulty: 3 },
-  { text: "Did you make time for silence today?", type: "deep", difficulty: 1 },
-  { text: "Are you holding onto something you should let go?", type: "deep", difficulty: 3 },
-  { text: "Did you feel grateful for something small?", type: "deep", difficulty: 1 },
-  { text: "Are you where you thought you'd be at this point in life?", type: "deep", difficulty: 3 },
-  { text: "Did you choose kindness over being right?", type: "deep", difficulty: 2 },
-  { text: "Is your heart lighter than it was yesterday?", type: "deep", difficulty: 2 },
-  { text: "Did you do something that scared you?", type: "deep", difficulty: 2 },
+  // Deep & Reflective
+  {
+    text: "Did you feel at peace at any moment today?",
+    type: "reflection",
+    difficulty: 2,
+    hashtags: ["#peace", "#mindfulness", "#daily"],
+    finePrint: "Peace doesn't mean the absence of chaos—it's finding calm within it. Even a brief moment counts.",
+    finePrintLinks: [
+      { label: "What is inner peace?", url: "https://www.psychologytoday.com/us/basics/inner-peace" }
+    ]
+  },
+  {
+    text: "Are you proud of who you're becoming?",
+    type: "identity",
+    difficulty: 3,
+    hashtags: ["#growth", "#identity", "#self"],
+    finePrint: "This isn't about perfection—it's about direction. Are you moving toward the person you want to be?",
+  },
+  {
+    text: "Did you listen to your gut feeling about something this week?",
+    type: "reflection",
+    difficulty: 2,
+    hashtags: ["#intuition", "#trust", "#decisions"],
+    finePrint: "Intuition is your brain processing information faster than your conscious mind. It's worth listening to.",
+    finePrintLinks: [
+      { label: "The science of gut feelings", url: "https://www.scientificamerican.com/article/gut-feelings-the-second-brain-in-our-gastrointestinal-systems-excerpt/" }
+    ]
+  },
+  {
+    text: "Is there something you need to forgive yourself for?",
+    type: "healing",
+    difficulty: 3,
+    hashtags: ["#forgiveness", "#healing", "#self-compassion"],
+    finePrint: "Self-forgiveness isn't about excusing behavior—it's about releasing the weight so you can move forward.",
+  },
+  {
+    text: "Have you been fully honest with yourself this week?",
+    type: "honesty",
+    difficulty: 3,
+    hashtags: ["#honesty", "#truth", "#self-awareness"],
+  },
+  {
+    text: "Did you make time for silence today?",
+    type: "wellness",
+    difficulty: 1,
+    hashtags: ["#silence", "#peace", "#daily"],
+    finePrint: "Even 5 minutes of intentional silence can reduce cortisol levels and improve focus.",
+  },
+  {
+    text: "Are you holding onto something you know you should let go of?",
+    type: "healing",
+    difficulty: 3,
+    hashtags: ["#letting-go", "#healing", "#growth"],
+  },
+  {
+    text: "Did you notice something small to be grateful for today?",
+    type: "gratitude",
+    difficulty: 1,
+    hashtags: ["#gratitude", "#mindfulness", "#daily"],
+  },
+  {
+    text: "Are you where you thought you'd be at this point in your life?",
+    type: "reflection",
+    difficulty: 3,
+    hashtags: ["#life-path", "#expectations", "#identity"],
+    finePrint: "There's no 'right' timeline. This question is about awareness, not judgment.",
+  },
+  {
+    text: "Did you choose kindness over being right in a conversation this week?",
+    type: "relationships",
+    difficulty: 2,
+    hashtags: ["#kindness", "#relationships", "#growth"],
+  },
+  {
+    text: "Does your heart feel lighter than it did yesterday?",
+    type: "emotional",
+    difficulty: 2,
+    hashtags: ["#emotions", "#healing", "#daily"],
+  },
+  {
+    text: "Did you do something that scared you this month?",
+    type: "courage",
+    difficulty: 2,
+    hashtags: ["#courage", "#fear", "#growth"],
+    finePrint: "Courage isn't the absence of fear—it's action despite fear.",
+  },
 
-  // Light-hearted & Fun (mostly easy)
-  { text: "Did you laugh out loud today?", type: "light", difficulty: 1 },
-  { text: "Have you danced when nobody was watching?", type: "light", difficulty: 1 },
-  { text: "Did you eat something delicious?", type: "light", difficulty: 1 },
-  { text: "Have you taken a really good nap recently?", type: "light", difficulty: 1 },
-  { text: "Did you sing in the shower?", type: "light", difficulty: 1 },
-  { text: "Have you worn your favorite outfit this week?", type: "light", difficulty: 1 },
-  { text: "Did you pet a dog or cat today?", type: "light", difficulty: 1 },
-  { text: "Have you watched the clouds go by?", type: "light", difficulty: 1 },
-  { text: "Did you treat yourself to something nice?", type: "light", difficulty: 1 },
-  { text: "Have you stayed in pajamas all day (unapologetically)?", type: "light", difficulty: 1 },
-  { text: "Did you take a photo of something beautiful?", type: "light", difficulty: 1 },
-  { text: "Have you had breakfast for dinner?", type: "light", difficulty: 1 },
+  // Light-hearted & Fun
+  {
+    text: "Did you laugh out loud today?",
+    type: "joy",
+    difficulty: 1,
+    hashtags: ["#joy", "#laughter", "#daily"],
+  },
+  {
+    text: "Have you danced—even just a little—when nobody was watching this week?",
+    type: "joy",
+    difficulty: 1,
+    hashtags: ["#joy", "#freedom", "#expression"],
+  },
+  {
+    text: "Did you eat something truly delicious today?",
+    type: "pleasure",
+    difficulty: 1,
+    hashtags: ["#food", "#pleasure", "#daily"],
+  },
+  {
+    text: "Have you taken a really satisfying nap this week?",
+    type: "rest",
+    difficulty: 1,
+    hashtags: ["#rest", "#self-care", "#wellness"],
+  },
+  {
+    text: "Did you sing along to a song today?",
+    type: "joy",
+    difficulty: 1,
+    hashtags: ["#music", "#joy", "#expression"],
+  },
+  {
+    text: "Have you worn an outfit that made you feel good this week?",
+    type: "confidence",
+    difficulty: 1,
+    hashtags: ["#confidence", "#self-expression", "#style"],
+  },
+  {
+    text: "Did you pet a dog, cat, or any animal today?",
+    type: "connection",
+    difficulty: 1,
+    hashtags: ["#animals", "#comfort", "#daily"],
+  },
+  {
+    text: "Have you watched the clouds or stars recently?",
+    type: "presence",
+    difficulty: 1,
+    hashtags: ["#nature", "#presence", "#wonder"],
+  },
+  {
+    text: "Did you treat yourself to something nice this week?",
+    type: "self-care",
+    difficulty: 1,
+    hashtags: ["#self-care", "#joy", "#treats"],
+  },
+  {
+    text: "Have you had a lazy day with zero guilt this month?",
+    type: "rest",
+    difficulty: 1,
+    hashtags: ["#rest", "#guilt-free", "#self-care"],
+  },
 
-  // Social & Relationships (mixed)
-  { text: "Did you tell someone you appreciate them?", type: "social", difficulty: 2 },
-  { text: "Have you called a friend just to chat?", type: "social", difficulty: 1 },
-  { text: "Did you make someone smile today?", type: "social", difficulty: 1 },
-  { text: "Have you hugged someone you love?", type: "social", difficulty: 1 },
-  { text: "Did you really listen when someone talked to you?", type: "social", difficulty: 2 },
-  { text: "Have you reconnected with an old friend?", type: "social", difficulty: 2 },
-  { text: "Did you ask someone how they're really doing?", type: "social", difficulty: 2 },
-  { text: "Have you shared a meal with someone?", type: "social", difficulty: 1 },
-  { text: "Did you compliment a stranger?", type: "social", difficulty: 2 },
-  { text: "Have you sent a thinking-of-you text?", type: "social", difficulty: 1 },
-  { text: "Did you forgive someone today?", type: "social", difficulty: 3 },
-  { text: "Have you made plans to see someone you miss?", type: "social", difficulty: 2 },
+  // Social & Relationships
+  {
+    text: "Did you tell someone you appreciate them this week?",
+    type: "connection",
+    difficulty: 2,
+    hashtags: ["#appreciation", "#relationships", "#connection"],
+  },
+  {
+    text: "Have you called a friend just to chat (not text) this month?",
+    type: "connection",
+    difficulty: 1,
+    hashtags: ["#friendship", "#connection", "#communication"],
+  },
+  {
+    text: "Did you make someone smile today?",
+    type: "kindness",
+    difficulty: 1,
+    hashtags: ["#kindness", "#connection", "#daily"],
+  },
+  {
+    text: "Have you hugged someone you love this week?",
+    type: "intimacy",
+    difficulty: 1,
+    hashtags: ["#love", "#physical-touch", "#connection"],
+  },
+  {
+    text: "Did you really listen—without planning your response—when someone talked to you today?",
+    type: "presence",
+    difficulty: 2,
+    hashtags: ["#listening", "#presence", "#relationships"],
+    finePrint: "Active listening means being fully present, not just waiting for your turn to speak.",
+  },
+  {
+    text: "Have you reconnected with an old friend this year?",
+    type: "friendship",
+    difficulty: 2,
+    hashtags: ["#friendship", "#reconnection", "#nostalgia"],
+  },
+  {
+    text: "Did you ask someone 'how are you really doing?' this week?",
+    type: "empathy",
+    difficulty: 2,
+    hashtags: ["#empathy", "#depth", "#connection"],
+  },
+  {
+    text: "Have you shared a meal with someone you care about this week?",
+    type: "bonding",
+    difficulty: 1,
+    hashtags: ["#meals", "#bonding", "#quality-time"],
+  },
 
-  // Pop Culture & Entertainment (mostly easy)
-  { text: "Have you watched a movie that made you cry?", type: "popculture", difficulty: 1 },
-  { text: "Do you know all the words to a Taylor Swift song?", type: "popculture", difficulty: 1 },
-  { text: "Have you binged an entire series in one sitting?", type: "popculture", difficulty: 1 },
-  { text: "Did you get emotionally attached to a fictional character?", type: "popculture", difficulty: 1 },
-  { text: "Have you ever dressed up for a movie premiere?", type: "popculture", difficulty: 1 },
-  { text: "Do you have a celebrity crush?", type: "popculture", difficulty: 1 },
-  { text: "Have you cried during an animated movie?", type: "popculture", difficulty: 1 },
-  { text: "Did you rewatch a comfort show recently?", type: "popculture", difficulty: 1 },
-  { text: "Have you listened to a song on repeat for hours?", type: "popculture", difficulty: 1 },
-  { text: "Do you know more about a fictional universe than real history?", type: "popculture", difficulty: 1 },
-  { text: "Have you quoted a movie in a real conversation?", type: "popculture", difficulty: 1 },
-  { text: "Did you discover a new artist you love?", type: "popculture", difficulty: 1 },
+  // Pop Culture & Recognition (with images)
+  {
+    text: "Do you recognize this person?",
+    type: "recognition",
+    difficulty: 1,
+    hashtags: ["#pop-culture", "#recognition", "#icons"],
+    mediaUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/N.Tesla.JPG/440px-N.Tesla.JPG",
+    mediaType: "image",
+    finePrint: "Nikola Tesla (1856-1943) was a Serbian-American inventor, best known for his contributions to alternating current (AC) electricity.",
+  },
+  {
+    text: "Do you recognize this landmark?",
+    type: "recognition",
+    difficulty: 1,
+    hashtags: ["#travel", "#landmarks", "#world"],
+    mediaUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/440px-Empire_State_Building_%28aerial_view%29.jpg",
+    mediaType: "image",
+    finePrint: "The Empire State Building in New York City, completed in 1931, was the world's tallest building for nearly 40 years.",
+  },
+  {
+    text: "Have you seen this movie?",
+    type: "entertainment",
+    difficulty: 1,
+    hashtags: ["#movies", "#classics", "#entertainment"],
+    mediaUrl: "https://upload.wikimedia.org/wikipedia/en/8/81/ShsawshanksRedemption.jpg",
+    mediaType: "image",
+    finePrint: "The Shawshank Redemption (1994), based on a Stephen King novella, is consistently rated as one of the greatest films ever made.",
+  },
+  {
+    text: "Do you know all the words to at least one Taylor Swift song?",
+    type: "entertainment",
+    difficulty: 1,
+    hashtags: ["#music", "#taylor-swift", "#pop-culture"],
+  },
+  {
+    text: "Have you cried during an animated movie?",
+    type: "emotional",
+    difficulty: 1,
+    hashtags: ["#movies", "#emotions", "#animation"],
+  },
+  {
+    text: "Did you rewatch a comfort show this month?",
+    type: "comfort",
+    difficulty: 1,
+    hashtags: ["#tv-shows", "#comfort", "#nostalgia"],
+  },
 
-  // Trivia & Random (mixed)
-  { text: "Can you name all the planets in order?", type: "trivia", difficulty: 2 },
-  { text: "Do you know your blood type?", type: "trivia", difficulty: 1 },
-  { text: "Have you ever seen a shooting star?", type: "trivia", difficulty: 1 },
-  { text: "Can you fold a paper crane?", type: "trivia", difficulty: 2 },
-  { text: "Do you know how to read a map without GPS?", type: "trivia", difficulty: 2 },
-  { text: "Have you ever grown something from a seed?", type: "trivia", difficulty: 1 },
-  { text: "Can you name a constellation in the night sky?", type: "trivia", difficulty: 2 },
-  { text: "Do you remember your childhood phone number?", type: "trivia", difficulty: 2 },
-  { text: "Have you ever been to a different continent?", type: "trivia", difficulty: 1 },
-  { text: "Can you cook a meal without a recipe?", type: "trivia", difficulty: 1 },
-  { text: "Do you know the capital of Australia?", type: "trivia", difficulty: 2 },
-  { text: "Have you ever written a letter by hand?", type: "trivia", difficulty: 1 },
+  // Knowledge & Skills
+  {
+    text: "Can you name all the planets in our solar system in order?",
+    type: "knowledge",
+    difficulty: 2,
+    hashtags: ["#space", "#knowledge", "#science"],
+    finePrint: "Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune. (Pluto was reclassified as a dwarf planet in 2006.)",
+  },
+  {
+    text: "Do you know your blood type?",
+    type: "self-knowledge",
+    difficulty: 1,
+    hashtags: ["#health", "#self-knowledge", "#practical"],
+  },
+  {
+    text: "Have you ever seen a shooting star?",
+    type: "experience",
+    difficulty: 1,
+    hashtags: ["#nature", "#wonder", "#memories"],
+  },
+  {
+    text: "Can you cook a full meal without looking at a recipe?",
+    type: "skills",
+    difficulty: 1,
+    hashtags: ["#cooking", "#skills", "#independence"],
+  },
+  {
+    text: "Do you know how to read a physical map without GPS?",
+    type: "skills",
+    difficulty: 2,
+    hashtags: ["#navigation", "#skills", "#practical"],
+  },
+  {
+    text: "Have you ever grown a plant from a seed?",
+    type: "experience",
+    difficulty: 1,
+    hashtags: ["#gardening", "#patience", "#nature"],
+  },
+  {
+    text: "Can you identify at least one constellation in the night sky?",
+    type: "knowledge",
+    difficulty: 2,
+    hashtags: ["#astronomy", "#nature", "#knowledge"],
+  },
 
-  // Daily Life & Wellness (mostly easy)
-  { text: "Did you drink enough water today?", type: "wellness", difficulty: 1 },
-  { text: "Have you stretched your body?", type: "wellness", difficulty: 1 },
-  { text: "Did you get some fresh air?", type: "wellness", difficulty: 1 },
-  { text: "Have you taken a deep breath on purpose?", type: "wellness", difficulty: 1 },
-  { text: "Did you put your phone down for an hour?", type: "wellness", difficulty: 2 },
-  { text: "Have you done something just for yourself?", type: "wellness", difficulty: 2 },
-  { text: "Did you go to bed at a reasonable time?", type: "wellness", difficulty: 2 },
-  { text: "Have you moved your body today?", type: "wellness", difficulty: 1 },
-  { text: "Did you eat a vegetable?", type: "wellness", difficulty: 1 },
-  { text: "Have you looked up from your screen at the sky?", type: "wellness", difficulty: 1 },
+  // Wellness & Daily Life
+  {
+    text: "Did you drink at least 8 glasses of water today?",
+    type: "wellness",
+    difficulty: 1,
+    hashtags: ["#hydration", "#health", "#daily"],
+  },
+  {
+    text: "Have you stretched your body today?",
+    type: "wellness",
+    difficulty: 1,
+    hashtags: ["#movement", "#wellness", "#daily"],
+  },
+  {
+    text: "Did you get at least 15 minutes of fresh air today?",
+    type: "wellness",
+    difficulty: 1,
+    hashtags: ["#nature", "#wellness", "#daily"],
+  },
+  {
+    text: "Have you taken a deep breath on purpose today?",
+    type: "mindfulness",
+    difficulty: 1,
+    hashtags: ["#breathing", "#mindfulness", "#daily"],
+    finePrint: "Intentional deep breathing activates your parasympathetic nervous system, reducing stress.",
+  },
+  {
+    text: "Did you put your phone down for at least an hour today (while awake)?",
+    type: "digital-wellness",
+    difficulty: 2,
+    hashtags: ["#digital-detox", "#presence", "#wellness"],
+  },
+  {
+    text: "Did you go to bed at your intended time last night?",
+    type: "habits",
+    difficulty: 2,
+    hashtags: ["#sleep", "#habits", "#wellness"],
+  },
+  {
+    text: "Have you eaten a fruit or vegetable today?",
+    type: "nutrition",
+    difficulty: 1,
+    hashtags: ["#nutrition", "#health", "#daily"],
+  },
+  {
+    text: "Did you move your body for at least 20 minutes today?",
+    type: "movement",
+    difficulty: 1,
+    hashtags: ["#exercise", "#movement", "#daily"],
+  },
 ];
 
-// Soft, calming color palette
+// Question types - now open-ended, just for color coding
 const typeColors = {
-  deep: '#8B9DC3',
-  light: '#B8D4E3',
-  social: '#F2B5D4',
-  popculture: '#C9B1FF',
-  trivia: '#98D8C8',
-  wellness: '#F7DC6F'
+  reflection: '#8B9DC3',
+  identity: '#9F7AEA',
+  healing: '#F2B5D4',
+  honesty: '#718096',
+  wellness: '#68D391',
+  gratitude: '#F6E05E',
+  emotional: '#FC8181',
+  courage: '#F6AD55',
+  joy: '#FBD38D',
+  pleasure: '#FED7E2',
+  rest: '#C4B5FD',
+  confidence: '#FBBF24',
+  connection: '#F9A8D4',
+  presence: '#A7F3D0',
+  kindness: '#FCA5A5',
+  intimacy: '#DDD6FE',
+  friendship: '#93C5FD',
+  empathy: '#A5B4FC',
+  bonding: '#FDBA74',
+  recognition: '#C9B1FF',
+  entertainment: '#A78BFA',
+  comfort: '#D8B4FE',
+  knowledge: '#98D8C8',
+  'self-knowledge': '#6EE7B7',
+  experience: '#67E8F9',
+  skills: '#5EEAD4',
+  mindfulness: '#BEF264',
+  'digital-wellness': '#A3E635',
+  habits: '#84CC16',
+  nutrition: '#4ADE80',
+  movement: '#34D399',
+  relationships: '#F472B6',
+  'self-care': '#E879F9',
+  default: '#CBD5E0'
 };
 
-// Gardens - themed question collections
+// Gardens - themed question collections with more visual data
 const gardens = [
   {
     id: 'shadows',
     name: 'Shadows',
-    description: 'The parts of yourself you avoid',
+    description: 'The parts of yourself you avoid looking at',
     icon: '🌑',
     color: '#4A5568',
+    gradient: 'from-gray-700 to-gray-900',
     seedCost: 300,
     tier: 3,
+    size: 'large', // for masonry layout
+    category: 'deep-dive',
+    popularity: 89,
     questions: [
-      { text: "Are you running from something you should face?", difficulty: 3 },
-      { text: "Do you judge others for traits you see in yourself?", difficulty: 3 },
+      { text: "Are you running from something you know you should face?", difficulty: 3 },
+      { text: "Do you judge others for traits you secretly see in yourself?", difficulty: 3 },
       { text: "Have you been lying to yourself about something important?", difficulty: 3 },
-      { text: "Is there a part of yourself you're ashamed of?", difficulty: 3 },
-      { text: "Are you the villain in someone else's story?", difficulty: 3 },
-      { text: "Do you self-sabotage when things are going well?", difficulty: 3 },
-      { text: "Are you addicted to something you won't admit?", difficulty: 3 },
+      { text: "Is there a part of yourself you're genuinely ashamed of?", difficulty: 3 },
+      { text: "Could you be the villain in someone else's story?", difficulty: 3 },
+      { text: "Do you self-sabotage when things start going well?", difficulty: 3 },
+      { text: "Is there something you're addicted to that you won't admit?", difficulty: 3 },
       { text: "Have you hurt someone and never apologized?", difficulty: 3 },
-      { text: "Do you secretly enjoy other people's failures?", difficulty: 3 },
+      { text: "Do you sometimes feel satisfaction when others fail?", difficulty: 3 },
       { text: "Are you pretending to be someone you're not?", difficulty: 3 }
     ]
   },
   {
     id: 'mirrors',
     name: 'Mirrors',
-    description: 'Honest reflections on who you are',
+    description: 'Honest reflections on who you really are',
     icon: '🪞',
     color: '#718096',
+    gradient: 'from-gray-500 to-gray-700',
     seedCost: 200,
     tier: 2,
+    size: 'medium',
+    category: 'self-discovery',
+    popularity: 156,
     questions: [
       { text: "Would you want to be friends with yourself?", difficulty: 2 },
-      { text: "Do people know the real you?", difficulty: 2 },
+      { text: "Do the people closest to you know the real you?", difficulty: 2 },
       { text: "Are you living your life or someone else's expectations?", difficulty: 3 },
-      { text: "If you met yourself, would you trust you?", difficulty: 2 },
-      { text: "Are your values actually reflected in your actions?", difficulty: 3 },
-      { text: "Do you like who you become when you're alone?", difficulty: 2 },
-      { text: "Are you the same person in private as in public?", difficulty: 2 },
-      { text: "Would your younger self be disappointed in you?", difficulty: 3 },
-      { text: "Are you kind when no one is watching?", difficulty: 2 },
-      { text: "Do you take more than you give?", difficulty: 2 }
+      { text: "If you met yourself as a stranger, would you trust you?", difficulty: 2 },
+      { text: "Are your stated values actually reflected in your daily actions?", difficulty: 3 },
+      { text: "Do you like who you become when you're completely alone?", difficulty: 2 },
+      { text: "Are you the same person in private as you are in public?", difficulty: 2 },
+      { text: "Would your 10-year-old self be disappointed in you?", difficulty: 3 },
+      { text: "Are you genuinely kind when no one is watching?", difficulty: 2 },
+      { text: "In your relationships, do you take more than you give?", difficulty: 2 }
     ]
   },
   {
     id: 'crossroads',
     name: 'Crossroads',
-    description: 'Life decisions and regrets',
+    description: 'Life decisions, paths not taken, and regrets',
     icon: '⚖️',
     color: '#9F7AEA',
+    gradient: 'from-purple-500 to-purple-700',
     seedCost: 250,
     tier: 2,
+    size: 'medium',
+    category: 'life-decisions',
+    popularity: 124,
     questions: [
-      { text: "Is there a decision you've been avoiding?", difficulty: 2 },
-      { text: "Are you staying somewhere out of fear, not love?", difficulty: 3 },
-      { text: "Have you given up on a dream too easily?", difficulty: 3 },
-      { text: "Are you in the right career for your soul?", difficulty: 3 },
-      { text: "Is there someone you should let go of?", difficulty: 3 },
+      { text: "Is there a major decision you've been avoiding?", difficulty: 2 },
+      { text: "Are you staying somewhere out of fear rather than love?", difficulty: 3 },
+      { text: "Have you given up on an important dream too easily?", difficulty: 3 },
+      { text: "Is your career fulfilling your soul or just paying bills?", difficulty: 3 },
+      { text: "Is there someone in your life you should let go of?", difficulty: 3 },
       { text: "Are you choosing comfort over growth?", difficulty: 2 },
-      { text: "Would you make the same choices if you could start over?", difficulty: 3 },
-      { text: "Are you waiting for permission to live your life?", difficulty: 2 },
-      { text: "Is fear making your decisions for you?", difficulty: 2 },
+      { text: "If you could start over, would you make the same major choices?", difficulty: 3 },
+      { text: "Are you waiting for permission to live your own life?", difficulty: 2 },
+      { text: "Is fear the one making your important decisions?", difficulty: 2 },
       { text: "Are you settling for less than you deserve?", difficulty: 2 }
     ]
   },
   {
     id: 'roots',
     name: 'Roots',
-    description: 'Family, origin, and belonging',
+    description: 'Family, origin, and where you belong',
     icon: '🌳',
     color: '#48BB78',
+    gradient: 'from-green-500 to-green-700',
     seedCost: 200,
     tier: 2,
+    size: 'small',
+    category: 'origins',
+    popularity: 98,
     questions: [
-      { text: "Have you forgiven your parents for their mistakes?", difficulty: 3 },
-      { text: "Are you repeating patterns from your childhood?", difficulty: 3 },
-      { text: "Do you feel like you belong somewhere?", difficulty: 2 },
-      { text: "Are there family wounds you haven't healed?", difficulty: 3 },
-      { text: "Do you carry guilt that isn't yours?", difficulty: 3 },
-      { text: "Have you become what your family expected?", difficulty: 2 },
+      { text: "Have you fully forgiven your parents for their mistakes?", difficulty: 3 },
+      { text: "Are you repeating patterns you learned in childhood?", difficulty: 3 },
+      { text: "Do you feel like you truly belong somewhere?", difficulty: 2 },
+      { text: "Are there family wounds you haven't begun to heal?", difficulty: 3 },
+      { text: "Do you carry guilt or shame that isn't yours to carry?", difficulty: 3 },
+      { text: "Have you become what your family expected of you?", difficulty: 2 },
       { text: "Is there a conversation with family you need to have?", difficulty: 2 },
-      { text: "Do you know where you come from?", difficulty: 1 },
+      { text: "Do you know and understand where you come from?", difficulty: 1 },
       { text: "Are you running toward something or away from your past?", difficulty: 3 },
       { text: "Have you made peace with your upbringing?", difficulty: 3 }
     ]
@@ -183,24 +489,88 @@ const gardens = [
   {
     id: 'depths',
     name: 'Depths',
-    description: 'Mortality, meaning, and existence',
+    description: 'Mortality, meaning, and big questions',
     icon: '🌊',
     color: '#4299E1',
+    gradient: 'from-blue-500 to-blue-700',
     seedCost: 400,
     tier: 3,
+    size: 'large',
+    category: 'existential',
+    popularity: 201,
     questions: [
-      { text: "Are you afraid of dying?", difficulty: 3 },
+      { text: "Are you genuinely afraid of dying?", difficulty: 3 },
       { text: "Do you know what you're living for?", difficulty: 3 },
-      { text: "Would your life have meaning if no one remembered you?", difficulty: 3 },
-      { text: "Have you accepted that you won't live forever?", difficulty: 3 },
-      { text: "Are you at peace with uncertainty?", difficulty: 3 },
-      { text: "Do you believe you matter in the grand scheme?", difficulty: 3 },
+      { text: "Would your life have meaning if no one remembered you after?", difficulty: 3 },
+      { text: "Have you truly accepted that you won't live forever?", difficulty: 3 },
+      { text: "Are you at peace with not having all the answers?", difficulty: 3 },
+      { text: "Do you believe you matter in the grand scheme of things?", difficulty: 3 },
       { text: "Have you found something worth suffering for?", difficulty: 3 },
-      { text: "Are you running out of time for what matters most?", difficulty: 3 },
-      { text: "Do you know what you'd regret on your deathbed?", difficulty: 3 },
-      { text: "Have you truly lived, or just existed?", difficulty: 3 }
+      { text: "Do you feel like you're running out of time for what matters most?", difficulty: 3 },
+      { text: "Do you know what you'd regret most on your deathbed?", difficulty: 3 },
+      { text: "Have you truly lived, or have you mostly just existed?", difficulty: 3 }
+    ]
+  },
+  {
+    id: 'sparks',
+    name: 'Sparks',
+    description: 'Joy, passion, and what lights you up',
+    icon: '✨',
+    color: '#ECC94B',
+    gradient: 'from-yellow-400 to-orange-500',
+    seedCost: 150,
+    tier: 1,
+    size: 'small',
+    category: 'joy',
+    popularity: 312,
+    questions: [
+      { text: "Do you remember the last time you felt pure joy?", difficulty: 1 },
+      { text: "Is there something that makes you lose track of time?", difficulty: 2 },
+      { text: "Have you laughed until you cried recently?", difficulty: 1 },
+      { text: "Do you still get excited about things?", difficulty: 2 },
+      { text: "Is there a passion you've abandoned that you miss?", difficulty: 2 },
+      { text: "When did you last do something just for fun?", difficulty: 1 },
+      { text: "Do you let yourself be silly sometimes?", difficulty: 1 },
+      { text: "Is there something you've always wanted to try?", difficulty: 2 },
+      { text: "Do you celebrate your small wins?", difficulty: 2 },
+      { text: "Have you felt truly alive this week?", difficulty: 2 }
+    ]
+  },
+  {
+    id: 'bonds',
+    name: 'Bonds',
+    description: 'Love, friendship, and human connection',
+    icon: '💞',
+    color: '#ED64A6',
+    gradient: 'from-pink-400 to-pink-600',
+    seedCost: 200,
+    tier: 2,
+    size: 'medium',
+    category: 'relationships',
+    popularity: 267,
+    questions: [
+      { text: "Do you have someone you can call at 3am?", difficulty: 2 },
+      { text: "Have you told someone you love them recently?", difficulty: 1 },
+      { text: "Is there a relationship you've neglected?", difficulty: 2 },
+      { text: "Do you let people truly know you?", difficulty: 3 },
+      { text: "Have you forgiven someone who hurt you?", difficulty: 3 },
+      { text: "Are you a good friend to others?", difficulty: 2 },
+      { text: "Do you have healthy boundaries in your relationships?", difficulty: 2 },
+      { text: "Is there someone you owe an apology?", difficulty: 2 },
+      { text: "Have you been fully present with someone you love recently?", difficulty: 2 },
+      { text: "Do you accept love as easily as you give it?", difficulty: 3 }
     ]
   }
+];
+
+// Garden categories for the discover page
+const gardenCategories = [
+  { id: 'popular', name: 'Most Popular', icon: '🔥' },
+  { id: 'new', name: 'New Gardens', icon: '🌱' },
+  { id: 'deep-dive', name: 'Deep Dives', icon: '🌊' },
+  { id: 'self-discovery', name: 'Self Discovery', icon: '🔮' },
+  { id: 'relationships', name: 'Relationships', icon: '💕' },
+  { id: 'joy', name: 'Joy & Light', icon: '✨' },
 ];
 
 // Format timestamp to readable format
@@ -220,12 +590,11 @@ const formatTime = (isoString) => {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 };
 
-// Generate consistent Daily 30 questions based on date (same for all users)
+// Generate consistent Daily 30 questions based on date
 const getDailyQuestions = () => {
   const today = new Date();
   const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
 
-  // Simple seeded shuffle
   const shuffled = [...questions];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor((Math.sin(seed + i) * 10000) % (i + 1));
@@ -236,6 +605,40 @@ const getDailyQuestions = () => {
   return shuffled.slice(0, 30);
 };
 
+// CSV Export helper
+const exportToCSV = (answers) => {
+  const headers = ['Question', 'Answer', 'Type', 'Date', 'Time'];
+  const rows = answers.map(a => [
+    `"${a.text.replace(/"/g, '""')}"`,
+    a.answer,
+    a.type || 'general',
+    new Date(a.timestamp).toLocaleDateString(),
+    new Date(a.timestamp).toLocaleTimeString()
+  ]);
+
+  const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `cilantro-reflections-${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+};
+
+// Get stats helper
+const getStats = (answers) => {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+  return {
+    allTime: answers.length,
+    today: answers.filter(a => new Date(a.timestamp) >= today).length,
+    thisWeek: answers.filter(a => new Date(a.timestamp) >= weekAgo).length
+  };
+};
+
 export default function Cilantro() {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [answers, setAnswers] = useState([]);
@@ -244,34 +647,41 @@ export default function Cilantro() {
   const [skippedQuestions, setSkippedQuestions] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showFinePrint, setShowFinePrint] = useState(false);
 
   // Navigation state
-  const [currentView, setCurrentView] = useState('home'); // 'home', 'gardens', 'garden-detail', 'daily30'
+  const [currentView, setCurrentView] = useState('landing'); // 'landing', 'home', 'gardens', 'garden-detail', 'daily30'
   const [selectedGarden, setSelectedGarden] = useState(null);
   const [gardenQuestionIndex, setGardenQuestionIndex] = useState(0);
+  const [gardenCategory, setGardenCategory] = useState('popular');
 
   // Daily 30 tracking
   const [dailyQuestions] = useState(getDailyQuestions());
   const [dailyQuestionIndex, setDailyQuestionIndex] = useState(0);
   const [dailyAnswered, setDailyAnswered] = useState(0);
-  const [dailyStreak, setDailyStreak] = useState(3); // Demo streak
+  const [dailyStreak, setDailyStreak] = useState(3);
+  const [showDailyReading, setShowDailyReading] = useState(false);
 
   // Seeds economy
-  const [seeds, setSeeds] = useState(50); // Start with some seeds for demo
-  const [gardenUnlocks, setGardenUnlocks] = useState({}); // { gardenId: true }
-  const [seedAnimation, setSeedAnimation] = useState(null); // For showing "+X seeds" feedback
+  const [seeds, setSeeds] = useState(50);
+  const [gardenUnlocks, setGardenUnlocks] = useState({});
+  const [seedAnimation, setSeedAnimation] = useState(null);
+
+  // Sidebar state
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [sidebarTab, setSidebarTab] = useState('settings'); // 'settings', 'shop'
 
   // Auth state
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Set to true for testing
-  const [authView, setAuthView] = useState('welcome'); // 'welcome', 'login', 'signup'
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authView, setAuthView] = useState('welcome');
   const [firstName, setFirstName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState({ firstName: 'Joey', username: 'joey_reflects' }); // Default user for testing
+  const [user, setUser] = useState(null);
 
-  // Earn seeds based on question difficulty
+  // Earn seeds
   const earnSeeds = (difficulty) => {
-    const earned = difficulty || 1; // 1 for easy, 2 for medium, 3 for hard
+    const earned = difficulty || 1;
     setSeeds(prev => prev + earned);
     setSeedAnimation(`+${earned}`);
     setTimeout(() => setSeedAnimation(null), 1500);
@@ -290,16 +700,16 @@ export default function Cilantro() {
     return available[randomIndex];
   };
 
-  // Initialize with first question
   useEffect(() => {
-    setCurrentQuestion(getNewQuestion());
-  }, []);
+    if (currentView === 'home' && !currentQuestion) {
+      setCurrentQuestion(getNewQuestion());
+    }
+  }, [currentView]);
 
   const handleAnswer = (answer) => {
     setIsTransitioning(true);
-
-    // Earn seeds based on difficulty
     earnSeeds(currentQuestion.difficulty);
+    setShowFinePrint(false);
 
     setAnswers(prev => [...prev, {
       ...currentQuestion,
@@ -315,6 +725,7 @@ export default function Cilantro() {
 
   const handleSkip = () => {
     setIsTransitioning(true);
+    setShowFinePrint(false);
     setSkippedQuestions(prev => [...prev, currentQuestion]);
     setTimeout(() => {
       setCurrentQuestion(getNewQuestion());
@@ -323,9 +734,7 @@ export default function Cilantro() {
   };
 
   // Garden handlers
-  const isGardenUnlocked = (gardenId) => {
-    return gardenUnlocks[gardenId] === true;
-  };
+  const isGardenUnlocked = (gardenId) => gardenUnlocks[gardenId] === true;
 
   const unlockGarden = (garden) => {
     if (seeds < garden.seedCost) {
@@ -333,33 +742,14 @@ export default function Cilantro() {
       setTimeout(() => setSeedAnimation(null), 1500);
       return;
     }
-
     setSeeds(prev => prev - garden.seedCost);
     setGardenUnlocks(prev => ({ ...prev, [garden.id]: true }));
     setSeedAnimation(`-${garden.seedCost} 🔓`);
     setTimeout(() => setSeedAnimation(null), 1500);
   };
 
-  const peekGarden = (garden) => {
-    const PEEK_COST = 10;
-    if (seeds < PEEK_COST) {
-      setSeedAnimation('Not enough seeds!');
-      setTimeout(() => setSeedAnimation(null), 1500);
-      return;
-    }
-
-    setSeeds(prev => prev - PEEK_COST);
-    setSeedAnimation(`-${PEEK_COST}`);
-    setTimeout(() => setSeedAnimation(null), 1500);
-
-    // Show garden questions briefly (would need modal, for now just unlock temporarily)
-    alert(`Peek at "${garden.name}":\n\n${garden.questions.slice(0, 3).map(q => `• ${q.text}`).join('\n')}\n\n...and ${garden.questions.length - 3} more questions`);
-  };
-
   const openGarden = (garden) => {
-    if (!isGardenUnlocked(garden.id)) {
-      return; // Can't open locked garden
-    }
+    if (!isGardenUnlocked(garden.id)) return;
     setSelectedGarden(garden);
     setGardenQuestionIndex(0);
     setCurrentView('garden-detail');
@@ -368,8 +758,6 @@ export default function Cilantro() {
   const handleGardenAnswer = (answer) => {
     setIsTransitioning(true);
     const currentQ = selectedGarden.questions[gardenQuestionIndex];
-
-    // Earn seeds based on difficulty
     earnSeeds(currentQ.difficulty);
 
     setAnswers(prev => [...prev, {
@@ -386,13 +774,11 @@ export default function Cilantro() {
       if (gardenQuestionIndex < selectedGarden.questions.length - 1) {
         setGardenQuestionIndex(prev => prev + 1);
       } else {
-        // Garden completed bonus: sum of difficulties × 2
         const totalDifficulty = selectedGarden.questions.reduce((sum, q) => sum + q.difficulty, 0);
         const bonus = totalDifficulty * 2;
         setSeeds(prev => prev + bonus);
         setSeedAnimation(`+${bonus} bonus!`);
         setTimeout(() => setSeedAnimation(null), 2000);
-
         setCurrentView('gardens');
         setSelectedGarden(null);
       }
@@ -422,14 +808,12 @@ export default function Cilantro() {
   const handleDaily30Answer = (answer) => {
     setIsTransitioning(true);
     const currentQ = dailyQuestions[dailyQuestionIndex];
-
-    // Earn seeds based on difficulty
     earnSeeds(currentQ.difficulty);
+    setShowFinePrint(false);
 
     setAnswers(prev => [...prev, {
-      text: currentQ.text,
+      ...currentQ,
       type: 'daily30',
-      difficulty: currentQ.difficulty,
       answer,
       timestamp: new Date().toISOString()
     }]);
@@ -440,11 +824,11 @@ export default function Cilantro() {
       if (dailyQuestionIndex < 29) {
         setDailyQuestionIndex(prev => prev + 1);
       } else {
-        // Daily 30 completed: +30 bonus, × streak multiplier
         const streakBonus = 30 + (dailyStreak * 5);
         setSeeds(prev => prev + streakBonus);
-        setSeedAnimation(`+${streakBonus} Daily 30 bonus!`);
+        setSeedAnimation(`+${streakBonus} Daily 30 complete!`);
         setTimeout(() => setSeedAnimation(null), 2500);
+        setShowDailyReading(true);
         setCurrentView('home');
       }
       setIsTransitioning(false);
@@ -453,6 +837,7 @@ export default function Cilantro() {
 
   const skipDaily30Question = () => {
     setIsTransitioning(true);
+    setShowFinePrint(false);
     setTimeout(() => {
       if (dailyQuestionIndex < 29) {
         setDailyQuestionIndex(prev => prev + 1);
@@ -465,15 +850,12 @@ export default function Cilantro() {
 
   const changeAnswer = (index) => {
     const CHANGE_COST = 5;
-
-    // Check if user has enough seeds
     if (seeds < CHANGE_COST) {
       setSeedAnimation('Not enough seeds!');
       setTimeout(() => setSeedAnimation(null), 1500);
       return;
     }
 
-    // Deduct seeds
     setSeeds(prev => prev - CHANGE_COST);
     setSeedAnimation(`-${CHANGE_COST}`);
     setTimeout(() => setSeedAnimation(null), 1500);
@@ -481,10 +863,7 @@ export default function Cilantro() {
     setAnswers(prev => prev.map((a, i) => {
       if (i === index) {
         const newAnswer = a.answer === 'yes' ? 'no' : 'yes';
-        const historyEntry = {
-          answer: a.answer,
-          timestamp: a.updatedAt || a.timestamp
-        };
+        const historyEntry = { answer: a.answer, timestamp: a.updatedAt || a.timestamp };
         return {
           ...a,
           answer: newAnswer,
@@ -496,59 +875,195 @@ export default function Cilantro() {
     }));
   };
 
-  // Auth handlers (to be connected to backend later)
+  // Auth handlers
   const handleLogin = (e) => {
     e.preventDefault();
-    // TODO: Connect to actual auth
-    setUser({ firstName: username.split('_')[0], username });
+    setUser({ firstName: username.split('_')[0] || username, username });
     setIsLoggedIn(true);
+    setCurrentView('home');
+    setCurrentQuestion(getNewQuestion());
   };
 
   const handleSignup = (e) => {
     e.preventDefault();
-    // TODO: Connect to actual auth
     setUser({ firstName, username });
     setIsLoggedIn(true);
+    setCurrentView('home');
+    setCurrentQuestion(getNewQuestion());
   };
 
   const handleLogout = () => {
     setUser(null);
     setIsLoggedIn(false);
     setAuthView('welcome');
+    setCurrentView('landing');
     setFirstName('');
     setUsername('');
     setPassword('');
+    setShowSidebar(false);
   };
 
-  // Auth Views
-  if (!isLoggedIn) {
-    // Welcome screen
+  // ============ LANDING PAGE ============
+  if (currentView === 'landing') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-stone-50 via-amber-50 to-stone-100">
+        {/* Hero Section */}
+        <div className="min-h-screen flex flex-col">
+          {/* Nav */}
+          <nav className="p-6 flex justify-between items-center max-w-4xl mx-auto w-full">
+            <h1 className="text-2xl font-light tracking-wide text-stone-500">cilantro</h1>
+            <button
+              onClick={() => setCurrentView('auth')}
+              className="text-sm text-stone-500 hover:text-stone-700 transition-colors"
+            >
+              sign in
+            </button>
+          </nav>
+
+          {/* Hero */}
+          <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
+            <div className="max-w-2xl">
+              {/* Decorative dots */}
+              <div className="flex justify-center gap-2 mb-8">
+                {['#8B9DC3', '#B8D4E3', '#F2B5D4', '#C9B1FF', '#98D8C8', '#F7DC6F'].map((color, i) => (
+                  <div
+                    key={i}
+                    className="w-3 h-3 rounded-full opacity-60 animate-pulse"
+                    style={{ backgroundColor: color, animationDelay: `${i * 0.2}s` }}
+                  />
+                ))}
+              </div>
+
+              <h2 className="text-4xl md:text-6xl font-light text-stone-700 mb-6 leading-tight">
+                yes or no.<br />
+                <span className="text-stone-400">find yourself.</span>
+              </h2>
+
+              <p className="text-lg text-stone-500 font-light mb-12 max-w-md mx-auto leading-relaxed">
+                Simple questions. Honest answers. A gentle journey of self-discovery, one reflection at a time.
+              </p>
+
+              <button
+                onClick={() => setCurrentView('auth')}
+                className="px-12 py-4 bg-stone-700 hover:bg-stone-800 text-white rounded-full font-light text-lg transition-all shadow-lg hover:shadow-xl"
+              >
+                begin your journey
+              </button>
+
+              <p className="mt-8 text-sm text-stone-400 font-light">
+                free forever · no ads · your data stays yours
+              </p>
+            </div>
+          </div>
+
+          {/* Scroll indicator */}
+          <div className="pb-8 flex justify-center">
+            <div className="animate-bounce text-stone-300">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Features Section */}
+        <div className="py-24 px-6 bg-white">
+          <div className="max-w-4xl mx-auto">
+            <h3 className="text-2xl font-light text-stone-600 text-center mb-16">how it works</h3>
+
+            <div className="grid md:grid-cols-3 gap-12">
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+                  <span className="text-2xl">💭</span>
+                </div>
+                <h4 className="font-medium text-stone-700 mb-2">reflect daily</h4>
+                <p className="text-sm text-stone-500 font-light">
+                  Answer simple yes/no questions that make you think about who you are and who you're becoming.
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                  <span className="text-2xl">🌱</span>
+                </div>
+                <h4 className="font-medium text-stone-700 mb-2">grow seeds</h4>
+                <p className="text-sm text-stone-500 font-light">
+                  Earn seeds with every answer. Use them to unlock themed gardens of deeper questions.
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+                  <span className="text-2xl">🔮</span>
+                </div>
+                <h4 className="font-medium text-stone-700 mb-2">discover yourself</h4>
+                <p className="text-sm text-stone-500 font-light">
+                  Track your reflections over time. Notice patterns. Embrace growth.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Substack / Learn More Section */}
+        <div className="py-24 px-6 bg-gradient-to-b from-stone-50 to-stone-100">
+          <div className="max-w-md mx-auto text-center">
+            <h3 className="text-xl font-light text-stone-600 mb-4">want to learn more?</h3>
+            <p className="text-stone-500 font-light mb-8">
+              Follow our journey as we build Cilantro. Thoughts on reflection, self-discovery, and building mindful technology.
+            </p>
+            <a
+              href="https://substack.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-8 py-3 border border-stone-300 hover:border-stone-400 text-stone-600 rounded-full font-light transition-all"
+            >
+              read our substack →
+            </a>
+          </div>
+        </div>
+
+        {/* Footer CTA */}
+        <div className="py-16 px-6 bg-stone-800 text-center">
+          <h3 className="text-2xl font-light text-white mb-4">ready to reflect?</h3>
+          <button
+            onClick={() => setCurrentView('auth')}
+            className="px-10 py-3 bg-white hover:bg-stone-100 text-stone-800 rounded-full font-light transition-all"
+          >
+            get started free
+          </button>
+          <p className="mt-6 text-stone-500 text-sm font-light">
+            © 2026 Cilantro · made with intention
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ============ AUTH VIEWS ============
+  if (currentView === 'auth' || !isLoggedIn) {
     if (authView === 'welcome') {
       return (
         <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col items-center justify-center px-6">
           <div className="max-w-sm w-full text-center">
-            {/* Logo/Brand */}
+            <button
+              onClick={() => setCurrentView('landing')}
+              className="absolute top-6 left-6 text-stone-400 hover:text-stone-600 transition-colors text-sm"
+            >
+              ← back
+            </button>
+
             <div className="mb-12">
-              <h1 className="text-5xl font-light tracking-wide text-stone-600 mb-3">
-                cilantro
-              </h1>
-              <p className="text-stone-400 font-light">
-                yes or no. find yourself.
-              </p>
+              <h1 className="text-5xl font-light tracking-wide text-stone-600 mb-3">cilantro</h1>
+              <p className="text-stone-400 font-light">yes or no. find yourself.</p>
             </div>
 
-            {/* Decorative dots */}
             <div className="flex justify-center gap-2 mb-12">
-              {Object.values(typeColors).map((color, i) => (
-                <div
-                  key={i}
-                  className="w-2 h-2 rounded-full opacity-40"
-                  style={{ backgroundColor: color }}
-                />
+              {Object.values(typeColors).slice(0, 6).map((color, i) => (
+                <div key={i} className="w-2 h-2 rounded-full opacity-40" style={{ backgroundColor: color }} />
               ))}
             </div>
 
-            {/* Auth buttons */}
             <div className="space-y-3">
               <button
                 onClick={() => setAuthView('signup')}
@@ -564,138 +1079,96 @@ export default function Cilantro() {
               </button>
             </div>
 
-            <p className="mt-8 text-xs text-stone-300 font-light">
-              reflect. grow. repeat.
-            </p>
+            <p className="mt-8 text-xs text-stone-300 font-light">reflect. grow. repeat.</p>
           </div>
         </div>
       );
     }
 
-    // Login screen
     if (authView === 'login') {
       return (
         <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col px-6 pt-12">
           <div className="max-w-sm w-full mx-auto">
-            {/* Back button */}
-            <button
-              onClick={() => setAuthView('welcome')}
-              className="text-stone-400 hover:text-stone-600 transition-colors text-sm mb-8"
-            >
+            <button onClick={() => setAuthView('welcome')} className="text-stone-400 hover:text-stone-600 transition-colors text-sm mb-8">
               ← back
             </button>
-
             <h2 className="text-3xl font-light text-stone-600 mb-2">welcome back</h2>
             <p className="text-stone-400 font-light mb-8">continue your reflections</p>
 
             <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <input
-                  type="text"
-                  placeholder="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full py-4 px-4 bg-white border border-stone-200 rounded-2xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-300 font-light"
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  type="password"
-                  placeholder="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full py-4 px-4 bg-white border border-stone-200 rounded-2xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-300 font-light"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-4 bg-stone-700 hover:bg-stone-800 text-white rounded-2xl font-light text-lg transition-all shadow-sm mt-6"
-              >
+              <input
+                type="text"
+                placeholder="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full py-4 px-4 bg-white border border-stone-200 rounded-2xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-300 font-light"
+                required
+              />
+              <input
+                type="password"
+                placeholder="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full py-4 px-4 bg-white border border-stone-200 rounded-2xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-300 font-light"
+                required
+              />
+              <button type="submit" className="w-full py-4 bg-stone-700 hover:bg-stone-800 text-white rounded-2xl font-light text-lg transition-all shadow-sm mt-6">
                 sign in
               </button>
             </form>
 
             <p className="mt-6 text-center text-sm text-stone-400 font-light">
               don't have an account?{' '}
-              <button
-                onClick={() => setAuthView('signup')}
-                className="text-stone-600 hover:text-stone-800 underline"
-              >
-                sign up
-              </button>
+              <button onClick={() => setAuthView('signup')} className="text-stone-600 hover:text-stone-800 underline">sign up</button>
             </p>
           </div>
         </div>
       );
     }
 
-    // Signup screen
     if (authView === 'signup') {
       return (
         <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col px-6 pt-12">
           <div className="max-w-sm w-full mx-auto">
-            {/* Back button */}
-            <button
-              onClick={() => setAuthView('welcome')}
-              className="text-stone-400 hover:text-stone-600 transition-colors text-sm mb-8"
-            >
+            <button onClick={() => setAuthView('welcome')} className="text-stone-400 hover:text-stone-600 transition-colors text-sm mb-8">
               ← back
             </button>
-
             <h2 className="text-3xl font-light text-stone-600 mb-2">create account</h2>
             <p className="text-stone-400 font-light mb-8">start your journey of reflection</p>
 
             <form onSubmit={handleSignup} className="space-y-4">
-              <div>
-                <input
-                  type="text"
-                  placeholder="first name"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full py-4 px-4 bg-white border border-stone-200 rounded-2xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-300 font-light"
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full py-4 px-4 bg-white border border-stone-200 rounded-2xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-300 font-light"
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  type="password"
-                  placeholder="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full py-4 px-4 bg-white border border-stone-200 rounded-2xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-300 font-light"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-4 bg-stone-700 hover:bg-stone-800 text-white rounded-2xl font-light text-lg transition-all shadow-sm mt-6"
-              >
+              <input
+                type="text"
+                placeholder="first name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full py-4 px-4 bg-white border border-stone-200 rounded-2xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-300 font-light"
+                required
+              />
+              <input
+                type="text"
+                placeholder="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full py-4 px-4 bg-white border border-stone-200 rounded-2xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-300 font-light"
+                required
+              />
+              <input
+                type="password"
+                placeholder="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full py-4 px-4 bg-white border border-stone-200 rounded-2xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-300 font-light"
+                required
+              />
+              <button type="submit" className="w-full py-4 bg-stone-700 hover:bg-stone-800 text-white rounded-2xl font-light text-lg transition-all shadow-sm mt-6">
                 create account
               </button>
             </form>
 
             <p className="mt-6 text-center text-sm text-stone-400 font-light">
               already have an account?{' '}
-              <button
-                onClick={() => setAuthView('login')}
-                className="text-stone-600 hover:text-stone-800 underline"
-              >
-                sign in
-              </button>
+              <button onClick={() => setAuthView('login')} className="text-stone-600 hover:text-stone-800 underline">sign in</button>
             </p>
           </div>
         </div>
@@ -703,12 +1176,172 @@ export default function Cilantro() {
     }
   }
 
-  if (!currentQuestion) return null;
+  if (!currentQuestion && currentView === 'home') return null;
 
-  const yesCount = answers.filter(a => a.answer === 'yes').length;
-  const noCount = answers.filter(a => a.answer === 'no').length;
+  const stats = getStats(answers);
 
-  // Profile View
+  // ============ SIDEBAR ============
+  const Sidebar = () => (
+    <div className={`fixed inset-0 z-50 transition-all duration-300 ${showSidebar ? 'visible' : 'invisible'}`}>
+      {/* Backdrop */}
+      <div
+        className={`absolute inset-0 bg-black transition-opacity duration-300 ${showSidebar ? 'opacity-30' : 'opacity-0'}`}
+        onClick={() => setShowSidebar(false)}
+      />
+
+      {/* Sidebar panel */}
+      <div className={`absolute right-0 top-0 bottom-0 w-80 bg-white shadow-xl transition-transform duration-300 ${showSidebar ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-lg font-medium text-stone-700">Menu</h2>
+            <button onClick={() => setShowSidebar(false)} className="text-stone-400 hover:text-stone-600">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Tab buttons */}
+          <div className="flex gap-2 mb-6">
+            {['settings', 'shop'].map(tab => (
+              <button
+                key={tab}
+                onClick={() => setSidebarTab(tab)}
+                className={`flex-1 py-2 rounded-xl text-sm font-light transition-all ${
+                  sidebarTab === tab ? 'bg-stone-700 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Settings Tab */}
+          {sidebarTab === 'settings' && (
+            <div className="space-y-4">
+              <button className="w-full p-4 text-left bg-stone-50 hover:bg-stone-100 rounded-xl transition-all">
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">🔔</span>
+                  <div>
+                    <p className="text-sm font-medium text-stone-700">Notifications</p>
+                    <p className="text-xs text-stone-400">Daily reminders</p>
+                  </div>
+                </div>
+              </button>
+
+              <button className="w-full p-4 text-left bg-stone-50 hover:bg-stone-100 rounded-xl transition-all">
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">🌙</span>
+                  <div>
+                    <p className="text-sm font-medium text-stone-700">Appearance</p>
+                    <p className="text-xs text-stone-400">Light mode</p>
+                  </div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => exportToCSV(answers)}
+                className="w-full p-4 text-left bg-stone-50 hover:bg-stone-100 rounded-xl transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">📥</span>
+                  <div>
+                    <p className="text-sm font-medium text-stone-700">Export Data</p>
+                    <p className="text-xs text-stone-400">Download your reflections as CSV</p>
+                  </div>
+                </div>
+              </button>
+
+              <button className="w-full p-4 text-left bg-stone-50 hover:bg-stone-100 rounded-xl transition-all">
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">🔒</span>
+                  <div>
+                    <p className="text-sm font-medium text-stone-700">Privacy</p>
+                    <p className="text-xs text-stone-400">Data & security</p>
+                  </div>
+                </div>
+              </button>
+
+              <hr className="border-stone-100 my-4" />
+
+              <button
+                onClick={handleLogout}
+                className="w-full p-4 text-left hover:bg-rose-50 rounded-xl transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">👋</span>
+                  <p className="text-sm font-medium text-rose-500">Sign Out</p>
+                </div>
+              </button>
+            </div>
+          )}
+
+          {/* Shop Tab */}
+          {sidebarTab === 'shop' && (
+            <div className="space-y-4">
+              <div className="text-center p-6 bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl mb-4">
+                <span className="text-3xl">🌱</span>
+                <p className="text-2xl font-light text-stone-700 mt-2">{seeds}</p>
+                <p className="text-xs text-stone-500">current seeds</p>
+              </div>
+
+              <p className="text-xs text-stone-400 text-center mb-4">Buy seeds or go unlimited</p>
+
+              <button className="w-full p-4 bg-stone-50 hover:bg-stone-100 rounded-xl transition-all">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">🌱</span>
+                    <div className="text-left">
+                      <p className="text-sm font-medium text-stone-700">100 Seeds</p>
+                      <p className="text-xs text-stone-400">Unlock a garden</p>
+                    </div>
+                  </div>
+                  <span className="text-sm font-medium text-stone-600">$0.99</span>
+                </div>
+              </button>
+
+              <button className="w-full p-4 bg-stone-50 hover:bg-stone-100 rounded-xl transition-all">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">🌿</span>
+                    <div className="text-left">
+                      <p className="text-sm font-medium text-stone-700">500 Seeds</p>
+                      <p className="text-xs text-stone-400">Best value</p>
+                    </div>
+                  </div>
+                  <span className="text-sm font-medium text-stone-600">$3.99</span>
+                </div>
+              </button>
+
+              <div className="relative">
+                <div className="absolute -top-2 left-4 px-2 py-0.5 bg-purple-500 text-white text-xs rounded-full">
+                  Popular
+                </div>
+                <button className="w-full p-4 bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-xl transition-all border-2 border-purple-200">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg">✨</span>
+                      <div className="text-left">
+                        <p className="text-sm font-medium text-purple-700">Unlimited</p>
+                        <p className="text-xs text-purple-500">All gardens unlocked forever</p>
+                      </div>
+                    </div>
+                    <span className="text-sm font-medium text-purple-600">$4.99/mo</span>
+                  </div>
+                </button>
+              </div>
+
+              <p className="text-xs text-stone-400 text-center mt-4">
+                Payments secured by Stripe
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
+  // ============ PROFILE VIEW ============
   if (showProfile) {
     const filteredAnswers = searchQuery
       ? answers.filter(a => a.text.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -716,18 +1349,19 @@ export default function Cilantro() {
 
     return (
       <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col">
+        <Sidebar />
+
         <div className="pt-8 pb-4 px-6">
           <div className="max-w-sm mx-auto flex justify-between items-center">
-            <button
-              onClick={() => setShowProfile(false)}
-              className="text-stone-400 hover:text-stone-600 transition-colors text-sm"
-            >
+            <button onClick={() => setShowProfile(false)} className="text-stone-400 hover:text-stone-600 transition-colors text-sm">
               ← back
             </button>
-            <h1 className="text-2xl font-light tracking-wide text-stone-400">
-              profile
-            </h1>
-            <div className="w-12"></div>
+            <h1 className="text-2xl font-light tracking-wide text-stone-400">profile</h1>
+            <button onClick={() => setShowSidebar(true)} className="text-stone-400 hover:text-stone-600">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -736,24 +1370,16 @@ export default function Cilantro() {
             {/* User info */}
             {user && (
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 mb-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-stone-200 to-stone-300 flex items-center justify-center">
-                      <span className="text-stone-500 font-light text-lg">
-                        {user.firstName?.charAt(0).toUpperCase() || '?'}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-stone-600 font-light">{user.firstName}</p>
-                      <p className="text-xs text-stone-300">@{user.username}</p>
-                    </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-stone-200 to-stone-300 flex items-center justify-center">
+                    <span className="text-stone-500 font-light text-xl">
+                      {user.firstName?.charAt(0).toUpperCase() || '?'}
+                    </span>
                   </div>
-                  <button
-                    onClick={handleLogout}
-                    className="text-xs text-stone-400 hover:text-stone-600 transition-colors"
-                  >
-                    sign out
-                  </button>
+                  <div>
+                    <p className="text-stone-600 font-medium">{user.firstName}</p>
+                    <p className="text-xs text-stone-300">@{user.username}</p>
+                  </div>
                 </div>
 
                 {/* Seeds display */}
@@ -765,9 +1391,7 @@ export default function Cilantro() {
                   </div>
                   {seedAnimation && (
                     <span className={`text-sm font-medium animate-pulse ${
-                      seedAnimation.startsWith('-') || seedAnimation.startsWith('Not')
-                        ? 'text-rose-400'
-                        : 'text-emerald-500'
+                      seedAnimation.startsWith('-') || seedAnimation.startsWith('Not') ? 'text-rose-400' : 'text-emerald-500'
                     }`}>
                       {seedAnimation}
                     </span>
@@ -808,43 +1432,58 @@ export default function Cilantro() {
               </button>
             </div>
 
-            {/* Stats overview */}
+            {/* Daily Reading Placeholder (shows after completing Daily 30) */}
+            {showDailyReading && (
+              <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 shadow-sm border border-purple-100 mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">📖</span>
+                  <h3 className="text-sm font-medium text-purple-700">Your Daily Reading</h3>
+                </div>
+                <p className="text-sm text-purple-600 font-light leading-relaxed mb-4">
+                  Based on today's reflections, you seem to be in a contemplative space.
+                  You're thinking deeply about growth and connection. Remember: the questions
+                  you ponder say as much about you as the answers you give.
+                </p>
+                <p className="text-xs text-purple-400 italic">
+                  Full personalized insights coming soon...
+                </p>
+              </div>
+            )}
+
+            {/* Stats overview - Updated */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 mb-6">
+              <h3 className="text-sm text-stone-400 font-light mb-4">your stats</h3>
               <div className="flex justify-around text-center">
                 <div>
-                  <div className="text-3xl font-light text-stone-700">{answers.length}</div>
-                  <div className="text-xs text-stone-400 mt-1">answered</div>
+                  <div className="text-3xl font-light text-stone-700">{stats.allTime}</div>
+                  <div className="text-xs text-stone-400 mt-1">all time</div>
                 </div>
                 <div className="w-px bg-stone-100"></div>
                 <div>
-                  <div className="text-3xl font-light text-emerald-500">{yesCount}</div>
-                  <div className="text-xs text-stone-400 mt-1">yes</div>
+                  <div className="text-3xl font-light text-amber-500">{stats.today}</div>
+                  <div className="text-xs text-stone-400 mt-1">today</div>
                 </div>
                 <div className="w-px bg-stone-100"></div>
                 <div>
-                  <div className="text-3xl font-light text-rose-400">{noCount}</div>
-                  <div className="text-xs text-stone-400 mt-1">no</div>
+                  <div className="text-3xl font-light text-emerald-500">{stats.thisWeek}</div>
+                  <div className="text-xs text-stone-400 mt-1">this week</div>
                 </div>
               </div>
-              {answers.length > 0 && (
-                <div className="mt-4 h-2 bg-stone-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-emerald-300 to-emerald-400 transition-all"
-                    style={{ width: `${(yesCount / answers.length) * 100}%` }}
-                  />
-                </div>
-              )}
             </div>
 
-            {/* Skipped questions */}
-            {skippedQuestions.length > 0 && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 mb-6">
-                <h3 className="text-sm text-stone-400 mb-4 font-light">skipped ({skippedQuestions.length})</h3>
-                <div className="space-y-3 max-h-48 overflow-auto">
-                  {skippedQuestions.map((q, i) => (
-                    <p key={i} className="text-sm text-stone-500 font-light">{q.text}</p>
-                  ))}
+            {/* Discrepancy Placeholder */}
+            {answers.length >= 10 && (
+              <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 shadow-sm border border-amber-100 mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">🔍</span>
+                  <h3 className="text-sm font-medium text-amber-700">Insights</h3>
                 </div>
+                <p className="text-sm text-amber-600 font-light leading-relaxed mb-2">
+                  We noticed something interesting in your answers...
+                </p>
+                <p className="text-xs text-amber-400 italic">
+                  Pattern detection coming soon. We'll help you spot contradictions and growth areas.
+                </p>
               </div>
             )}
 
@@ -853,9 +1492,14 @@ export default function Cilantro() {
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-100">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-sm text-stone-400 font-light">your reflections</h3>
+                  <button
+                    onClick={() => exportToCSV(answers)}
+                    className="text-xs text-stone-400 hover:text-stone-600 transition-colors"
+                  >
+                    export ↓
+                  </button>
                 </div>
 
-                {/* Search input */}
                 <div className="relative mb-4">
                   <input
                     type="text"
@@ -865,10 +1509,7 @@ export default function Cilantro() {
                     className="w-full py-2 px-3 text-sm bg-stone-50 border border-stone-100 rounded-xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-200 font-light"
                   />
                   {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-300 hover:text-stone-400"
-                    >
+                    <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-300 hover:text-stone-400">
                       ×
                     </button>
                   )}
@@ -882,14 +1523,20 @@ export default function Cilantro() {
                         <div className="flex items-start gap-3">
                           <div
                             className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                            style={{ backgroundColor: typeColors[a.type] }}
+                            style={{ backgroundColor: typeColors[a.type] || typeColors.default }}
                           />
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm text-stone-600 font-light leading-relaxed">
-                              {a.text}
-                            </p>
+                            <p className="text-sm text-stone-600 font-light leading-relaxed">{a.text}</p>
 
-                            {/* Current answer */}
+                            {/* Hashtags */}
+                            {a.hashtags && (
+                              <div className="flex flex-wrap gap-1 mt-2">
+                                {a.hashtags.slice(0, 3).map((tag, ti) => (
+                                  <span key={ti} className="text-xs text-stone-300">{tag}</span>
+                                ))}
+                              </div>
+                            )}
+
                             <div className="flex items-center gap-3 mt-2">
                               <button
                                 onClick={() => changeAnswer(actualIndex)}
@@ -901,24 +1548,17 @@ export default function Cilantro() {
                               >
                                 {a.answer}
                               </button>
-                              <span className="text-xs text-stone-300">
-                                {formatTime(a.updatedAt || a.timestamp)}
-                              </span>
+                              <span className="text-xs text-stone-300">{formatTime(a.updatedAt || a.timestamp)}</span>
                             </div>
 
-                            {/* Answer history */}
                             {a.history && a.history.length > 0 && (
                               <div className="mt-2 pl-2 border-l-2 border-stone-100">
                                 {[...a.history].reverse().map((h, hi) => (
                                   <div key={hi} className="flex items-center gap-2 py-1">
-                                    <span className={`text-xs ${
-                                      h.answer === 'yes' ? 'text-emerald-400' : 'text-rose-300'
-                                    }`}>
+                                    <span className={`text-xs ${h.answer === 'yes' ? 'text-emerald-400' : 'text-rose-300'}`}>
                                       {h.answer}
                                     </span>
-                                    <span className="text-xs text-stone-200">
-                                      {formatTime(h.timestamp)}
-                                    </span>
+                                    <span className="text-xs text-stone-200">{formatTime(h.timestamp)}</span>
                                   </div>
                                 ))}
                               </div>
@@ -930,18 +1570,14 @@ export default function Cilantro() {
                   })}
 
                   {filteredAnswers.length === 0 && searchQuery && (
-                    <p className="text-center text-stone-300 text-sm font-light py-4">
-                      no matches found
-                    </p>
+                    <p className="text-center text-stone-300 text-sm font-light py-4">no matches found</p>
                   )}
                 </div>
               </div>
             )}
 
-            {answers.length === 0 && skippedQuestions.length === 0 && (
-              <p className="text-center text-stone-400 font-light mt-12">
-                no reflections yet
-              </p>
+            {answers.length === 0 && (
+              <p className="text-center text-stone-400 font-light mt-12">no reflections yet</p>
             )}
           </div>
         </div>
@@ -949,94 +1585,107 @@ export default function Cilantro() {
     );
   }
 
-  // Gardens List View
+  // ============ GARDENS LIST VIEW ============
   if (currentView === 'gardens') {
+    const sortedGardens = [...gardens].sort((a, b) => {
+      if (gardenCategory === 'popular') return b.popularity - a.popularity;
+      return 0;
+    });
+
+    const filteredGardens = gardenCategory === 'popular'
+      ? sortedGardens
+      : sortedGardens.filter(g => g.category === gardenCategory);
+
     return (
       <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col">
         <div className="pt-8 pb-4 px-6">
-          <div className="max-w-sm mx-auto flex justify-between items-center">
-            <button
-              onClick={() => setCurrentView('home')}
-              className="text-stone-400 hover:text-stone-600 transition-colors text-sm"
-            >
+          <div className="max-w-2xl mx-auto flex justify-between items-center">
+            <button onClick={() => setCurrentView('home')} className="text-stone-400 hover:text-stone-600 transition-colors text-sm">
               ← back
             </button>
-            <h1 className="text-2xl font-light tracking-wide text-stone-400">
-              gardens
-            </h1>
+            <h1 className="text-2xl font-light tracking-wide text-stone-400">gardens</h1>
             <div className="w-12"></div>
           </div>
         </div>
 
         <div className="flex-1 px-6 pb-8 overflow-auto">
-          <div className="max-w-sm mx-auto">
-            <p className="text-center text-stone-400 font-light mb-8">
-              collections for deeper reflection
-            </p>
+          <div className="max-w-2xl mx-auto">
+            <p className="text-center text-stone-400 font-light mb-6">explore themed collections</p>
 
-            <div className="space-y-4">
-              {gardens.map((garden) => {
+            {/* Category tabs */}
+            <div className="flex gap-2 overflow-x-auto pb-4 mb-6 scrollbar-hide">
+              {gardenCategories.map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={() => setGardenCategory(cat.id)}
+                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-light transition-all ${
+                    gardenCategory === cat.id
+                      ? 'bg-stone-700 text-white'
+                      : 'bg-white text-stone-500 hover:bg-stone-100 border border-stone-200'
+                  }`}
+                >
+                  {cat.icon} {cat.name}
+                </button>
+              ))}
+            </div>
+
+            {/* Pinterest-style masonry grid */}
+            <div className="columns-2 gap-4 space-y-4">
+              {(gardenCategory === 'popular' ? sortedGardens : filteredGardens).map((garden) => {
                 const unlocked = isGardenUnlocked(garden.id);
+                const heightClass = garden.size === 'large' ? 'h-72' : garden.size === 'medium' ? 'h-56' : 'h-44';
+
                 return (
                   <div
                     key={garden.id}
-                    className={`w-full bg-white rounded-2xl p-6 shadow-sm border transition-all text-left ${
-                      unlocked ? 'border-stone-100 hover:border-stone-200' : 'border-stone-100 opacity-90'
+                    className={`break-inside-avoid mb-4 rounded-2xl overflow-hidden shadow-sm border border-stone-100 transition-all hover:shadow-md ${
+                      !unlocked ? 'opacity-90' : ''
                     }`}
                   >
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
-                          !unlocked ? 'grayscale opacity-60' : ''
-                        }`}
-                        style={{ backgroundColor: garden.color + '20' }}
-                      >
-                        {unlocked ? garden.icon : '🔒'}
+                    {/* Garden card header with gradient */}
+                    <div
+                      className={`${heightClass} bg-gradient-to-br ${garden.gradient} p-5 flex flex-col justify-between relative`}
+                    >
+                      {!unlocked && (
+                        <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px] flex items-center justify-center">
+                          <div className="text-4xl">🔒</div>
+                        </div>
+                      )}
+
+                      <div>
+                        <span className="text-3xl mb-2 block">{garden.icon}</span>
+                        <h3 className="text-white font-medium text-lg">{garden.name}</h3>
+                        <p className="text-white/70 text-xs mt-1">{garden.description}</p>
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-stone-700 font-medium">{garden.name}</h3>
-                        <p className="text-xs text-stone-400 font-light mt-1">{garden.description}</p>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-white/60 text-xs">{garden.questions.length} questions</span>
+                        {!unlocked && (
+                          <span className="text-white/80 text-xs flex items-center gap-1">
+                            🌱 {garden.seedCost}
+                          </span>
+                        )}
                       </div>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="bg-white p-3">
                       {unlocked ? (
                         <button
                           onClick={() => openGarden(garden)}
-                          className="text-stone-300 hover:text-stone-500 transition-colors"
+                          className="w-full py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-sm font-light transition-all"
                         >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-                          </svg>
+                          Enter Garden
                         </button>
                       ) : (
-                        <div className="flex items-center gap-1 text-xs text-stone-400">
-                          <span>🌱</span>
-                          <span>{garden.seedCost}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {unlocked ? (
-                      <div className="mt-3 flex items-center gap-2">
-                        <div className="flex-1 h-1 bg-stone-100 rounded-full overflow-hidden">
-                          <div className="h-full bg-stone-300 rounded-full" style={{ width: '0%' }} />
-                        </div>
-                        <span className="text-xs text-stone-300">{garden.questions.length} questions</span>
-                      </div>
-                    ) : (
-                      <div className="mt-4 flex gap-2">
                         <button
                           onClick={() => unlockGarden(garden)}
-                          className="flex-1 py-2 bg-stone-700 hover:bg-stone-800 text-white rounded-xl text-xs font-light transition-all flex items-center justify-center gap-1"
+                          className="w-full py-2 bg-stone-700 hover:bg-stone-800 text-white rounded-xl text-sm font-light transition-all flex items-center justify-center gap-2"
                         >
                           <span>🌱</span> Unlock for {garden.seedCost}
                         </button>
-                        <button
-                          onClick={() => peekGarden(garden)}
-                          className="px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-600 rounded-xl text-xs font-light transition-all"
-                        >
-                          Peek (10 🌱)
-                        </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 );
               })}
@@ -1047,7 +1696,7 @@ export default function Cilantro() {
     );
   }
 
-  // Garden Detail View (answering garden questions)
+  // ============ GARDEN DETAIL VIEW ============
   if (currentView === 'garden-detail' && selectedGarden) {
     const currentGardenQuestion = selectedGarden.questions[gardenQuestionIndex].text;
     const progress = ((gardenQuestionIndex + 1) / selectedGarden.questions.length) * 100;
@@ -1067,7 +1716,6 @@ export default function Cilantro() {
                 {gardenQuestionIndex + 1} / {selectedGarden.questions.length}
               </span>
             </div>
-            {/* Progress bar */}
             <div className="h-1 bg-stone-100 rounded-full overflow-hidden">
               <div
                 className="h-full transition-all duration-300 rounded-full"
@@ -1079,12 +1727,7 @@ export default function Cilantro() {
 
         <div className="flex-1 flex items-center justify-center px-6 pb-8">
           <div className="max-w-sm w-full">
-            <div
-              className={`transition-all duration-300 ${
-                isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'
-              }`}
-            >
-              {/* Garden indicator */}
+            <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'}`}>
               <div className="flex justify-center mb-6">
                 <div
                   className="px-3 py-1 rounded-full text-xs font-medium"
@@ -1094,12 +1737,10 @@ export default function Cilantro() {
                 </div>
               </div>
 
-              {/* Question */}
               <h2 className="text-2xl md:text-3xl font-light text-stone-700 text-center leading-relaxed mb-12 px-4">
                 {currentGardenQuestion}
               </h2>
 
-              {/* Yes/No buttons */}
               <div className="flex gap-4 px-4">
                 <button
                   onClick={() => handleGardenAnswer('yes')}
@@ -1115,12 +1756,8 @@ export default function Cilantro() {
                 </button>
               </div>
 
-              {/* Skip button */}
               <div className="flex justify-center mt-6">
-                <button
-                  onClick={skipGardenQuestion}
-                  className="text-xs text-stone-300 hover:text-stone-400 transition-colors font-light"
-                >
+                <button onClick={skipGardenQuestion} className="text-xs text-stone-300 hover:text-stone-400 transition-colors font-light">
                   skip
                 </button>
               </div>
@@ -1131,7 +1768,7 @@ export default function Cilantro() {
     );
   }
 
-  // Daily 30 View
+  // ============ DAILY 30 VIEW ============
   if (currentView === 'daily30') {
     const currentDailyQuestion = dailyQuestions[dailyQuestionIndex];
     const progress = ((dailyQuestionIndex + 1) / 30) * 100;
@@ -1141,25 +1778,17 @@ export default function Cilantro() {
         <div className="pt-8 pb-4 px-6">
           <div className="max-w-sm mx-auto">
             <div className="flex justify-between items-center mb-4">
-              <button
-                onClick={() => setCurrentView('home')}
-                className="text-stone-400 hover:text-stone-600 transition-colors text-sm"
-              >
+              <button onClick={() => setCurrentView('home')} className="text-stone-400 hover:text-stone-600 transition-colors text-sm">
                 ← exit
               </button>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium text-stone-600">Daily 30</span>
                 {dailyStreak > 0 && (
-                  <span className="text-xs bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full">
-                    🔥 {dailyStreak}
-                  </span>
+                  <span className="text-xs bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full">🔥 {dailyStreak}</span>
                 )}
               </div>
-              <span className="text-xs text-stone-400">
-                {dailyQuestionIndex + 1}/30
-              </span>
+              <span className="text-xs text-stone-400">{dailyQuestionIndex + 1}/30</span>
             </div>
-            {/* Progress bar */}
             <div className="h-1 bg-stone-100 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-300 rounded-full"
@@ -1171,23 +1800,72 @@ export default function Cilantro() {
 
         <div className="flex-1 flex items-center justify-center px-6 pb-8">
           <div className="max-w-sm w-full">
-            <div
-              className={`transition-all duration-300 ${
-                isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'
-              }`}
-            >
+            <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'}`}>
+
+              {/* Media (if present) */}
+              {currentDailyQuestion?.mediaUrl && (
+                <div className="flex justify-center mb-6">
+                  <img
+                    src={currentDailyQuestion.mediaUrl}
+                    alt=""
+                    className="max-h-40 rounded-xl shadow-md object-cover"
+                  />
+                </div>
+              )}
+
               {/* Type indicator */}
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center mb-4">
                 <div
                   className="w-2 h-2 rounded-full opacity-60"
-                  style={{ backgroundColor: typeColors[currentDailyQuestion?.type] || '#999' }}
+                  style={{ backgroundColor: typeColors[currentDailyQuestion?.type] || typeColors.default }}
                 />
               </div>
 
               {/* Question */}
-              <h2 className="text-2xl md:text-3xl font-light text-stone-700 text-center leading-relaxed mb-12 px-4">
+              <h2 className="text-2xl md:text-3xl font-light text-stone-700 text-center leading-relaxed mb-4 px-4">
                 {currentDailyQuestion?.text}
               </h2>
+
+              {/* Hashtags */}
+              {currentDailyQuestion?.hashtags && (
+                <div className="flex justify-center flex-wrap gap-2 mb-6">
+                  {currentDailyQuestion.hashtags.map((tag, i) => (
+                    <span key={i} className="text-xs text-stone-400">{tag}</span>
+                  ))}
+                </div>
+              )}
+
+              {/* Fine Print toggle */}
+              {currentDailyQuestion?.finePrint && (
+                <div className="mb-8 px-4">
+                  <button
+                    onClick={() => setShowFinePrint(!showFinePrint)}
+                    className="text-xs text-stone-400 hover:text-stone-500 transition-colors mx-auto block"
+                  >
+                    {showFinePrint ? '▼ hide fine print' : '▶ fine print'}
+                  </button>
+                  {showFinePrint && (
+                    <div className="mt-3 p-4 bg-white/50 rounded-xl text-sm text-stone-500 font-light">
+                      <p>{currentDailyQuestion.finePrint}</p>
+                      {currentDailyQuestion.finePrintLinks && (
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {currentDailyQuestion.finePrintLinks.map((link, i) => (
+                            <a
+                              key={i}
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-blue-500 hover:text-blue-600 underline"
+                            >
+                              {link.label} ↗
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Yes/No buttons */}
               <div className="flex gap-4 px-4">
@@ -1205,12 +1883,8 @@ export default function Cilantro() {
                 </button>
               </div>
 
-              {/* Skip button */}
               <div className="flex justify-center mt-6">
-                <button
-                  onClick={skipDaily30Question}
-                  className="text-xs text-stone-300 hover:text-stone-400 transition-colors font-light"
-                >
+                <button onClick={skipDaily30Question} className="text-xs text-stone-300 hover:text-stone-400 transition-colors font-light">
                   skip
                 </button>
               </div>
@@ -1221,14 +1895,13 @@ export default function Cilantro() {
     );
   }
 
+  // ============ MAIN HOME VIEW ============
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col">
-      {/* Header with nav */}
+      {/* Header */}
       <div className="pt-8 pb-4 px-6">
         <div className="max-w-sm mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-light tracking-wide text-stone-400">
-            cilantro
-          </h1>
+          <h1 className="text-2xl font-light tracking-wide text-stone-400">cilantro</h1>
           <div className="flex items-center gap-2">
             {/* Seeds indicator */}
             <div className="flex items-center gap-1 px-2 py-1 bg-white border border-stone-200 rounded-full shadow-sm">
@@ -1236,9 +1909,7 @@ export default function Cilantro() {
               <span className="text-xs font-medium text-stone-500">{seeds}</span>
               {seedAnimation && (
                 <span className={`text-xs font-medium ${
-                  seedAnimation.startsWith('-') || seedAnimation.startsWith('Not')
-                    ? 'text-rose-400'
-                    : 'text-emerald-500'
+                  seedAnimation.startsWith('-') || seedAnimation.startsWith('Not') ? 'text-rose-400' : 'text-emerald-500'
                 }`}>
                   {seedAnimation}
                 </span>
@@ -1268,27 +1939,75 @@ export default function Cilantro() {
         </div>
       </div>
 
-      {/* Question area - centered */}
+      {/* Question area */}
       <div className="flex-1 flex items-center justify-center px-6 pb-8">
         <div className="max-w-sm w-full">
-          {/* Question card */}
-          <div
-            className={`transition-all duration-300 ${
-              isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'
-            }`}
-          >
-            {/* Type indicator - subtle dot */}
-            <div className="flex justify-center mb-6">
+          <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'}`}>
+
+            {/* Media (if present) */}
+            {currentQuestion?.mediaUrl && (
+              <div className="flex justify-center mb-6">
+                <img
+                  src={currentQuestion.mediaUrl}
+                  alt=""
+                  className="max-h-40 rounded-xl shadow-md object-cover"
+                />
+              </div>
+            )}
+
+            {/* Type indicator dot */}
+            <div className="flex justify-center mb-4">
               <div
                 className="w-2 h-2 rounded-full opacity-60"
-                style={{ backgroundColor: typeColors[currentQuestion.type] }}
+                style={{ backgroundColor: typeColors[currentQuestion?.type] || typeColors.default }}
               />
             </div>
 
             {/* Question */}
-            <h2 className="text-2xl md:text-3xl font-light text-stone-700 text-center leading-relaxed mb-12 px-4">
-              {currentQuestion.text}
+            <h2 className="text-2xl md:text-3xl font-light text-stone-700 text-center leading-relaxed mb-4 px-4">
+              {currentQuestion?.text}
             </h2>
+
+            {/* Hashtags */}
+            {currentQuestion?.hashtags && (
+              <div className="flex justify-center flex-wrap gap-2 mb-6">
+                {currentQuestion.hashtags.map((tag, i) => (
+                  <span key={i} className="text-xs text-stone-400">{tag}</span>
+                ))}
+              </div>
+            )}
+
+            {/* Fine Print toggle */}
+            {currentQuestion?.finePrint && (
+              <div className="mb-8 px-4">
+                <button
+                  onClick={() => setShowFinePrint(!showFinePrint)}
+                  className="text-xs text-stone-400 hover:text-stone-500 transition-colors mx-auto block"
+                >
+                  {showFinePrint ? '▼ hide fine print' : '▶ fine print'}
+                </button>
+                {showFinePrint && (
+                  <div className="mt-3 p-4 bg-white/50 rounded-xl text-sm text-stone-500 font-light">
+                    <p>{currentQuestion.finePrint}</p>
+                    {currentQuestion.finePrintLinks && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {currentQuestion.finePrintLinks.map((link, i) => (
+                          <a
+                            key={i}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-500 hover:text-blue-600 underline"
+                          >
+                            {link.label} ↗
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Yes/No buttons */}
             <div className="flex gap-4 px-4">
@@ -1308,15 +2027,11 @@ export default function Cilantro() {
 
             {/* Skip button */}
             <div className="flex justify-center mt-6">
-              <button
-                onClick={handleSkip}
-                className="text-xs text-stone-300 hover:text-stone-400 transition-colors font-light"
-              >
+              <button onClick={handleSkip} className="text-xs text-stone-300 hover:text-stone-400 transition-colors font-light">
                 skip
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
