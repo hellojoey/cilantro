@@ -226,9 +226,18 @@ const questions = [
     type: "entertainment",
     difficulty: 1,
     hashtags: ["#movies", "#classics", "#entertainment"],
-    mediaUrl: "https://upload.wikimedia.org/wikipedia/en/8/81/ShsawshanksRedemption.jpg",
+    mediaUrl: "https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_SX300.jpg",
     mediaType: "image",
     finePrint: "The Shawshank Redemption (1994), based on a Stephen King novella, is consistently rated as one of the greatest films ever made.",
+  },
+  {
+    text: "Do you recognize this album cover?",
+    type: "recognition",
+    difficulty: 2,
+    hashtags: ["#music", "#albums", "#iconic"],
+    mediaUrl: "https://upload.wikimedia.org/wikipedia/en/4/42/Beatles_-_Abbey_Road.jpg",
+    mediaType: "image",
+    finePrint: "Abbey Road by The Beatles (1969) - the iconic crosswalk on Abbey Road in London has become a tourist landmark.",
   },
   {
     text: "Do you know all the words to at least one Taylor Swift song?",
@@ -346,7 +355,7 @@ const questions = [
   },
 ];
 
-// Question types - now open-ended, just for color coding
+// Question types - open-ended, just for color coding
 const typeColors = {
   reflection: '#8B9DC3',
   identity: '#9F7AEA',
@@ -384,31 +393,56 @@ const typeColors = {
   default: '#CBD5E0'
 };
 
-// Gardens - themed question collections with more visual data
+// Gardens - themed question collections
 const gardens = [
   {
-    id: 'shadows',
-    name: 'Shadows',
-    description: 'The parts of yourself you avoid looking at',
-    icon: '🌑',
-    color: '#4A5568',
-    gradient: 'from-gray-700 to-gray-900',
-    seedCost: 300,
-    tier: 3,
-    size: 'large', // for masonry layout
-    category: 'deep-dive',
-    popularity: 89,
+    id: 'sparks',
+    name: 'Sparks',
+    description: 'Joy, passion, and what lights you up',
+    icon: '✨',
+    color: '#ECC94B',
+    gradient: 'from-yellow-400 to-orange-500',
+    seedCost: 0, // FREE
+    tier: 1,
+    size: 'small',
+    category: 'joy',
+    popularity: 312,
     questions: [
-      { text: "Are you running from something you know you should face?", difficulty: 3 },
-      { text: "Do you judge others for traits you secretly see in yourself?", difficulty: 3 },
-      { text: "Have you been lying to yourself about something important?", difficulty: 3 },
-      { text: "Is there a part of yourself you're genuinely ashamed of?", difficulty: 3 },
-      { text: "Could you be the villain in someone else's story?", difficulty: 3 },
-      { text: "Do you self-sabotage when things start going well?", difficulty: 3 },
-      { text: "Is there something you're addicted to that you won't admit?", difficulty: 3 },
-      { text: "Have you hurt someone and never apologized?", difficulty: 3 },
-      { text: "Do you sometimes feel satisfaction when others fail?", difficulty: 3 },
-      { text: "Are you pretending to be someone you're not?", difficulty: 3 }
+      { text: "Do you remember the last time you felt pure joy?", difficulty: 1 },
+      { text: "Is there something that makes you lose track of time?", difficulty: 2 },
+      { text: "Have you laughed until you cried recently?", difficulty: 1 },
+      { text: "Do you still get excited about things?", difficulty: 2 },
+      { text: "Is there a passion you've abandoned that you miss?", difficulty: 2 },
+      { text: "When did you last do something just for fun?", difficulty: 1 },
+      { text: "Do you let yourself be silly sometimes?", difficulty: 1 },
+      { text: "Is there something you've always wanted to try?", difficulty: 2 },
+      { text: "Do you celebrate your small wins?", difficulty: 2 },
+      { text: "Have you felt truly alive this week?", difficulty: 2 }
+    ]
+  },
+  {
+    id: 'bonds',
+    name: 'Bonds',
+    description: 'Love, friendship, and human connection',
+    icon: '💞',
+    color: '#ED64A6',
+    gradient: 'from-pink-400 to-pink-600',
+    seedCost: 0, // FREE
+    tier: 2,
+    size: 'medium',
+    category: 'relationships',
+    popularity: 267,
+    questions: [
+      { text: "Do you have someone you can call at 3am?", difficulty: 2 },
+      { text: "Have you told someone you love them recently?", difficulty: 1 },
+      { text: "Is there a relationship you've neglected?", difficulty: 2 },
+      { text: "Do you let people truly know you?", difficulty: 3 },
+      { text: "Have you forgiven someone who hurt you?", difficulty: 3 },
+      { text: "Are you a good friend to others?", difficulty: 2 },
+      { text: "Do you have healthy boundaries in your relationships?", difficulty: 2 },
+      { text: "Is there someone you owe an apology?", difficulty: 2 },
+      { text: "Have you been fully present with someone you love recently?", difficulty: 2 },
+      { text: "Do you accept love as easily as you give it?", difficulty: 3 }
     ]
   },
   {
@@ -418,7 +452,7 @@ const gardens = [
     icon: '🪞',
     color: '#718096',
     gradient: 'from-gray-500 to-gray-700',
-    seedCost: 200,
+    seedCost: 150,
     tier: 2,
     size: 'medium',
     category: 'self-discovery',
@@ -443,7 +477,7 @@ const gardens = [
     icon: '⚖️',
     color: '#9F7AEA',
     gradient: 'from-purple-500 to-purple-700',
-    seedCost: 250,
+    seedCost: 200,
     tier: 2,
     size: 'medium',
     category: 'life-decisions',
@@ -487,6 +521,31 @@ const gardens = [
     ]
   },
   {
+    id: 'shadows',
+    name: 'Shadows',
+    description: 'The parts of yourself you avoid looking at',
+    icon: '🌑',
+    color: '#4A5568',
+    gradient: 'from-gray-700 to-gray-900',
+    seedCost: 300,
+    tier: 3,
+    size: 'large',
+    category: 'deep-dive',
+    popularity: 89,
+    questions: [
+      { text: "Are you running from something you know you should face?", difficulty: 3 },
+      { text: "Do you judge others for traits you secretly see in yourself?", difficulty: 3 },
+      { text: "Have you been lying to yourself about something important?", difficulty: 3 },
+      { text: "Is there a part of yourself you're genuinely ashamed of?", difficulty: 3 },
+      { text: "Could you be the villain in someone else's story?", difficulty: 3 },
+      { text: "Do you self-sabotage when things start going well?", difficulty: 3 },
+      { text: "Is there something you're addicted to that you won't admit?", difficulty: 3 },
+      { text: "Have you hurt someone and never apologized?", difficulty: 3 },
+      { text: "Do you sometimes feel satisfaction when others fail?", difficulty: 3 },
+      { text: "Are you pretending to be someone you're not?", difficulty: 3 }
+    ]
+  },
+  {
     id: 'depths',
     name: 'Depths',
     description: 'Mortality, meaning, and big questions',
@@ -510,70 +569,20 @@ const gardens = [
       { text: "Do you know what you'd regret most on your deathbed?", difficulty: 3 },
       { text: "Have you truly lived, or have you mostly just existed?", difficulty: 3 }
     ]
-  },
-  {
-    id: 'sparks',
-    name: 'Sparks',
-    description: 'Joy, passion, and what lights you up',
-    icon: '✨',
-    color: '#ECC94B',
-    gradient: 'from-yellow-400 to-orange-500',
-    seedCost: 150,
-    tier: 1,
-    size: 'small',
-    category: 'joy',
-    popularity: 312,
-    questions: [
-      { text: "Do you remember the last time you felt pure joy?", difficulty: 1 },
-      { text: "Is there something that makes you lose track of time?", difficulty: 2 },
-      { text: "Have you laughed until you cried recently?", difficulty: 1 },
-      { text: "Do you still get excited about things?", difficulty: 2 },
-      { text: "Is there a passion you've abandoned that you miss?", difficulty: 2 },
-      { text: "When did you last do something just for fun?", difficulty: 1 },
-      { text: "Do you let yourself be silly sometimes?", difficulty: 1 },
-      { text: "Is there something you've always wanted to try?", difficulty: 2 },
-      { text: "Do you celebrate your small wins?", difficulty: 2 },
-      { text: "Have you felt truly alive this week?", difficulty: 2 }
-    ]
-  },
-  {
-    id: 'bonds',
-    name: 'Bonds',
-    description: 'Love, friendship, and human connection',
-    icon: '💞',
-    color: '#ED64A6',
-    gradient: 'from-pink-400 to-pink-600',
-    seedCost: 200,
-    tier: 2,
-    size: 'medium',
-    category: 'relationships',
-    popularity: 267,
-    questions: [
-      { text: "Do you have someone you can call at 3am?", difficulty: 2 },
-      { text: "Have you told someone you love them recently?", difficulty: 1 },
-      { text: "Is there a relationship you've neglected?", difficulty: 2 },
-      { text: "Do you let people truly know you?", difficulty: 3 },
-      { text: "Have you forgiven someone who hurt you?", difficulty: 3 },
-      { text: "Are you a good friend to others?", difficulty: 2 },
-      { text: "Do you have healthy boundaries in your relationships?", difficulty: 2 },
-      { text: "Is there someone you owe an apology?", difficulty: 2 },
-      { text: "Have you been fully present with someone you love recently?", difficulty: 2 },
-      { text: "Do you accept love as easily as you give it?", difficulty: 3 }
-    ]
   }
 ];
 
-// Garden categories for the discover page
+// Garden categories
 const gardenCategories = [
   { id: 'popular', name: 'Most Popular', icon: '🔥' },
-  { id: 'new', name: 'New Gardens', icon: '🌱' },
+  { id: 'free', name: 'Free Gardens', icon: '🎁' },
   { id: 'deep-dive', name: 'Deep Dives', icon: '🌊' },
   { id: 'self-discovery', name: 'Self Discovery', icon: '🔮' },
   { id: 'relationships', name: 'Relationships', icon: '💕' },
   { id: 'joy', name: 'Joy & Light', icon: '✨' },
 ];
 
-// Format timestamp to readable format
+// Format timestamp
 const formatTime = (isoString) => {
   const date = new Date(isoString);
   const now = new Date();
@@ -590,7 +599,7 @@ const formatTime = (isoString) => {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 };
 
-// Generate consistent Daily 30 questions based on date
+// Generate consistent Daily 30 questions
 const getDailyQuestions = () => {
   const today = new Date();
   const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
@@ -650,7 +659,7 @@ export default function Cilantro() {
   const [showFinePrint, setShowFinePrint] = useState(false);
 
   // Navigation state
-  const [currentView, setCurrentView] = useState('landing'); // 'landing', 'home', 'gardens', 'garden-detail', 'daily30'
+  const [currentView, setCurrentView] = useState('landing');
   const [selectedGarden, setSelectedGarden] = useState(null);
   const [gardenQuestionIndex, setGardenQuestionIndex] = useState(0);
   const [gardenCategory, setGardenCategory] = useState('popular');
@@ -664,12 +673,12 @@ export default function Cilantro() {
 
   // Seeds economy
   const [seeds, setSeeds] = useState(50);
-  const [gardenUnlocks, setGardenUnlocks] = useState({});
+  const [gardenUnlocks, setGardenUnlocks] = useState({ sparks: true, bonds: true }); // Free gardens start unlocked
   const [seedAnimation, setSeedAnimation] = useState(null);
 
   // Sidebar state
   const [showSidebar, setShowSidebar] = useState(false);
-  const [sidebarTab, setSidebarTab] = useState('settings'); // 'settings', 'shop'
+  const [sidebarTab, setSidebarTab] = useState('settings');
 
   // Auth state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -678,6 +687,14 @@ export default function Cilantro() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
+
+  // Garden progress tracking
+  const [gardenProgress, setGardenProgress] = useState({});
+
+  // Get answered count for a garden
+  const getGardenAnsweredCount = (gardenId) => {
+    return answers.filter(a => a.gardenId === gardenId).length;
+  };
 
   // Earn seeds
   const earnSeeds = (difficulty) => {
@@ -734,9 +751,16 @@ export default function Cilantro() {
   };
 
   // Garden handlers
-  const isGardenUnlocked = (gardenId) => gardenUnlocks[gardenId] === true;
+  const isGardenUnlocked = (gardenId) => {
+    const garden = gardens.find(g => g.id === gardenId);
+    return garden?.seedCost === 0 || gardenUnlocks[gardenId] === true;
+  };
 
   const unlockGarden = (garden) => {
+    if (garden.seedCost === 0) {
+      setGardenUnlocks(prev => ({ ...prev, [garden.id]: true }));
+      return;
+    }
     if (seeds < garden.seedCost) {
       setSeedAnimation('Not enough seeds!');
       setTimeout(() => setSeedAnimation(null), 1500);
@@ -802,6 +826,7 @@ export default function Cilantro() {
   // Daily 30 handlers
   const startDaily30 = () => {
     setDailyQuestionIndex(0);
+    setShowProfile(false);
     setCurrentView('daily30');
   };
 
@@ -901,15 +926,137 @@ export default function Cilantro() {
     setUsername('');
     setPassword('');
     setShowSidebar(false);
+    setShowProfile(false);
   };
+
+  // ============ PERSISTENT HEADER COMPONENT ============
+  const Header = ({ showBack = false, backAction = null, title = null }) => (
+    <div className="pt-6 pb-4 px-6">
+      <div className="max-w-2xl mx-auto flex justify-between items-center">
+        {/* Left side - Logo or Back */}
+        {showBack ? (
+          <button
+            onClick={backAction}
+            className="text-stone-400 hover:text-stone-600 transition-colors text-sm"
+          >
+            ← back
+          </button>
+        ) : (
+          <button
+            onClick={() => { setCurrentView('home'); setShowProfile(false); }}
+            className="text-2xl font-light tracking-wide text-stone-400 hover:text-stone-600 transition-colors"
+          >
+            cilantro
+          </button>
+        )}
+
+        {/* Center - Title (optional) */}
+        {title && (
+          <h1 className="text-lg font-light tracking-wide text-stone-500">{title}</h1>
+        )}
+
+        {/* Right side - Nav icons */}
+        <div className="flex items-center gap-2">
+          {/* Seeds indicator */}
+          <div className="flex items-center gap-1 px-2 py-1 bg-white border border-stone-200 rounded-full shadow-sm">
+            <span className="text-sm">🌱</span>
+            <span className="text-xs font-medium text-stone-500">{seeds}</span>
+            {seedAnimation && (
+              <span className={`text-xs font-medium ${
+                seedAnimation.startsWith('-') || seedAnimation.startsWith('Not') ? 'text-rose-400' : 'text-emerald-500'
+              }`}>
+                {seedAnimation}
+              </span>
+            )}
+          </div>
+
+          {/* Gardens button */}
+          <button
+            onClick={() => { setCurrentView('gardens'); setShowProfile(false); }}
+            className={`w-8 h-8 rounded-full border flex items-center justify-center transition-colors shadow-sm ${
+              currentView === 'gardens'
+                ? 'bg-stone-700 border-stone-700'
+                : 'bg-white border-stone-200 hover:border-stone-300'
+            }`}
+            title="Gardens"
+          >
+            <svg className={`w-4 h-4 ${currentView === 'gardens' ? 'text-white' : 'text-stone-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m0 0v2m0-2h2m-2 0H10m2-10a4 4 0 00-4 4v1h8v-1a4 4 0 00-4-4z" />
+              <rect x="5" y="11" width="14" height="10" rx="2" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+
+          {/* Profile button */}
+          <button
+            onClick={() => { setShowProfile(true); setCurrentView('home'); }}
+            className={`w-8 h-8 rounded-full border flex items-center justify-center transition-colors shadow-sm ${
+              showProfile
+                ? 'bg-stone-700 border-stone-700'
+                : 'bg-white border-stone-200 hover:border-stone-300'
+            }`}
+          >
+            <svg className={`w-4 h-4 ${showProfile ? 'text-white' : 'text-stone-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ============ FOOTNOTE SECTION COMPONENT ============
+  const FootnoteSection = ({ question }) => (
+    <div className="mt-8 px-4">
+      <div className="border-t border-stone-200 pt-4">
+        {/* Hashtags */}
+        {question?.hashtags && (
+          <div className="flex justify-center flex-wrap gap-2 mb-3">
+            {question.hashtags.map((tag, i) => (
+              <span key={i} className="text-xs text-stone-400">{tag}</span>
+            ))}
+          </div>
+        )}
+
+        {/* Fine Print */}
+        {question?.finePrint && (
+          <div className="text-center">
+            <button
+              onClick={() => setShowFinePrint(!showFinePrint)}
+              className="text-xs text-stone-400 hover:text-stone-500 transition-colors"
+            >
+              {showFinePrint ? '▼ hide fine print' : '▶ fine print'}
+            </button>
+            {showFinePrint && (
+              <div className="mt-3 p-4 bg-white/50 rounded-xl text-sm text-stone-500 font-light text-left">
+                <p>{question.finePrint}</p>
+                {question.finePrintLinks && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {question.finePrintLinks.map((link, i) => (
+                      <a
+                        key={i}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-500 hover:text-blue-600 underline"
+                      >
+                        {link.label} ↗
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 
   // ============ LANDING PAGE ============
   if (currentView === 'landing') {
     return (
       <div className="min-h-screen bg-gradient-to-b from-stone-50 via-amber-50 to-stone-100">
-        {/* Hero Section */}
         <div className="min-h-screen flex flex-col">
-          {/* Nav */}
           <nav className="p-6 flex justify-between items-center max-w-4xl mx-auto w-full">
             <h1 className="text-2xl font-light tracking-wide text-stone-500">cilantro</h1>
             <button
@@ -920,10 +1067,8 @@ export default function Cilantro() {
             </button>
           </nav>
 
-          {/* Hero */}
           <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
             <div className="max-w-2xl">
-              {/* Decorative dots */}
               <div className="flex justify-center gap-2 mb-8">
                 {['#8B9DC3', '#B8D4E3', '#F2B5D4', '#C9B1FF', '#98D8C8', '#F7DC6F'].map((color, i) => (
                   <div
@@ -956,7 +1101,6 @@ export default function Cilantro() {
             </div>
           </div>
 
-          {/* Scroll indicator */}
           <div className="pb-8 flex justify-center">
             <div className="animate-bounce text-stone-300">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -966,11 +1110,9 @@ export default function Cilantro() {
           </div>
         </div>
 
-        {/* Features Section */}
         <div className="py-24 px-6 bg-white">
           <div className="max-w-4xl mx-auto">
             <h3 className="text-2xl font-light text-stone-600 text-center mb-16">how it works</h3>
-
             <div className="grid md:grid-cols-3 gap-12">
               <div className="text-center">
                 <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
@@ -978,20 +1120,18 @@ export default function Cilantro() {
                 </div>
                 <h4 className="font-medium text-stone-700 mb-2">reflect daily</h4>
                 <p className="text-sm text-stone-500 font-light">
-                  Answer simple yes/no questions that make you think about who you are and who you're becoming.
+                  Answer simple yes/no questions that make you think about who you are.
                 </p>
               </div>
-
               <div className="text-center">
                 <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
                   <span className="text-2xl">🌱</span>
                 </div>
                 <h4 className="font-medium text-stone-700 mb-2">grow seeds</h4>
                 <p className="text-sm text-stone-500 font-light">
-                  Earn seeds with every answer. Use them to unlock themed gardens of deeper questions.
+                  Earn seeds with every answer. Use them to unlock themed gardens.
                 </p>
               </div>
-
               <div className="text-center">
                 <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
                   <span className="text-2xl">🔮</span>
@@ -1005,12 +1145,11 @@ export default function Cilantro() {
           </div>
         </div>
 
-        {/* Substack / Learn More Section */}
         <div className="py-24 px-6 bg-gradient-to-b from-stone-50 to-stone-100">
           <div className="max-w-md mx-auto text-center">
             <h3 className="text-xl font-light text-stone-600 mb-4">want to learn more?</h3>
             <p className="text-stone-500 font-light mb-8">
-              Follow our journey as we build Cilantro. Thoughts on reflection, self-discovery, and building mindful technology.
+              Follow our journey as we build Cilantro.
             </p>
             <a
               href="https://substack.com"
@@ -1023,7 +1162,6 @@ export default function Cilantro() {
           </div>
         </div>
 
-        {/* Footer CTA */}
         <div className="py-16 px-6 bg-stone-800 text-center">
           <h3 className="text-2xl font-light text-white mb-4">ready to reflect?</h3>
           <button
@@ -1032,9 +1170,7 @@ export default function Cilantro() {
           >
             get started free
           </button>
-          <p className="mt-6 text-stone-500 text-sm font-light">
-            © 2026 Cilantro · made with intention
-          </p>
+          <p className="mt-6 text-stone-500 text-sm font-light">© 2026 Cilantro</p>
         </div>
       </div>
     );
@@ -1044,15 +1180,15 @@ export default function Cilantro() {
   if (currentView === 'auth' || !isLoggedIn) {
     if (authView === 'welcome') {
       return (
-        <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col items-center justify-center px-6">
-          <div className="max-w-sm w-full text-center">
-            <button
-              onClick={() => setCurrentView('landing')}
-              className="absolute top-6 left-6 text-stone-400 hover:text-stone-600 transition-colors text-sm"
-            >
-              ← back
-            </button>
+        <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col items-center justify-center px-6 relative">
+          <button
+            onClick={() => setCurrentView('landing')}
+            className="absolute top-6 left-6 text-stone-400 hover:text-stone-600 transition-colors text-sm"
+          >
+            ← back
+          </button>
 
+          <div className="max-w-sm w-full text-center">
             <div className="mb-12">
               <h1 className="text-5xl font-light tracking-wide text-stone-600 mb-3">cilantro</h1>
               <p className="text-stone-400 font-light">yes or no. find yourself.</p>
@@ -1176,20 +1312,17 @@ export default function Cilantro() {
     }
   }
 
-  if (!currentQuestion && currentView === 'home') return null;
+  if (!currentQuestion && currentView === 'home' && !showProfile) return null;
 
   const stats = getStats(answers);
 
   // ============ SIDEBAR ============
   const Sidebar = () => (
     <div className={`fixed inset-0 z-50 transition-all duration-300 ${showSidebar ? 'visible' : 'invisible'}`}>
-      {/* Backdrop */}
       <div
         className={`absolute inset-0 bg-black transition-opacity duration-300 ${showSidebar ? 'opacity-30' : 'opacity-0'}`}
         onClick={() => setShowSidebar(false)}
       />
-
-      {/* Sidebar panel */}
       <div className={`absolute right-0 top-0 bottom-0 w-80 bg-white shadow-xl transition-transform duration-300 ${showSidebar ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="p-6">
           <div className="flex justify-between items-center mb-8">
@@ -1201,7 +1334,6 @@ export default function Cilantro() {
             </button>
           </div>
 
-          {/* Tab buttons */}
           <div className="flex gap-2 mb-6">
             {['settings', 'shop'].map(tab => (
               <button
@@ -1216,7 +1348,6 @@ export default function Cilantro() {
             ))}
           </div>
 
-          {/* Settings Tab */}
           {sidebarTab === 'settings' && (
             <div className="space-y-4">
               <button className="w-full p-4 text-left bg-stone-50 hover:bg-stone-100 rounded-xl transition-all">
@@ -1228,7 +1359,6 @@ export default function Cilantro() {
                   </div>
                 </div>
               </button>
-
               <button className="w-full p-4 text-left bg-stone-50 hover:bg-stone-100 rounded-xl transition-all">
                 <div className="flex items-center gap-3">
                   <span className="text-lg">🌙</span>
@@ -1238,7 +1368,6 @@ export default function Cilantro() {
                   </div>
                 </div>
               </button>
-
               <button
                 onClick={() => exportToCSV(answers)}
                 className="w-full p-4 text-left bg-stone-50 hover:bg-stone-100 rounded-xl transition-all"
@@ -1247,11 +1376,10 @@ export default function Cilantro() {
                   <span className="text-lg">📥</span>
                   <div>
                     <p className="text-sm font-medium text-stone-700">Export Data</p>
-                    <p className="text-xs text-stone-400">Download your reflections as CSV</p>
+                    <p className="text-xs text-stone-400">Download as CSV</p>
                   </div>
                 </div>
               </button>
-
               <button className="w-full p-4 text-left bg-stone-50 hover:bg-stone-100 rounded-xl transition-all">
                 <div className="flex items-center gap-3">
                   <span className="text-lg">🔒</span>
@@ -1261,9 +1389,7 @@ export default function Cilantro() {
                   </div>
                 </div>
               </button>
-
               <hr className="border-stone-100 my-4" />
-
               <button
                 onClick={handleLogout}
                 className="w-full p-4 text-left hover:bg-rose-50 rounded-xl transition-all"
@@ -1276,7 +1402,6 @@ export default function Cilantro() {
             </div>
           )}
 
-          {/* Shop Tab */}
           {sidebarTab === 'shop' && (
             <div className="space-y-4">
               <div className="text-center p-6 bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl mb-4">
@@ -1284,9 +1409,7 @@ export default function Cilantro() {
                 <p className="text-2xl font-light text-stone-700 mt-2">{seeds}</p>
                 <p className="text-xs text-stone-500">current seeds</p>
               </div>
-
               <p className="text-xs text-stone-400 text-center mb-4">Buy seeds or go unlimited</p>
-
               <button className="w-full p-4 bg-stone-50 hover:bg-stone-100 rounded-xl transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -1299,7 +1422,6 @@ export default function Cilantro() {
                   <span className="text-sm font-medium text-stone-600">$0.99</span>
                 </div>
               </button>
-
               <button className="w-full p-4 bg-stone-50 hover:bg-stone-100 rounded-xl transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -1312,7 +1434,6 @@ export default function Cilantro() {
                   <span className="text-sm font-medium text-stone-600">$3.99</span>
                 </div>
               </button>
-
               <div className="relative">
                 <div className="absolute -top-2 left-4 px-2 py-0.5 bg-purple-500 text-white text-xs rounded-full">
                   Popular
@@ -1323,17 +1444,14 @@ export default function Cilantro() {
                       <span className="text-lg">✨</span>
                       <div className="text-left">
                         <p className="text-sm font-medium text-purple-700">Unlimited</p>
-                        <p className="text-xs text-purple-500">All gardens unlocked forever</p>
+                        <p className="text-xs text-purple-500">All gardens unlocked</p>
                       </div>
                     </div>
                     <span className="text-sm font-medium text-purple-600">$4.99/mo</span>
                   </div>
                 </button>
               </div>
-
-              <p className="text-xs text-stone-400 text-center mt-4">
-                Payments secured by Stripe
-              </p>
+              <p className="text-xs text-stone-400 text-center mt-4">Payments secured by Stripe</p>
             </div>
           )}
         </div>
@@ -1350,23 +1468,19 @@ export default function Cilantro() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col">
         <Sidebar />
-
-        <div className="pt-8 pb-4 px-6">
-          <div className="max-w-sm mx-auto flex justify-between items-center">
-            <button onClick={() => setShowProfile(false)} className="text-stone-400 hover:text-stone-600 transition-colors text-sm">
-              ← back
-            </button>
-            <h1 className="text-2xl font-light tracking-wide text-stone-400">profile</h1>
-            <button onClick={() => setShowSidebar(true)} className="text-stone-400 hover:text-stone-600">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
-        </div>
+        <Header title="profile" />
 
         <div className="flex-1 px-6 pb-8 overflow-auto">
           <div className="max-w-sm mx-auto">
+            {/* Menu button */}
+            <div className="flex justify-end mb-4">
+              <button onClick={() => setShowSidebar(true)} className="text-stone-400 hover:text-stone-600">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+
             {/* User info */}
             {user && (
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 mb-6">
@@ -1380,22 +1494,6 @@ export default function Cilantro() {
                     <p className="text-stone-600 font-medium">{user.firstName}</p>
                     <p className="text-xs text-stone-300">@{user.username}</p>
                   </div>
-                </div>
-
-                {/* Seeds display */}
-                <div className="mt-4 pt-4 border-t border-stone-100 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">🌱</span>
-                    <span className="text-2xl font-light text-stone-700">{seeds}</span>
-                    <span className="text-sm text-stone-400">seeds</span>
-                  </div>
-                  {seedAnimation && (
-                    <span className={`text-sm font-medium animate-pulse ${
-                      seedAnimation.startsWith('-') || seedAnimation.startsWith('Not') ? 'text-rose-400' : 'text-emerald-500'
-                    }`}>
-                      {seedAnimation}
-                    </span>
-                  )}
                 </div>
               </div>
             )}
@@ -1425,14 +1523,14 @@ export default function Cilantro() {
                 <span className="text-xs text-stone-400">{dailyAnswered}/30</span>
               </div>
               <button
-                onClick={() => { setShowProfile(false); startDaily30(); }}
+                onClick={startDaily30}
                 className="w-full py-3 bg-stone-700 hover:bg-stone-800 text-white rounded-xl font-light text-sm transition-all"
               >
                 {dailyAnswered === 0 ? 'start today\'s daily 30' : dailyAnswered < 30 ? 'continue daily 30' : 'completed ✓'}
               </button>
             </div>
 
-            {/* Daily Reading Placeholder (shows after completing Daily 30) */}
+            {/* Daily Reading */}
             {showDailyReading && (
               <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 shadow-sm border border-purple-100 mb-6">
                 <div className="flex items-center gap-2 mb-3">
@@ -1441,16 +1539,13 @@ export default function Cilantro() {
                 </div>
                 <p className="text-sm text-purple-600 font-light leading-relaxed mb-4">
                   Based on today's reflections, you seem to be in a contemplative space.
-                  You're thinking deeply about growth and connection. Remember: the questions
-                  you ponder say as much about you as the answers you give.
+                  Remember: the questions you ponder say as much about you as the answers you give.
                 </p>
-                <p className="text-xs text-purple-400 italic">
-                  Full personalized insights coming soon...
-                </p>
+                <p className="text-xs text-purple-400 italic">Full insights coming soon...</p>
               </div>
             )}
 
-            {/* Stats overview - Updated */}
+            {/* Stats */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 mb-6">
               <h3 className="text-sm text-stone-400 font-light mb-4">your stats</h3>
               <div className="flex justify-around text-center">
@@ -1471,7 +1566,7 @@ export default function Cilantro() {
               </div>
             </div>
 
-            {/* Discrepancy Placeholder */}
+            {/* Insights placeholder */}
             {answers.length >= 10 && (
               <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 shadow-sm border border-amber-100 mb-6">
                 <div className="flex items-center gap-2 mb-3">
@@ -1481,9 +1576,7 @@ export default function Cilantro() {
                 <p className="text-sm text-amber-600 font-light leading-relaxed mb-2">
                   We noticed something interesting in your answers...
                 </p>
-                <p className="text-xs text-amber-400 italic">
-                  Pattern detection coming soon. We'll help you spot contradictions and growth areas.
-                </p>
+                <p className="text-xs text-amber-400 italic">Pattern detection coming soon.</p>
               </div>
             )}
 
@@ -1508,11 +1601,6 @@ export default function Cilantro() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full py-2 px-3 text-sm bg-stone-50 border border-stone-100 rounded-xl text-stone-600 placeholder-stone-300 focus:outline-none focus:border-stone-200 font-light"
                   />
-                  {searchQuery && (
-                    <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-300 hover:text-stone-400">
-                      ×
-                    </button>
-                  )}
                 </div>
 
                 <div className="space-y-4 max-h-96 overflow-auto">
@@ -1527,16 +1615,6 @@ export default function Cilantro() {
                           />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm text-stone-600 font-light leading-relaxed">{a.text}</p>
-
-                            {/* Hashtags */}
-                            {a.hashtags && (
-                              <div className="flex flex-wrap gap-1 mt-2">
-                                {a.hashtags.slice(0, 3).map((tag, ti) => (
-                                  <span key={ti} className="text-xs text-stone-300">{tag}</span>
-                                ))}
-                              </div>
-                            )}
-
                             <div className="flex items-center gap-3 mt-2">
                               <button
                                 onClick={() => changeAnswer(actualIndex)}
@@ -1550,34 +1628,13 @@ export default function Cilantro() {
                               </button>
                               <span className="text-xs text-stone-300">{formatTime(a.updatedAt || a.timestamp)}</span>
                             </div>
-
-                            {a.history && a.history.length > 0 && (
-                              <div className="mt-2 pl-2 border-l-2 border-stone-100">
-                                {[...a.history].reverse().map((h, hi) => (
-                                  <div key={hi} className="flex items-center gap-2 py-1">
-                                    <span className={`text-xs ${h.answer === 'yes' ? 'text-emerald-400' : 'text-rose-300'}`}>
-                                      {h.answer}
-                                    </span>
-                                    <span className="text-xs text-stone-200">{formatTime(h.timestamp)}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
                           </div>
                         </div>
                       </div>
                     );
                   })}
-
-                  {filteredAnswers.length === 0 && searchQuery && (
-                    <p className="text-center text-stone-300 text-sm font-light py-4">no matches found</p>
-                  )}
                 </div>
               </div>
-            )}
-
-            {answers.length === 0 && (
-              <p className="text-center text-stone-400 font-light mt-12">no reflections yet</p>
             )}
           </div>
         </div>
@@ -1589,24 +1646,17 @@ export default function Cilantro() {
   if (currentView === 'gardens') {
     const sortedGardens = [...gardens].sort((a, b) => {
       if (gardenCategory === 'popular') return b.popularity - a.popularity;
+      if (gardenCategory === 'free') return a.seedCost - b.seedCost;
       return 0;
     });
 
-    const filteredGardens = gardenCategory === 'popular'
+    const filteredGardens = gardenCategory === 'popular' || gardenCategory === 'free'
       ? sortedGardens
       : sortedGardens.filter(g => g.category === gardenCategory);
 
     return (
       <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col">
-        <div className="pt-8 pb-4 px-6">
-          <div className="max-w-2xl mx-auto flex justify-between items-center">
-            <button onClick={() => setCurrentView('home')} className="text-stone-400 hover:text-stone-600 transition-colors text-sm">
-              ← back
-            </button>
-            <h1 className="text-2xl font-light tracking-wide text-stone-400">gardens</h1>
-            <div className="w-12"></div>
-          </div>
-        </div>
+        <Header title="gardens" />
 
         <div className="flex-1 px-6 pb-8 overflow-auto">
           <div className="max-w-2xl mx-auto">
@@ -1631,24 +1681,28 @@ export default function Cilantro() {
 
             {/* Pinterest-style masonry grid */}
             <div className="columns-2 gap-4 space-y-4">
-              {(gardenCategory === 'popular' ? sortedGardens : filteredGardens).map((garden) => {
+              {(gardenCategory === 'free'
+                ? sortedGardens.filter(g => g.seedCost === 0)
+                : filteredGardens
+              ).map((garden) => {
                 const unlocked = isGardenUnlocked(garden.id);
+                const answeredCount = getGardenAnsweredCount(garden.id);
                 const heightClass = garden.size === 'large' ? 'h-72' : garden.size === 'medium' ? 'h-56' : 'h-44';
 
                 return (
                   <div
                     key={garden.id}
-                    className={`break-inside-avoid mb-4 rounded-2xl overflow-hidden shadow-sm border border-stone-100 transition-all hover:shadow-md ${
-                      !unlocked ? 'opacity-90' : ''
-                    }`}
+                    className="break-inside-avoid mb-4 rounded-2xl overflow-hidden shadow-sm border border-stone-100 transition-all hover:shadow-md"
                   >
-                    {/* Garden card header with gradient */}
+                    {/* Garden card header - grayscale when locked */}
                     <div
-                      className={`${heightClass} bg-gradient-to-br ${garden.gradient} p-5 flex flex-col justify-between relative`}
+                      className={`${heightClass} bg-gradient-to-br ${garden.gradient} p-5 flex flex-col justify-between relative transition-all duration-300 ${
+                        !unlocked ? 'grayscale' : ''
+                      }`}
                     >
                       {!unlocked && (
-                        <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px] flex items-center justify-center">
-                          <div className="text-4xl">🔒</div>
+                        <div className="absolute top-3 right-3">
+                          <span className="text-2xl">🔒</span>
                         </div>
                       )}
 
@@ -1659,13 +1713,29 @@ export default function Cilantro() {
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-white/60 text-xs">{garden.questions.length} questions</span>
-                        {!unlocked && (
+                        <span className="text-white/80 text-xs">
+                          {answeredCount}/{garden.questions.length} answered
+                        </span>
+                        {!unlocked && garden.seedCost > 0 && (
                           <span className="text-white/80 text-xs flex items-center gap-1">
                             🌱 {garden.seedCost}
                           </span>
                         )}
+                        {garden.seedCost === 0 && (
+                          <span className="text-white/80 text-xs bg-white/20 px-2 py-0.5 rounded-full">FREE</span>
+                        )}
                       </div>
+                    </div>
+
+                    {/* Progress bar */}
+                    <div className="h-1 bg-stone-100">
+                      <div
+                        className="h-full transition-all duration-300"
+                        style={{
+                          width: `${(answeredCount / garden.questions.length) * 100}%`,
+                          backgroundColor: unlocked ? garden.color : '#CBD5E0'
+                        }}
+                      />
                     </div>
 
                     {/* Action buttons */}
@@ -1675,7 +1745,7 @@ export default function Cilantro() {
                           onClick={() => openGarden(garden)}
                           className="w-full py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-sm font-light transition-all"
                         >
-                          Enter Garden
+                          {answeredCount === 0 ? 'Start Garden' : answeredCount < garden.questions.length ? 'Continue' : 'Review'}
                         </button>
                       ) : (
                         <button
@@ -1698,14 +1768,16 @@ export default function Cilantro() {
 
   // ============ GARDEN DETAIL VIEW ============
   if (currentView === 'garden-detail' && selectedGarden) {
-    const currentGardenQuestion = selectedGarden.questions[gardenQuestionIndex].text;
+    const currentGardenQuestion = selectedGarden.questions[gardenQuestionIndex];
     const progress = ((gardenQuestionIndex + 1) / selectedGarden.questions.length) * 100;
 
     return (
       <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col">
-        <div className="pt-8 pb-4 px-6">
+        <Header />
+
+        <div className="px-6 pb-2">
           <div className="max-w-sm mx-auto">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-2">
               <button
                 onClick={() => { setCurrentView('gardens'); setSelectedGarden(null); }}
                 className="text-stone-400 hover:text-stone-600 transition-colors text-sm"
@@ -1737,8 +1809,8 @@ export default function Cilantro() {
                 </div>
               </div>
 
-              <h2 className="text-2xl md:text-3xl font-light text-stone-700 text-center leading-relaxed mb-12 px-4">
-                {currentGardenQuestion}
+              <h2 className="text-2xl md:text-3xl font-light text-stone-700 text-center leading-relaxed mb-8 px-4">
+                {currentGardenQuestion.text}
               </h2>
 
               <div className="flex gap-4 px-4">
@@ -1775,9 +1847,11 @@ export default function Cilantro() {
 
     return (
       <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col">
-        <div className="pt-8 pb-4 px-6">
+        <Header />
+
+        <div className="px-6 pb-2">
           <div className="max-w-sm mx-auto">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-2">
               <button onClick={() => setCurrentView('home')} className="text-stone-400 hover:text-stone-600 transition-colors text-sm">
                 ← exit
               </button>
@@ -1802,13 +1876,14 @@ export default function Cilantro() {
           <div className="max-w-sm w-full">
             <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'}`}>
 
-              {/* Media (if present) */}
+              {/* Media */}
               {currentDailyQuestion?.mediaUrl && (
                 <div className="flex justify-center mb-6">
                   <img
                     src={currentDailyQuestion.mediaUrl}
                     alt=""
                     className="max-h-40 rounded-xl shadow-md object-cover"
+                    onError={(e) => { e.target.style.display = 'none'; }}
                   />
                 </div>
               )}
@@ -1822,50 +1897,9 @@ export default function Cilantro() {
               </div>
 
               {/* Question */}
-              <h2 className="text-2xl md:text-3xl font-light text-stone-700 text-center leading-relaxed mb-4 px-4">
+              <h2 className="text-2xl md:text-3xl font-light text-stone-700 text-center leading-relaxed mb-8 px-4">
                 {currentDailyQuestion?.text}
               </h2>
-
-              {/* Hashtags */}
-              {currentDailyQuestion?.hashtags && (
-                <div className="flex justify-center flex-wrap gap-2 mb-6">
-                  {currentDailyQuestion.hashtags.map((tag, i) => (
-                    <span key={i} className="text-xs text-stone-400">{tag}</span>
-                  ))}
-                </div>
-              )}
-
-              {/* Fine Print toggle */}
-              {currentDailyQuestion?.finePrint && (
-                <div className="mb-8 px-4">
-                  <button
-                    onClick={() => setShowFinePrint(!showFinePrint)}
-                    className="text-xs text-stone-400 hover:text-stone-500 transition-colors mx-auto block"
-                  >
-                    {showFinePrint ? '▼ hide fine print' : '▶ fine print'}
-                  </button>
-                  {showFinePrint && (
-                    <div className="mt-3 p-4 bg-white/50 rounded-xl text-sm text-stone-500 font-light">
-                      <p>{currentDailyQuestion.finePrint}</p>
-                      {currentDailyQuestion.finePrintLinks && (
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {currentDailyQuestion.finePrintLinks.map((link, i) => (
-                            <a
-                              key={i}
-                              href={link.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-xs text-blue-500 hover:text-blue-600 underline"
-                            >
-                              {link.label} ↗
-                            </a>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
 
               {/* Yes/No buttons */}
               <div className="flex gap-4 px-4">
@@ -1883,11 +1917,15 @@ export default function Cilantro() {
                 </button>
               </div>
 
+              {/* Skip */}
               <div className="flex justify-center mt-6">
                 <button onClick={skipDaily30Question} className="text-xs text-stone-300 hover:text-stone-400 transition-colors font-light">
                   skip
                 </button>
               </div>
+
+              {/* Footnote section - hashtags and fine print below skip */}
+              <FootnoteSection question={currentDailyQuestion} />
             </div>
           </div>
         </div>
@@ -1898,59 +1936,20 @@ export default function Cilantro() {
   // ============ MAIN HOME VIEW ============
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 flex flex-col">
-      {/* Header */}
-      <div className="pt-8 pb-4 px-6">
-        <div className="max-w-sm mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-light tracking-wide text-stone-400">cilantro</h1>
-          <div className="flex items-center gap-2">
-            {/* Seeds indicator */}
-            <div className="flex items-center gap-1 px-2 py-1 bg-white border border-stone-200 rounded-full shadow-sm">
-              <span className="text-sm">🌱</span>
-              <span className="text-xs font-medium text-stone-500">{seeds}</span>
-              {seedAnimation && (
-                <span className={`text-xs font-medium ${
-                  seedAnimation.startsWith('-') || seedAnimation.startsWith('Not') ? 'text-rose-400' : 'text-emerald-500'
-                }`}>
-                  {seedAnimation}
-                </span>
-              )}
-            </div>
-            {/* Gardens button */}
-            <button
-              onClick={() => setCurrentView('gardens')}
-              className="w-8 h-8 rounded-full bg-white border border-stone-200 flex items-center justify-center hover:border-stone-300 transition-colors shadow-sm"
-              title="Gardens"
-            >
-              <svg className="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m0 0v2m0-2h2m-2 0H10m2-10a4 4 0 00-4 4v1h8v-1a4 4 0 00-4-4z" />
-                <rect x="5" y="11" width="14" height="10" rx="2" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            {/* Profile button */}
-            <button
-              onClick={() => setShowProfile(true)}
-              className="w-8 h-8 rounded-full bg-white border border-stone-200 flex items-center justify-center hover:border-stone-300 transition-colors shadow-sm"
-            >
-              <svg className="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
+      <Header />
 
-      {/* Question area */}
       <div className="flex-1 flex items-center justify-center px-6 pb-8">
         <div className="max-w-sm w-full">
           <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'}`}>
 
-            {/* Media (if present) */}
+            {/* Media */}
             {currentQuestion?.mediaUrl && (
               <div className="flex justify-center mb-6">
                 <img
                   src={currentQuestion.mediaUrl}
                   alt=""
                   className="max-h-40 rounded-xl shadow-md object-cover"
+                  onError={(e) => { e.target.style.display = 'none'; }}
                 />
               </div>
             )}
@@ -1964,50 +1963,9 @@ export default function Cilantro() {
             </div>
 
             {/* Question */}
-            <h2 className="text-2xl md:text-3xl font-light text-stone-700 text-center leading-relaxed mb-4 px-4">
+            <h2 className="text-2xl md:text-3xl font-light text-stone-700 text-center leading-relaxed mb-8 px-4">
               {currentQuestion?.text}
             </h2>
-
-            {/* Hashtags */}
-            {currentQuestion?.hashtags && (
-              <div className="flex justify-center flex-wrap gap-2 mb-6">
-                {currentQuestion.hashtags.map((tag, i) => (
-                  <span key={i} className="text-xs text-stone-400">{tag}</span>
-                ))}
-              </div>
-            )}
-
-            {/* Fine Print toggle */}
-            {currentQuestion?.finePrint && (
-              <div className="mb-8 px-4">
-                <button
-                  onClick={() => setShowFinePrint(!showFinePrint)}
-                  className="text-xs text-stone-400 hover:text-stone-500 transition-colors mx-auto block"
-                >
-                  {showFinePrint ? '▼ hide fine print' : '▶ fine print'}
-                </button>
-                {showFinePrint && (
-                  <div className="mt-3 p-4 bg-white/50 rounded-xl text-sm text-stone-500 font-light">
-                    <p>{currentQuestion.finePrint}</p>
-                    {currentQuestion.finePrintLinks && (
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {currentQuestion.finePrintLinks.map((link, i) => (
-                          <a
-                            key={i}
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-blue-500 hover:text-blue-600 underline"
-                          >
-                            {link.label} ↗
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
 
             {/* Yes/No buttons */}
             <div className="flex gap-4 px-4">
@@ -2031,6 +1989,9 @@ export default function Cilantro() {
                 skip
               </button>
             </div>
+
+            {/* Footnote section - hashtags and fine print below skip */}
+            <FootnoteSection question={currentQuestion} />
           </div>
         </div>
       </div>
