@@ -262,7 +262,7 @@ export default function Cilantro() {
   const [seedAnimation, setSeedAnimation] = useState(null); // For showing "+X seeds" feedback
 
   // Auth state
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Set to true for testing
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Set to true for testing
   const [authView, setAuthView] = useState('welcome'); // 'welcome', 'login', 'signup'
   const [firstName, setFirstName] = useState('');
   const [username, setUsername] = useState('');
