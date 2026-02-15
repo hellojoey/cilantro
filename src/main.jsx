@@ -1,10 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import { CilantroProvider } from './context/CilantroContext'
 import Cilantro from './Cilantro'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Cilantro />
+    <BrowserRouter>
+      <CilantroProvider>
+        <Cilantro />
+      </CilantroProvider>
+    </BrowserRouter>
   </React.StrictMode>,
 )
