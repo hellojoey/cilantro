@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-export default function PeekModal({ garden, questions, onClose }) {
+export default function PeekModal({ garden, items, onClose }) {
   const modalRef = useRef(null);
 
   // Focus trap + escape to close
@@ -13,7 +13,13 @@ export default function PeekModal({ garden, questions, onClose }) {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [onClose]);
 
-  if (!questions || !garden) return null;
+  if (!items || !garden) return null;
+
+  const contentTypeLabel = (type) => {
+    if (type === 'quote') return '💬';
+    if (type === 'vibe') return '✨';
+    return '❓';
+  };
 
   return (
     <div
@@ -43,16 +49,21 @@ export default function PeekModal({ garden, questions, onClose }) {
           </div>
         </div>
 
-        {/* Preview questions */}
+        {/* Preview items */}
         <div className="space-y-3 mb-4">
-          {questions.map((q, i) => (
+          {items.map((item, i) => (
             <div key={i} className="flex items-start gap-2">
-              <span className="text-stone-300 dark:text-stone-500 text-xs mt-1">{i + 1}.</span>
-              <p className="text-sm text-stone-600 dark:text-stone-300 font-light">{q.text}</p>
+              <span className="text-xs mt-0.5" aria-hidden="true">{contentTypeLabel(item.contentType)}</span>
+              <p className="text-sm text-stone-600 dark:text-stone-300 font-light">
+                {item.text}
+                {item.attribution && (
+                  <span className="text-stone-400 dark:text-stone-500"> — {item.attribution}</span>
+                )}
+              </p>
             </div>
           ))}
-          <p className="text-xs text-stone-300 dark:text-stone-500 font-light italic pl-4">
-            ...and {garden.questions.length - questions.length} more questions
+          <p className="text-xs text-stone-300 dark:text-stone-500 font-light italic pl-6">
+            ...and {garden.items.length - items.length} more
           </p>
         </div>
 

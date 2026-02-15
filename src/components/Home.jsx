@@ -84,7 +84,7 @@ export default function Home() {
         <div className="max-w-sm w-full">
           <QuestionCard
             question={currentQuestion.text}
-            type={currentQuestion.type}
+            vibe={currentQuestion.vibe}
             isTransitioning={isTransitioning}
             onYes={() => handleAnswer('yes')}
             onNo={() => handleAnswer('no')}

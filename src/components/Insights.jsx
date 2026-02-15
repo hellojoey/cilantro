@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCilantro } from '../context/CilantroContext';
-import { typeColors, typeLabels } from '../data/questions';
 
 export default function Insights() {
   const navigate = useNavigate();
@@ -13,28 +12,11 @@ export default function Insights() {
   const noCount = answers.filter(a => a.answer === 'no').length;
   const yesPercent = totalAnswered > 0 ? Math.round((yesCount / totalAnswered) * 100) : 0;
 
-  // Category breakdown
-  const categories = {};
-  answers.forEach(a => {
-    const type = a.type || 'unknown';
-    if (!categories[type]) {
-      categories[type] = { total: 0, yes: 0, no: 0 };
-    }
-    categories[type].total++;
-    if (a.answer === 'yes') categories[type].yes++;
-    else categories[type].no++;
-  });
-
-  // Sort categories by total answered (descending)
-  const sortedCategories = Object.entries(categories)
-    .sort(([, a], [, b]) => b.total - a.total);
-
   // Recent activity (last 7 days)
   const now = new Date();
   const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const recentAnswers = answers.filter(a => new Date(a.timestamp) >= weekAgo);
   const recentYes = recentAnswers.filter(a => a.answer === 'yes').length;
-  const recentNo = recentAnswers.filter(a => a.answer === 'no').length;
 
   // Day-by-day activity (last 7 days)
   const dayActivity = [];
@@ -155,41 +137,6 @@ export default function Insights() {
             </div>
           </div>
 
-          {/* ── Category Breakdown ── */}
-          <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700">
-            <h3 className="text-xs text-stone-400 font-light uppercase tracking-wide mb-4">By Category</h3>
-            <div className="space-y-3">
-              {sortedCategories.map(([type, data]) => {
-                const yPct = Math.round((data.yes / data.total) * 100);
-                return (
-                  <div key={type}>
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-2 h-2 rounded-full"
-                          style={{ backgroundColor: typeColors[type] || '#a8a29e' }}
-                        />
-                        <span className="text-xs text-stone-600 dark:text-stone-300 font-light">
-                          {typeLabels[type] || type}
-                        </span>
-                      </div>
-                      <span className="text-xs text-stone-400">{data.total} · {yPct}% yes</span>
-                    </div>
-                    <div className="h-1.5 bg-stone-100 dark:bg-stone-700 rounded-full overflow-hidden">
-                      <div
-                        className="h-full rounded-full transition-all"
-                        style={{
-                          width: `${yPct}%`,
-                          backgroundColor: typeColors[type] || '#a8a29e',
-                        }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
           {/* ── Milestones ── */}
           <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700">
             <h3 className="text-xs text-stone-400 font-light uppercase tracking-wide mb-4">Milestones</h3>
@@ -200,7 +147,7 @@ export default function Insights() {
                 { icon: '🌿', label: 'Gardens', value: gardensCompleted, sub: 'completed' },
                 { icon: '💭', label: 'Reflections', value: totalAnswered, sub: 'total' },
               ].map((m, i) => (
-                <div key={i} className="bg-stone-50 dark:bg-stone-750 dark:bg-stone-700/50 rounded-xl p-3 text-center">
+                <div key={i} className="bg-stone-50 dark:bg-stone-700/50 rounded-xl p-3 text-center">
                   <div className="text-lg">{m.icon}</div>
                   <div className="text-xl font-light text-stone-700 dark:text-stone-200">{m.value}</div>
                   <div className="text-xs text-stone-400">{m.sub}</div>

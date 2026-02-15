@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCilantro } from '../context/CilantroContext';
 import { gardens } from '../data/questions';
-import QuestionCard from './QuestionCard';
+import GardenContentCard from './GardenContentCard';
 
 export default function GardenDetail() {
   const navigate = useNavigate();
   const { gardenId } = useParams();
-  const { handleGardenAnswer, isGardenUnlocked, isTransitioning } = useCilantro();
+  const { handleGardenAnswer, handleGardenContinue, isGardenUnlocked } = useCilantro();
 
   const garden = gardens.find(g => g.id === gardenId);
-  const [questionIndex, setQuestionIndex] = useState(0);
+  const [itemIndex, setItemIndex] = useState(0);
   const [localTransitioning, setLocalTransitioning] = useState(false);
 
   // Guard: if garden not found or not unlocked, redirect
@@ -28,18 +28,32 @@ export default function GardenDetail() {
     );
   }
 
-  const progress = ((questionIndex + 1) / garden.questions.length) * 100;
-  const currentQ = garden.questions[questionIndex];
+  const progress = ((itemIndex + 1) / garden.items.length) * 100;
+  const currentItem = garden.items[itemIndex];
 
   const onAnswer = (answer) => {
     setLocalTransitioning(true);
-    const completed = handleGardenAnswer(garden, questionIndex, answer);
+    const completed = handleGardenAnswer(garden, itemIndex, answer);
 
     setTimeout(() => {
       if (completed) {
         navigate('/gardens');
       } else {
-        setQuestionIndex(prev => prev + 1);
+        setItemIndex(prev => prev + 1);
+      }
+      setLocalTransitioning(false);
+    }, 400);
+  };
+
+  const onContinue = () => {
+    setLocalTransitioning(true);
+    const completed = handleGardenContinue(garden, itemIndex);
+
+    setTimeout(() => {
+      if (completed) {
+        navigate('/gardens');
+      } else {
+        setItemIndex(prev => prev + 1);
       }
       setLocalTransitioning(false);
     }, 400);
@@ -48,10 +62,10 @@ export default function GardenDetail() {
   const onSkip = () => {
     setLocalTransitioning(true);
     setTimeout(() => {
-      if (questionIndex >= garden.questions.length - 1) {
+      if (itemIndex >= garden.items.length - 1) {
         navigate('/gardens');
       } else {
-        setQuestionIndex(prev => prev + 1);
+        setItemIndex(prev => prev + 1);
       }
       setLocalTransitioning(false);
     }, 300);
@@ -69,17 +83,17 @@ export default function GardenDetail() {
             >
               ← exit garden
             </button>
-            <span className="text-xs text-stone-400 dark:text-stone-500" aria-label={`Question ${questionIndex + 1} of ${garden.questions.length}`}>
-              {questionIndex + 1} / {garden.questions.length}
+            <span className="text-xs text-stone-400 dark:text-stone-500" aria-label={`Item ${itemIndex + 1} of ${garden.items.length}`}>
+              {itemIndex + 1} / {garden.items.length}
             </span>
           </div>
           {/* Progress bar */}
           <div
             className="h-1 bg-stone-100 dark:bg-stone-700 rounded-full overflow-hidden"
             role="progressbar"
-            aria-valuenow={questionIndex + 1}
+            aria-valuenow={itemIndex + 1}
             aria-valuemin={0}
-            aria-valuemax={garden.questions.length}
+            aria-valuemax={garden.items.length}
             aria-label={`${garden.name} progress`}
           >
             <div
@@ -92,13 +106,14 @@ export default function GardenDetail() {
 
       <main className="flex-1 flex items-center justify-center px-6 pb-8">
         <div className="max-w-sm w-full">
-          <QuestionCard
-            question={currentQ.text}
-            color={garden.color}
-            label={`${garden.icon} ${garden.name}`}
+          <GardenContentCard
+            item={currentItem}
+            gardenColor={garden.color}
+            gardenLabel={`${garden.icon} ${garden.name}`}
             isTransitioning={localTransitioning}
             onYes={() => onAnswer('yes')}
             onNo={() => onAnswer('no')}
+            onContinue={onContinue}
             onSkip={onSkip}
           />
         </div>

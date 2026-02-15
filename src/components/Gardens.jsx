@@ -7,12 +7,12 @@ import PeekModal from './PeekModal';
 export default function Gardens() {
   const navigate = useNavigate();
   const { isGardenUnlocked, getGardenProgress, unlockGarden, peekGarden } = useCilantro();
-  const [peekData, setPeekData] = useState(null); // { garden, questions }
+  const [peekData, setPeekData] = useState(null); // { garden, items }
 
   const handlePeek = (garden) => {
     const preview = peekGarden(garden);
     if (preview) {
-      setPeekData({ garden, questions: preview });
+      setPeekData({ garden, items: preview });
     }
   };
 
@@ -44,7 +44,7 @@ export default function Gardens() {
             {gardens.map((garden) => {
               const unlocked = isGardenUnlocked(garden.id);
               const progress = getGardenProgress(garden.id);
-              const progressPercent = (progress / garden.questions.length) * 100;
+              const progressPercent = (progress / garden.items.length) * 100;
 
               return (
                 <div
@@ -92,7 +92,7 @@ export default function Gardens() {
                         role="progressbar"
                         aria-valuenow={progress}
                         aria-valuemin={0}
-                        aria-valuemax={garden.questions.length}
+                        aria-valuemax={garden.items.length}
                         aria-label={`${garden.name} progress`}
                       >
                         <div
@@ -101,8 +101,8 @@ export default function Gardens() {
                         />
                       </div>
                       <span className="text-xs text-stone-300 dark:text-stone-500">
-                        {progress}/{garden.questions.length}
-                        {progress >= garden.questions.length && ' ✓'}
+                        {progress}/{garden.items.length}
+                        {progress >= garden.items.length && ' ✓'}
                       </span>
                     </div>
                   ) : (
@@ -132,7 +132,7 @@ export default function Gardens() {
       {peekData && (
         <PeekModal
           garden={peekData.garden}
-          questions={peekData.questions}
+          items={peekData.items}
           onClose={() => setPeekData(null)}
         />
       )}

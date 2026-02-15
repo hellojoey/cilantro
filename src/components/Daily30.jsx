@@ -116,7 +116,7 @@ export default function Daily30() {
         <div className="max-w-sm w-full">
           <QuestionCard
             question={currentQ.text}
-            type={currentQ.type}
+            vibe={currentQ.vibe}
             isTransitioning={localTransitioning}
             onYes={() => onAnswer('yes')}
             onNo={() => onAnswer('no')}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { typeColors } from '../data/questions';
+import { vibeColor } from '../data/questions';
 
 export default function Welcome() {
   const navigate = useNavigate();
@@ -20,11 +20,11 @@ export default function Welcome() {
 
         {/* Decorative dots */}
         <div className="flex justify-center gap-2 mb-12" aria-hidden="true">
-          {Object.values(typeColors).slice(0, 6).map((color, i) => (
+          {['peace', 'joy', 'courage', 'honesty', 'curiosity', 'love'].map((vibe, i) => (
             <div
               key={i}
               className="w-2 h-2 rounded-full opacity-40"
-              style={{ backgroundColor: color }}
+              style={{ backgroundColor: vibeColor(vibe) }}
             />
           ))}
         </div>

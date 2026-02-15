@@ -1,8 +1,8 @@
 import React from 'react';
-import { typeColors } from '../data/questions';
+import { vibeColor } from '../data/questions';
 
-export default function QuestionCard({ question, type, color, label, isTransitioning, onYes, onNo, onSkip }) {
-  const dotColor = color || typeColors[type] || '#a8a29e';
+export default function QuestionCard({ question, vibe, color, label, isTransitioning, onYes, onNo, onSkip }) {
+  const dotColor = color || vibeColor(vibe) || '#a8a29e';
 
   return (
     <div

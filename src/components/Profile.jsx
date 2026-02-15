@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCilantro } from '../context/CilantroContext';
-import { typeColors, formatTime } from '../data/questions';
+import { vibeColor, formatTime, radarDimensions, calculateRadarScores } from '../data/questions';
 import SeedBadge from './SeedBadge';
+import RadarChart from './RadarChart';
 
 export default function Profile() {
   const navigate = useNavigate();
   const {
     user, logout,
-    answers, yesCount, noCount, changeAnswer,
+    answers, changeAnswer,
     skippedQuestions,
     dailyAnswered, dailyStreak,
   } = useCilantro();
@@ -18,6 +19,9 @@ export default function Profile() {
   const filteredAnswers = searchQuery
     ? answers.filter(a => a.text.toLowerCase().includes(searchQuery.toLowerCase()))
     : answers;
+
+  // Radar chart scores
+  const radarScores = calculateRadarScores(answers);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 dark:from-stone-900 dark:to-stone-800 flex flex-col">
@@ -69,6 +73,23 @@ export default function Profile() {
             </div>
           )}
 
+          {/* Radar Chart — Your Character */}
+          {answers.length > 0 && (
+            <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700 mb-6">
+              <h3 className="text-xs text-stone-400 font-light uppercase tracking-wide mb-2 text-center">your character</h3>
+              <RadarChart
+                dimensions={radarDimensions}
+                scores={radarScores}
+                size={280}
+              />
+              {radarScores.every(s => s === null) && (
+                <p className="text-xs text-stone-300 dark:text-stone-500 text-center mt-2 font-light">
+                  answer more questions to reveal your character
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Daily 30 Section */}
           <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700 mb-6">
             <div className="flex items-center justify-between mb-4">
@@ -100,34 +121,6 @@ export default function Profile() {
             >
               {dailyAnswered.count === 0 ? "start today's daily 30" : dailyAnswered.count < 30 ? 'continue daily 30' : 'completed ✓'}
             </button>
-          </div>
-
-          {/* Stats overview */}
-          <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700 mb-6">
-            <div className="flex justify-around text-center">
-              <div>
-                <div className="text-3xl font-light text-stone-700 dark:text-stone-200">{answers.length}</div>
-                <div className="text-xs text-stone-400 dark:text-stone-500 mt-1">answered</div>
-              </div>
-              <div className="w-px bg-stone-100 dark:bg-stone-700" aria-hidden="true"></div>
-              <div>
-                <div className="text-3xl font-light text-emerald-500">{yesCount}</div>
-                <div className="text-xs text-stone-400 dark:text-stone-500 mt-1">yes</div>
-              </div>
-              <div className="w-px bg-stone-100 dark:bg-stone-700" aria-hidden="true"></div>
-              <div>
-                <div className="text-3xl font-light text-rose-400">{noCount}</div>
-                <div className="text-xs text-stone-400 dark:text-stone-500 mt-1">no</div>
-              </div>
-            </div>
-            {answers.length > 0 && (
-              <div className="mt-4 h-2 bg-stone-100 dark:bg-stone-700 rounded-full overflow-hidden" role="progressbar" aria-valuenow={yesCount} aria-valuemin={0} aria-valuemax={answers.length} aria-label="Yes percentage">
-                <div
-                  className="h-full bg-gradient-to-r from-emerald-300 to-emerald-400 transition-all"
-                  style={{ width: `${(yesCount / answers.length) * 100}%` }}
-                />
-              </div>
-            )}
           </div>
 
           {/* Skipped questions */}
@@ -179,7 +172,7 @@ export default function Profile() {
                       <div className="flex items-start gap-3">
                         <div
                           className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                          style={{ backgroundColor: typeColors[a.type] || '#a8a29e' }}
+                          style={{ backgroundColor: vibeColor(a.vibe || 'reflection') }}
                           aria-hidden="true"
                         />
                         <div className="flex-1 min-w-0">
@@ -193,25 +186,26 @@ export default function Profile() {
                               {a.gardenName}
                             </span>
                           )}
-                          {a.type === 'daily30' && (
-                            <span className="inline-block text-xs text-amber-500 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full mt-1">
-                              Daily 30
-                            </span>
-                          )}
 
                           {/* Current answer */}
                           <div className="flex items-center gap-3 mt-2">
-                            <button
-                              onClick={() => changeAnswer(actualIndex)}
-                              className={`text-xs font-medium px-3 py-1 rounded-full transition-all ${
-                                a.answer === 'yes'
-                                  ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50'
-                                  : 'bg-rose-50 dark:bg-rose-900/30 text-rose-500 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50'
-                              }`}
-                              aria-label={`Change answer from ${a.answer} (costs 5 seeds)`}
-                            >
-                              {a.answer}
-                            </button>
+                            {a.answer === 'reflected' ? (
+                              <span className="text-xs font-medium px-3 py-1 rounded-full bg-stone-50 dark:bg-stone-700 text-stone-400 dark:text-stone-500">
+                                reflected
+                              </span>
+                            ) : (
+                              <button
+                                onClick={() => changeAnswer(actualIndex)}
+                                className={`text-xs font-medium px-3 py-1 rounded-full transition-all ${
+                                  a.answer === 'yes'
+                                    ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50'
+                                    : 'bg-rose-50 dark:bg-rose-900/30 text-rose-500 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50'
+                                }`}
+                                aria-label={`Change answer from ${a.answer} (costs 5 seeds)`}
+                              >
+                                {a.answer}
+                              </button>
+                            )}
                             <span className="text-xs text-stone-300 dark:text-stone-500">
                               {formatTime(a.updatedAt || a.timestamp)}
                             </span>
