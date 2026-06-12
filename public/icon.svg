@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Full-bleed background (safe for maskable icons) -->
+  <rect width="512" height="512" fill="#fafaf9"/>
+  <!-- Soft vibe-dot cluster, centered within the 80% safe zone -->
+  <circle cx="186" cy="210" r="50" fill="#8B9DC3" opacity="0.75"/>
+  <circle cx="326" cy="210" r="50" fill="#B8D4E3" opacity="0.75"/>
+  <circle cx="256" cy="306" r="50" fill="#F2B5D4" opacity="0.75"/>
+  <circle cx="206" cy="282" r="38" fill="#C9B1FF" opacity="0.75"/>
+  <circle cx="306" cy="282" r="38" fill="#98D8C8" opacity="0.75"/>
+</svg>
