@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "questions:validate": "node scripts/validate-questions.mjs",
+    "questions:stats": "node scripts/question-stats.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",

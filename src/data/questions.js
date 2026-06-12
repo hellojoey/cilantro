@@ -1,6 +1,29 @@
 // Cilantro - Question Data & Constants
-// v3.0: Freeform vibes, mixed-content gardens, radar chart dimensions
-// 200 base questions + 8 gardens (80 mixed items)
+// v3.1: Question bank lives in per-category JSON files (src/data/questions/*.json)
+// Add questions there (or via the /addquestions workflow), then run `npm run questions:validate`
+
+import deepReflective from './questions/deep-reflective.json';
+import lighthearted from './questions/lighthearted.json';
+import social from './questions/social.json';
+import popCulture from './questions/pop-culture.json';
+import trivia from './questions/trivia.json';
+import wellness from './questions/wellness.json';
+import creativity from './questions/creativity.json';
+import growth from './questions/growth.json';
+import vibeDimensionMap from './vibe-dimensions.json';
+
+export const questionCategories = [
+  deepReflective,
+  lighthearted,
+  social,
+  popCulture,
+  trivia,
+  wellness,
+  creativity,
+  growth,
+];
+
+export const questions = questionCategories.flatMap(c => c.questions);
 
 // ── Deterministic color from any vibe string ──
 export const vibeColor = (vibe) => {
@@ -15,127 +38,8 @@ export const vibeColor = (vibe) => {
 export const radarDimensions = ['Honesty', 'Empathy', 'Resilience', 'Courage', 'Curiosity', 'Discipline'];
 
 // ── Vibe → Radar Dimension Mapping ──
-// Each vibe maps to 1-2 character dimensions it primarily relates to
-export const vibeToDimensions = {
-  // Deep & reflective vibes
-  peace: ['Resilience'],
-  identity: ['Honesty', 'Courage'],
-  intuition: ['Curiosity', 'Courage'],
-  forgiveness: ['Empathy', 'Courage'],
-  honesty: ['Honesty'],
-  stillness: ['Discipline', 'Resilience'],
-  letting_go: ['Courage', 'Resilience'],
-  gratitude: ['Empathy'],
-  perspective: ['Honesty', 'Curiosity'],
-  kindness: ['Empathy'],
-  emotion: ['Empathy', 'Courage'],
-  fear: ['Courage'],
-  truth: ['Honesty', 'Courage'],
-  solitude: ['Discipline', 'Resilience'],
-  intention: ['Discipline', 'Honesty'],
-  growth: ['Resilience', 'Curiosity'],
-  beauty: ['Curiosity', 'Empathy'],
-  boundaries: ['Discipline', 'Courage'],
-  gentleness: ['Empathy'],
-  wounds: ['Resilience', 'Honesty'],
-  connection: ['Empathy'],
-  becoming: ['Courage', 'Honesty'],
-  discomfort: ['Courage', 'Resilience'],
-  permission: ['Courage'],
-
-  // Light-hearted vibes
-  humor: ['Curiosity'],
-  joy: ['Empathy', 'Curiosity'],
-  playful: ['Curiosity'],
-  comfort: ['Empathy'],
-  spontaneous: ['Courage', 'Curiosity'],
-  silly: ['Curiosity', 'Courage'],
-  nostalgia: ['Empathy'],
-  whimsy: ['Curiosity'],
-  indulgence: ['Courage'],
-  carefree: ['Curiosity'],
-  delight: ['Empathy', 'Curiosity'],
-
-  // Social vibes
-  appreciation: ['Empathy', 'Honesty'],
-  friendship: ['Empathy'],
-  warmth: ['Empathy'],
-  listening: ['Empathy', 'Discipline'],
-  vulnerability: ['Courage', 'Honesty'],
-  reconciliation: ['Empathy', 'Courage'],
-  generosity: ['Empathy'],
-  trust: ['Honesty', 'Empathy'],
-  celebration: ['Empathy'],
-  presence: ['Discipline', 'Empathy'],
-
-  // Pop culture vibes
-  passion: ['Courage', 'Curiosity'],
-  fandom: ['Curiosity'],
-  immersion: ['Curiosity', 'Discipline'],
-  taste: ['Honesty', 'Curiosity'],
-  escapism: ['Curiosity'],
-  resonance: ['Empathy', 'Curiosity'],
-
-  // Trivia vibes
-  knowledge: ['Curiosity', 'Discipline'],
-  skill: ['Discipline', 'Curiosity'],
-  memory: ['Curiosity'],
-  adventure: ['Courage', 'Curiosity'],
-  resourcefulness: ['Curiosity', 'Resilience'],
-
-  // Wellness vibes
-  health: ['Discipline'],
-  rest: ['Discipline', 'Resilience'],
-  nature: ['Curiosity'],
-  mindfulness: ['Discipline', 'Resilience'],
-  selfcare: ['Discipline', 'Empathy'],
-  balance: ['Discipline', 'Honesty'],
-  strength: ['Resilience', 'Courage'],
-  nourishment: ['Discipline'],
-
-  // Creativity vibes
-  dreams: ['Curiosity'],
-  creation: ['Curiosity', 'Courage'],
-  imagination: ['Curiosity'],
-  inspiration: ['Curiosity', 'Empathy'],
-  expression: ['Courage', 'Honesty'],
-  experimentation: ['Curiosity', 'Courage'],
-  craft: ['Discipline', 'Curiosity'],
-  wonder: ['Curiosity', 'Empathy'],
-
-  // Growth vibes
-  learning: ['Curiosity', 'Discipline'],
-  ambition: ['Discipline', 'Courage'],
-  grit: ['Resilience', 'Discipline'],
-  feedback: ['Honesty', 'Courage'],
-  persistence: ['Resilience', 'Discipline'],
-  purpose: ['Honesty', 'Courage'],
-  patience: ['Resilience', 'Discipline'],
-  progress: ['Resilience', 'Discipline'],
-  decision: ['Courage', 'Honesty'],
-  priority: ['Discipline', 'Honesty'],
-
-  // Garden-specific vibes
-  shadow: ['Honesty', 'Courage'],
-  reflection: ['Honesty'],
-  crossroads: ['Courage', 'Honesty'],
-  roots: ['Empathy', 'Resilience'],
-  mortality: ['Courage', 'Honesty'],
-  love: ['Empathy', 'Courage'],
-  direction: ['Discipline', 'Courage'],
-  calm: ['Resilience', 'Discipline'],
-  acceptance: ['Resilience', 'Empathy'],
-  legacy: ['Honesty', 'Discipline'],
-  desire: ['Courage', 'Honesty'],
-  belonging: ['Empathy'],
-  solace: ['Resilience'],
-  clarity: ['Honesty', 'Discipline'],
-  surrender: ['Courage', 'Resilience'],
-
-  // Fallbacks
-  daily: ['Curiosity'],
-  garden: ['Curiosity'],
-};
+// Lives in vibe-dimensions.json so scripts and the app share one source of truth
+export const vibeToDimensions = vibeDimensionMap;
 
 // ── Calculate radar scores from answers ──
 export const calculateRadarScores = (answers) => {
@@ -158,240 +62,6 @@ export const calculateRadarScores = (answers) => {
     return Math.round((yesCounts[d] / counts[d]) * 100);
   });
 };
-
-export const questions = [
-  // ═══════════════════════════════════════════════
-  // DEEP & REFLECTIVE (25 questions)
-  // ═══════════════════════════════════════════════
-  { text: "Did you feel at peace today?", vibe: "peace", difficulty: 2 },
-  { text: "Are you proud of who you're becoming?", vibe: "becoming", difficulty: 3 },
-  { text: "Did you listen to your intuition recently?", vibe: "intuition", difficulty: 2 },
-  { text: "Is there something you need to forgive yourself for?", vibe: "forgiveness", difficulty: 3 },
-  { text: "Are you being honest with yourself?", vibe: "honesty", difficulty: 3 },
-  { text: "Did you make time for silence today?", vibe: "stillness", difficulty: 1 },
-  { text: "Are you holding onto something you should let go?", vibe: "letting_go", difficulty: 3 },
-  { text: "Did you feel grateful for something small?", vibe: "gratitude", difficulty: 1 },
-  { text: "Are you where you thought you'd be at this point in life?", vibe: "perspective", difficulty: 3 },
-  { text: "Did you choose kindness over being right?", vibe: "kindness", difficulty: 2 },
-  { text: "Is your heart lighter than it was yesterday?", vibe: "emotion", difficulty: 2 },
-  { text: "Did you do something that scared you?", vibe: "fear", difficulty: 2 },
-  { text: "Have you been avoiding a truth about yourself?", vibe: "truth", difficulty: 3 },
-  { text: "Did you spend time with your thoughts today?", vibe: "solitude", difficulty: 2 },
-  { text: "Are you living with intention?", vibe: "intention", difficulty: 3 },
-  { text: "Have you outgrown a version of yourself recently?", vibe: "growth", difficulty: 3 },
-  { text: "Did you notice something beautiful that others missed?", vibe: "beauty", difficulty: 1 },
-  { text: "Are you carrying a burden that isn't yours to carry?", vibe: "boundaries", difficulty: 3 },
-  { text: "Did you honor a boundary today?", vibe: "boundaries", difficulty: 2 },
-  { text: "Have you been gentle with yourself lately?", vibe: "gentleness", difficulty: 2 },
-  { text: "Is there a wound you keep reopening?", vibe: "wounds", difficulty: 3 },
-  { text: "Did you feel truly seen by someone today?", vibe: "connection", difficulty: 2 },
-  { text: "Are you becoming more yourself or less?", vibe: "becoming", difficulty: 3 },
-  { text: "Have you sat with an uncomfortable emotion recently?", vibe: "discomfort", difficulty: 3 },
-  { text: "Did you give yourself permission to feel today?", vibe: "permission", difficulty: 2 },
-
-  // ═══════════════════════════════════════════════
-  // LIGHT-HEARTED & FUN (25 questions)
-  // ═══════════════════════════════════════════════
-  { text: "Did you laugh out loud today?", vibe: "humor", difficulty: 1 },
-  { text: "Have you danced when nobody was watching?", vibe: "spontaneous", difficulty: 1 },
-  { text: "Did you eat something delicious?", vibe: "delight", difficulty: 1 },
-  { text: "Have you taken a really good nap recently?", vibe: "comfort", difficulty: 1 },
-  { text: "Did you sing in the shower?", vibe: "playful", difficulty: 1 },
-  { text: "Have you worn your favorite outfit this week?", vibe: "joy", difficulty: 1 },
-  { text: "Did you pet a dog or cat today?", vibe: "warmth", difficulty: 1 },
-  { text: "Have you watched the clouds go by?", vibe: "peace", difficulty: 1 },
-  { text: "Did you treat yourself to something nice?", vibe: "indulgence", difficulty: 1 },
-  { text: "Have you stayed in pajamas all day (unapologetically)?", vibe: "carefree", difficulty: 1 },
-  { text: "Did you take a photo of something beautiful?", vibe: "beauty", difficulty: 1 },
-  { text: "Have you had breakfast for dinner?", vibe: "playful", difficulty: 1 },
-  { text: "Did you try a new food recently?", vibe: "curiosity", difficulty: 1 },
-  { text: "Have you done something silly today?", vibe: "silly", difficulty: 1 },
-  { text: "Did you say something that made yourself laugh?", vibe: "humor", difficulty: 1 },
-  { text: "Have you splashed in a puddle as an adult?", vibe: "whimsy", difficulty: 1 },
-  { text: "Did you make a wish on something today?", vibe: "whimsy", difficulty: 1 },
-  { text: "Have you worn mismatched socks on purpose?", vibe: "silly", difficulty: 1 },
-  { text: "Did you doodle or draw something just for fun?", vibe: "creation", difficulty: 1 },
-  { text: "Have you had an entire conversation with a pet?", vibe: "playful", difficulty: 1 },
-  { text: "Did you eat dessert first?", vibe: "spontaneous", difficulty: 1 },
-  { text: "Have you made a blanket fort as an adult?", vibe: "whimsy", difficulty: 1 },
-  { text: "Did you wave at a baby today?", vibe: "warmth", difficulty: 1 },
-  { text: "Have you used a silly voice for no reason?", vibe: "silly", difficulty: 1 },
-  { text: "Did you find money in an old pocket?", vibe: "delight", difficulty: 1 },
-
-  // ═══════════════════════════════════════════════
-  // SOCIAL & RELATIONSHIPS (25 questions)
-  // ═══════════════════════════════════════════════
-  { text: "Did you tell someone you appreciate them?", vibe: "appreciation", difficulty: 2 },
-  { text: "Have you called a friend just to chat?", vibe: "friendship", difficulty: 1 },
-  { text: "Did you make someone smile today?", vibe: "warmth", difficulty: 1 },
-  { text: "Have you hugged someone you love?", vibe: "love", difficulty: 1 },
-  { text: "Did you really listen when someone talked to you?", vibe: "listening", difficulty: 2 },
-  { text: "Have you reconnected with an old friend?", vibe: "friendship", difficulty: 2 },
-  { text: "Did you ask someone how they're really doing?", vibe: "empathy", difficulty: 2 },
-  { text: "Have you shared a meal with someone?", vibe: "connection", difficulty: 1 },
-  { text: "Did you compliment a stranger?", vibe: "generosity", difficulty: 2 },
-  { text: "Have you sent a thinking-of-you text?", vibe: "friendship", difficulty: 1 },
-  { text: "Did you forgive someone today?", vibe: "forgiveness", difficulty: 3 },
-  { text: "Have you made plans to see someone you miss?", vibe: "connection", difficulty: 2 },
-  { text: "Did you let someone help you today?", vibe: "vulnerability", difficulty: 2 },
-  { text: "Have you told someone they inspire you?", vibe: "appreciation", difficulty: 2 },
-  { text: "Did you hold space for someone's feelings?", vibe: "listening", difficulty: 3 },
-  { text: "Have you said sorry when you were wrong?", vibe: "honesty", difficulty: 3 },
-  { text: "Did you celebrate someone else's win today?", vibe: "celebration", difficulty: 1 },
-  { text: "Have you had a deep conversation recently?", vibe: "vulnerability", difficulty: 2 },
-  { text: "Did you introduce two people who should know each other?", vibe: "generosity", difficulty: 2 },
-  { text: "Have you checked in on someone who went quiet?", vibe: "empathy", difficulty: 2 },
-  { text: "Did you let someone go first today?", vibe: "kindness", difficulty: 1 },
-  { text: "Have you thanked someone who's always there?", vibe: "gratitude", difficulty: 2 },
-  { text: "Did you share something vulnerable with someone?", vibe: "vulnerability", difficulty: 3 },
-  { text: "Have you laughed with someone until it hurt?", vibe: "joy", difficulty: 1 },
-  { text: "Did you put your phone away during a conversation?", vibe: "presence", difficulty: 2 },
-
-  // ═══════════════════════════════════════════════
-  // POP CULTURE & ENTERTAINMENT (25 questions)
-  // ═══════════════════════════════════════════════
-  { text: "Have you watched a movie that made you cry?", vibe: "resonance", difficulty: 1 },
-  { text: "Do you know all the words to a Taylor Swift song?", vibe: "fandom", difficulty: 1 },
-  { text: "Have you binged an entire series in one sitting?", vibe: "immersion", difficulty: 1 },
-  { text: "Did you get emotionally attached to a fictional character?", vibe: "resonance", difficulty: 1 },
-  { text: "Have you ever dressed up for a movie premiere?", vibe: "fandom", difficulty: 1 },
-  { text: "Do you have a celebrity crush?", vibe: "playful", difficulty: 1 },
-  { text: "Have you cried during an animated movie?", vibe: "resonance", difficulty: 1 },
-  { text: "Did you rewatch a comfort show recently?", vibe: "comfort", difficulty: 1 },
-  { text: "Have you listened to a song on repeat for hours?", vibe: "immersion", difficulty: 1 },
-  { text: "Do you know more about a fictional universe than real history?", vibe: "escapism", difficulty: 1 },
-  { text: "Have you quoted a movie in a real conversation?", vibe: "humor", difficulty: 1 },
-  { text: "Did you discover a new artist you love?", vibe: "passion", difficulty: 1 },
-  { text: "Have you had a song stuck in your head all day?", vibe: "immersion", difficulty: 1 },
-  { text: "Did a TV show change your perspective on something?", vibe: "resonance", difficulty: 2 },
-  { text: "Have you stayed up too late finishing a book?", vibe: "passion", difficulty: 1 },
-  { text: "Do you have a comfort movie you've seen 10+ times?", vibe: "comfort", difficulty: 1 },
-  { text: "Have you cried at a song in public?", vibe: "vulnerability", difficulty: 1 },
-  { text: "Did you learn something real from a fictional story?", vibe: "curiosity", difficulty: 2 },
-  { text: "Have you recommended a show to everyone you know?", vibe: "passion", difficulty: 1 },
-  { text: "Do you have a playlist for your current mood?", vibe: "expression", difficulty: 1 },
-  { text: "Have you cosplayed or wanted to?", vibe: "fandom", difficulty: 1 },
-  { text: "Did a podcast make you rethink something?", vibe: "curiosity", difficulty: 2 },
-  { text: "Have you felt understood by a song lyric?", vibe: "resonance", difficulty: 1 },
-  { text: "Do you judge a person by their taste in music?", vibe: "taste", difficulty: 1 },
-  { text: "Have you written fan fiction or wanted to?", vibe: "creation", difficulty: 1 },
-
-  // ═══════════════════════════════════════════════
-  // TRIVIA & RANDOM (25 questions)
-  // ═══════════════════════════════════════════════
-  { text: "Can you name all the planets in order?", vibe: "knowledge", difficulty: 2 },
-  { text: "Do you know your blood type?", vibe: "knowledge", difficulty: 1 },
-  { text: "Have you ever seen a shooting star?", vibe: "wonder", difficulty: 1 },
-  { text: "Can you fold a paper crane?", vibe: "skill", difficulty: 2 },
-  { text: "Do you know how to read a map without GPS?", vibe: "resourcefulness", difficulty: 2 },
-  { text: "Have you ever grown something from a seed?", vibe: "patience", difficulty: 1 },
-  { text: "Can you name a constellation in the night sky?", vibe: "knowledge", difficulty: 2 },
-  { text: "Do you remember your childhood phone number?", vibe: "memory", difficulty: 2 },
-  { text: "Have you ever been to a different continent?", vibe: "adventure", difficulty: 1 },
-  { text: "Can you cook a meal without a recipe?", vibe: "resourcefulness", difficulty: 1 },
-  { text: "Do you know the capital of Australia?", vibe: "knowledge", difficulty: 2 },
-  { text: "Have you ever written a letter by hand?", vibe: "craft", difficulty: 1 },
-  { text: "Can you name five countries that start with 'M'?", vibe: "knowledge", difficulty: 2 },
-  { text: "Do you know what your name means?", vibe: "identity", difficulty: 1 },
-  { text: "Have you ever been awake for more than 24 hours?", vibe: "grit", difficulty: 1 },
-  { text: "Can you ride a bicycle with no hands?", vibe: "skill", difficulty: 2 },
-  { text: "Do you know how to change a tire?", vibe: "resourcefulness", difficulty: 2 },
-  { text: "Have you ever seen the Northern Lights?", vibe: "wonder", difficulty: 1 },
-  { text: "Can you whistle a full melody?", vibe: "skill", difficulty: 1 },
-  { text: "Do you know how to swim?", vibe: "skill", difficulty: 1 },
-  { text: "Have you ever caught a fish?", vibe: "adventure", difficulty: 1 },
-  { text: "Can you do mental math faster than your phone?", vibe: "skill", difficulty: 2 },
-  { text: "Do you know your Wi-Fi password by heart?", vibe: "memory", difficulty: 1 },
-  { text: "Have you ever built something with your hands?", vibe: "craft", difficulty: 1 },
-  { text: "Can you type without looking at the keyboard?", vibe: "skill", difficulty: 1 },
-
-  // ═══════════════════════════════════════════════
-  // DAILY LIFE & WELLNESS (25 questions)
-  // ═══════════════════════════════════════════════
-  { text: "Did you drink enough water today?", vibe: "health", difficulty: 1 },
-  { text: "Have you stretched your body?", vibe: "health", difficulty: 1 },
-  { text: "Did you get some fresh air?", vibe: "nature", difficulty: 1 },
-  { text: "Have you taken a deep breath on purpose?", vibe: "mindfulness", difficulty: 1 },
-  { text: "Did you put your phone down for an hour?", vibe: "balance", difficulty: 2 },
-  { text: "Have you done something just for yourself?", vibe: "selfcare", difficulty: 2 },
-  { text: "Did you go to bed at a reasonable time?", vibe: "discipline", difficulty: 2 },
-  { text: "Have you moved your body today?", vibe: "health", difficulty: 1 },
-  { text: "Did you eat a vegetable?", vibe: "nourishment", difficulty: 1 },
-  { text: "Have you looked up from your screen at the sky?", vibe: "nature", difficulty: 1 },
-  { text: "Did you wake up feeling rested?", vibe: "rest", difficulty: 1 },
-  { text: "Have you taken a walk outside today?", vibe: "nature", difficulty: 1 },
-  { text: "Did you eat a home-cooked meal?", vibe: "nourishment", difficulty: 1 },
-  { text: "Have you said no to something that drains you?", vibe: "boundaries", difficulty: 2 },
-  { text: "Did you spend less than an hour on social media?", vibe: "balance", difficulty: 2 },
-  { text: "Have you cleaned or organized a space today?", vibe: "discipline", difficulty: 1 },
-  { text: "Did you take your medication or vitamins?", vibe: "health", difficulty: 1 },
-  { text: "Have you listened to your body's signals?", vibe: "mindfulness", difficulty: 2 },
-  { text: "Did you do something that made you feel strong?", vibe: "strength", difficulty: 2 },
-  { text: "Have you journaled or reflected in writing?", vibe: "reflection", difficulty: 2 },
-  { text: "Did you avoid comparing yourself to others today?", vibe: "honesty", difficulty: 3 },
-  { text: "Have you created something today?", vibe: "creation", difficulty: 2 },
-  { text: "Did you rest without guilt?", vibe: "rest", difficulty: 2 },
-  { text: "Have you spent time in nature this week?", vibe: "nature", difficulty: 1 },
-  { text: "Did you set a healthy boundary today?", vibe: "boundaries", difficulty: 3 },
-
-  // ═══════════════════════════════════════════════
-  // CREATIVITY & DREAMS (25 questions)
-  // ═══════════════════════════════════════════════
-  { text: "Did you have a vivid dream last night?", vibe: "dreams", difficulty: 1 },
-  { text: "Have you written something creative recently?", vibe: "creation", difficulty: 2 },
-  { text: "Did you make something with your hands today?", vibe: "craft", difficulty: 2 },
-  { text: "Have you had a new idea that excited you?", vibe: "inspiration", difficulty: 1 },
-  { text: "Did you daydream today?", vibe: "imagination", difficulty: 1 },
-  { text: "Have you tried a new creative medium?", vibe: "experimentation", difficulty: 2 },
-  { text: "Did you take a photo that tells a story?", vibe: "expression", difficulty: 2 },
-  { text: "Have you been inspired by something unexpected?", vibe: "inspiration", difficulty: 1 },
-  { text: "Did you solve a problem in a creative way?", vibe: "resourcefulness", difficulty: 2 },
-  { text: "Have you shared your creative work with someone?", vibe: "vulnerability", difficulty: 3 },
-  { text: "Did you play music or make a sound today?", vibe: "expression", difficulty: 1 },
-  { text: "Have you reimagined something ordinary?", vibe: "imagination", difficulty: 2 },
-  { text: "Did you let yourself be a beginner at something?", vibe: "humility", difficulty: 2 },
-  { text: "Have you written down a dream or idea?", vibe: "dreams", difficulty: 1 },
-  { text: "Did you color, paint, or sketch today?", vibe: "creation", difficulty: 1 },
-  { text: "Have you arranged something beautifully?", vibe: "beauty", difficulty: 1 },
-  { text: "Did you make up a story or scenario?", vibe: "imagination", difficulty: 1 },
-  { text: "Have you experimented in the kitchen?", vibe: "experimentation", difficulty: 1 },
-  { text: "Did you see art that moved you?", vibe: "resonance", difficulty: 1 },
-  { text: "Have you imagined your ideal day in detail?", vibe: "dreams", difficulty: 2 },
-  { text: "Did you express yourself in a new way?", vibe: "expression", difficulty: 2 },
-  { text: "Have you built or fixed something recently?", vibe: "craft", difficulty: 2 },
-  { text: "Did you find beauty in something broken?", vibe: "wonder", difficulty: 2 },
-  { text: "Have you thought about what you'd create with unlimited time?", vibe: "imagination", difficulty: 2 },
-  { text: "Did creativity bring you joy today?", vibe: "joy", difficulty: 1 },
-
-  // ═══════════════════════════════════════════════
-  // GROWTH & AMBITION (25 questions)
-  // ═══════════════════════════════════════════════
-  { text: "Did you learn something new today?", vibe: "learning", difficulty: 1 },
-  { text: "Have you taken a step toward a goal this week?", vibe: "ambition", difficulty: 2 },
-  { text: "Did you step outside your comfort zone?", vibe: "fear", difficulty: 2 },
-  { text: "Have you asked for feedback recently?", vibe: "feedback", difficulty: 2 },
-  { text: "Did you fail at something and try again?", vibe: "grit", difficulty: 3 },
-  { text: "Have you read something that challenged your thinking?", vibe: "curiosity", difficulty: 2 },
-  { text: "Did you practice a skill you're developing?", vibe: "discipline", difficulty: 2 },
-  { text: "Have you invested in your future self?", vibe: "ambition", difficulty: 2 },
-  { text: "Did you have a productive day?", vibe: "discipline", difficulty: 1 },
-  { text: "Have you mentored or taught someone?", vibe: "generosity", difficulty: 2 },
-  { text: "Did you start something you've been putting off?", vibe: "grit", difficulty: 3 },
-  { text: "Have you celebrated a small win?", vibe: "gratitude", difficulty: 1 },
-  { text: "Did you choose progress over perfection?", vibe: "progress", difficulty: 2 },
-  { text: "Have you written down your goals?", vibe: "intention", difficulty: 2 },
-  { text: "Did you resist the urge to quit something hard?", vibe: "persistence", difficulty: 3 },
-  { text: "Have you changed your mind about something important?", vibe: "honesty", difficulty: 3 },
-  { text: "Did you prioritize what matters over what's urgent?", vibe: "priority", difficulty: 2 },
-  { text: "Have you sought out a new perspective?", vibe: "curiosity", difficulty: 2 },
-  { text: "Did you show up for yourself today?", vibe: "discipline", difficulty: 2 },
-  { text: "Have you been patient with your own progress?", vibe: "patience", difficulty: 2 },
-  { text: "Did you make a decision you'd been avoiding?", vibe: "decision", difficulty: 3 },
-  { text: "Have you thought about your purpose lately?", vibe: "purpose", difficulty: 3 },
-  { text: "Did you do the hard thing instead of the easy thing?", vibe: "grit", difficulty: 3 },
-  { text: "Have you acknowledged how far you've come?", vibe: "gratitude", difficulty: 2 },
-  { text: "Did you invest time in something meaningful today?", vibe: "purpose", difficulty: 2 },
-];
 
 export const gardens = [
   // ── ORIGINAL 5 GARDENS (now with mixed content) ──
