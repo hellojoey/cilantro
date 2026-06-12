@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCilantro } from '../context/CilantroContext';
-import { vibeColor, formatTime, radarDimensions, calculateRadarScores } from '../data/questions';
+import { vibeColor, formatTime, radarDimensions } from '../data/questions';
+import { radarComparison } from '../utils/insights';
 import SeedBadge from './SeedBadge';
 import RadarChart from './RadarChart';
 
@@ -20,8 +21,10 @@ export default function Profile() {
     ? answers.filter(a => a.text.toLowerCase().includes(searchQuery.toLowerCase()))
     : answers;
 
-  // Radar chart scores
-  const radarScores = calculateRadarScores(answers);
+  // Radar chart: once enough history exists, show who you are now (last 30
+  // days) against who you were (everything before) — otherwise all-time
+  const { allTime, baseline, current, hasComparison } = radarComparison(answers);
+  const radarScores = hasComparison ? current : allTime;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 dark:from-stone-900 dark:to-stone-800 flex flex-col">
@@ -80,8 +83,19 @@ export default function Profile() {
               <RadarChart
                 dimensions={radarDimensions}
                 scores={radarScores}
+                compareScores={hasComparison ? baseline : null}
                 size={280}
               />
+              {hasComparison && (
+                <div className="flex items-center justify-center gap-4 mt-2">
+                  <span className="flex items-center gap-1.5 text-xs text-stone-400 font-light">
+                    <span className="inline-block w-4 border-t-2 border-amber-500" aria-hidden="true" /> now
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs text-stone-400 font-light">
+                    <span className="inline-block w-4 border-t-2 border-dashed border-stone-400" aria-hidden="true" /> then
+                  </span>
+                </div>
+              )}
               {radarScores.every(s => s === null) && (
                 <p className="text-xs text-stone-300 dark:text-stone-500 text-center mt-2 font-light">
                   answer more questions to reveal your character

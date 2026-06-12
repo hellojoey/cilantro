@@ -1,0 +1,1568 @@
+{
+  "pairs": [
+    {
+      "a": "deep-042",
+      "aText": "Do you trust your first instinct?",
+      "b": "deep-041",
+      "bText": "Did your gut tell you something today that you ignored?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You trust your first instinct, yet today your gut spoke and went unheard."
+    },
+    {
+      "a": "deep-005",
+      "aText": "Are you being honest with yourself?",
+      "b": "deep-057",
+      "bText": "Have you told yourself a comforting story that isn't quite true?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You feel honest with yourself, yet a comforting story is still being told."
+    },
+    {
+      "a": "growth-044",
+      "aText": "Do you rest without guilt when you need to?",
+      "b": "wellness-130",
+      "bText": "Have you put off resting because there's always more to do?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You say rest comes without guilt, yet it keeps getting postponed for the to-do list."
+    },
+    {
+      "a": "deep-148",
+      "aText": "Do you rest before you're forced to?",
+      "b": "wellness-232",
+      "bText": "Did you push through exhaustion when you should have stopped?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You rest before you're forced to, you say, yet today exhaustion had to push first."
+    },
+    {
+      "a": "deep-015",
+      "aText": "Are you living with intention?",
+      "b": "deep-128",
+      "bText": "Do you say yes out of habit?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You're living with intention, yet yes still slips out by habit."
+    },
+    {
+      "a": "deep-063",
+      "aText": "Can you be still without feeling guilty?",
+      "b": "wellness-023",
+      "bText": "Did you rest without guilt?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You believe stillness can be guilt-free, yet guilt followed your rest today."
+    },
+    {
+      "a": "growth-103",
+      "aText": "Do you take breaks before you burn out, not after?",
+      "b": "wellness-239",
+      "bText": "Have you been borrowing energy from tomorrow to get through today?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You pause before burning out, you say, yet tomorrow keeps lending you energy."
+    },
+    {
+      "a": "wellness-183",
+      "aText": "Did you let yourself enjoy something without earning it first?",
+      "b": "wellness-195",
+      "bText": "Did you skip self-care this week because you felt you hadn't earned it?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "Part of you enjoys without earning, while another part still waits for permission."
+    },
+    {
+      "a": "growth-131",
+      "aText": "Would you defend your free time like you defend a meeting?",
+      "b": "deep-149",
+      "bText": "Have you protected your time this week?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You'd defend your free time like a meeting, yet this week it went unguarded."
+    },
+    {
+      "a": "deep-218",
+      "aText": "Can you name the thing that's been draining you?",
+      "b": "wellness-014",
+      "bText": "Have you said no to something that drains you?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You can name what drains you, yet the no hasn't been said."
+    },
+    {
+      "a": "deep-020",
+      "aText": "Have you been gentle with yourself lately?",
+      "b": "deep-096",
+      "bText": "Would you be friends with someone who spoke to you the way you speak to yourself?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You feel gentle with yourself, yet you wouldn't befriend your own inner voice."
+    },
+    {
+      "a": "deep-050",
+      "aText": "Would you forgive a friend for the things you blame yourself for?",
+      "b": "deep-004",
+      "bText": "Is there something you need to forgive yourself for?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "A friend would already be forgiven, yet you're still waiting on your own pardon."
+    },
+    {
+      "a": "growth-234",
+      "aText": "Do you coach yourself more than you criticize yourself?",
+      "b": "deep-155",
+      "bText": "Did you speak to yourself kindly after a mistake today?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You see yourself as your own coach, yet today's mistake met a harsher voice."
+    },
+    {
+      "a": "deep-114",
+      "aText": "Can you hear a hard truth without flinching?",
+      "b": "growth-057",
+      "bText": "Is there feedback you've been avoiding hearing?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You can take a hard truth, yet one piece of feedback still waits at the door."
+    },
+    {
+      "a": "creativity-099",
+      "aText": "Can you ask for honest feedback on your work?",
+      "b": "growth-057",
+      "bText": "Is there feedback you've been avoiding hearing?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You can ask for honest feedback, yet some of it you've been keeping at a distance."
+    },
+    {
+      "a": "deep-056",
+      "aText": "Do you soften your opinions to keep the peace?",
+      "b": "deep-055",
+      "bText": "Did you say what you actually meant today?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You tend to soften your opinions, yet today your real words found their way out."
+    },
+    {
+      "a": "deep-003",
+      "aText": "Did you listen to your intuition recently?",
+      "b": "deep-044",
+      "bText": "Is there a quiet knowing you've been talking yourself out of?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You listen to your intuition, yet one quiet knowing keeps getting talked down."
+    },
+    {
+      "a": "growth-093",
+      "aText": "Do you trust yourself to figure things out?",
+      "b": "growth-185",
+      "bText": "Are you waiting to feel confident before you act?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You trust yourself to figure things out, yet you're waiting for confidence to go first."
+    },
+    {
+      "a": "deep-110",
+      "aText": "Would you still choose the safe path if no one was watching?",
+      "b": "deep-105",
+      "bText": "Is fear making a decision for you right now?",
+      "conflict": [
+        [
+          "no",
+          "yes"
+        ]
+      ],
+      "note": "Unwatched, you wouldn't choose the safe path, yet fear is quietly choosing for you."
+    },
+    {
+      "a": "growth-059",
+      "aText": "Do you believe you can get better at hard things?",
+      "b": "growth-166",
+      "bText": "Are you avoiding a task because it might reveal your limits?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You believe you can grow through hard things, yet one task stays untouched in case it proves otherwise."
+    },
+    {
+      "a": "growth-202",
+      "aText": "Do you choose courage in small doses every day?",
+      "b": "deep-111",
+      "bText": "Is there a conversation you keep rehearsing but never having?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You choose small daily courage, yet one conversation stays in rehearsal."
+    },
+    {
+      "a": "growth-111",
+      "aText": "Would you rather try and stumble than always wonder?",
+      "b": "deep-247",
+      "bText": "Is there a leap you keep walking up to the edge of?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You'd rather stumble than wonder, yet one leap keeps you at its edge."
+    },
+    {
+      "a": "growth-098",
+      "aText": "Do you let yourself be a beginner without apology?",
+      "b": "growth-034",
+      "bText": "Are you afraid of looking like a beginner?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You let yourself begin without apology, yet looking like a beginner still feels frightening."
+    },
+    {
+      "a": "creativity-093",
+      "aText": "Can you enjoy making something you're not good at yet?",
+      "b": "growth-087",
+      "bText": "Are you okay being average at something while you learn?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You enjoy making things you haven't mastered, yet being average while learning still sits uneasily."
+    },
+    {
+      "a": "creativity-178",
+      "aText": "Is creating part of who you are?",
+      "b": "creativity-177",
+      "bText": "Do you protect time for creating?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "Creating is part of who you are, yet its time on the calendar goes unprotected."
+    },
+    {
+      "a": "creativity-086",
+      "aText": "Do you let yourself write bad first drafts?",
+      "b": "creativity-091",
+      "bText": "Is perfectionism quieting something you want to make?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You allow rough first drafts, yet perfectionism is still hushing something you want to make."
+    },
+    {
+      "a": "growth-210",
+      "aText": "Would you ship the imperfect thing tomorrow?",
+      "b": "creativity-091",
+      "bText": "Is perfectionism quieting something you want to make?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You'd ship the imperfect thing tomorrow, yet perfectionism keeps something of yours quiet today."
+    },
+    {
+      "a": "creativity-122",
+      "aText": "Do you trust your own taste?",
+      "b": "creativity-081",
+      "bText": "Do you compare your work to others' more than you'd like?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You trust your own taste, yet other people's work keeps becoming the measuring stick."
+    },
+    {
+      "a": "creativity-174",
+      "aText": "Do you believe everyone is creative?",
+      "b": "creativity-032",
+      "bText": "Do you think of yourself as a creative person?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You believe everyone is creative, yet somehow that everyone doesn't include you."
+    },
+    {
+      "a": "creativity-189",
+      "aText": "Do you practice anything creative regularly?",
+      "b": "creativity-175",
+      "bText": "Would you call yourself an artist out loud?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You practice your craft regularly, yet the word artist stays unspoken."
+    },
+    {
+      "a": "creativity-232",
+      "aText": "Do you wish you played make-believe more often?",
+      "b": "creativity-094",
+      "bText": "Did you give yourself permission to play today?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You wish for more play, yet today's permission slip went unsigned."
+    },
+    {
+      "a": "wellness-018",
+      "aText": "Have you listened to your body's signals?",
+      "b": "wellness-167",
+      "bText": "Did you push through pain you should have listened to?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You listen to your body, yet today its pain was pushed through rather than heard."
+    },
+    {
+      "a": "wellness-036",
+      "aText": "Have you been honest with yourself about how tired you are?",
+      "b": "wellness-037",
+      "bText": "Did you stay up too late doing nothing in particular?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You know how tired you are, yet the late hours still drifted by unclaimed."
+    },
+    {
+      "a": "wellness-105",
+      "aText": "Have you set any limits on your screen time?",
+      "b": "wellness-100",
+      "bText": "Did you lose an hour to scrolling without meaning to?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You've set limits on your screens, yet an hour still slipped through the scroll."
+    },
+    {
+      "a": "wellness-103",
+      "aText": "Have you noticed how you feel after a long scroll?",
+      "b": "wellness-104",
+      "bText": "Did you reach for your phone the moment you felt bored today?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You know how the long scroll leaves you feeling, yet boredom still reaches for the phone."
+    },
+    {
+      "a": "deep-028",
+      "aText": "Can you sit with yourself without reaching for a distraction?",
+      "b": "deep-177",
+      "bText": "Do you reach for your phone the second you feel uneasy?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You can sit with yourself, you say, yet unease still sends your hand to the phone."
+    },
+    {
+      "a": "wellness-231",
+      "aText": "Have you figured out what reliably recharges you?",
+      "b": "wellness-127",
+      "bText": "Have you been running on empty lately?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You know what recharges you, yet lately the tank stays empty."
+    },
+    {
+      "a": "deep-216",
+      "aText": "Do you know what matters most to you right now?",
+      "b": "deep-129",
+      "bText": "Is your time going where you say it matters?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You know what matters most, yet your hours are traveling somewhere else."
+    },
+    {
+      "a": "growth-009",
+      "aText": "Did you have a productive day?",
+      "b": "growth-201",
+      "bText": "Is your busyness building anything?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "Today felt productive, yet the busyness doesn't seem to be building anything."
+    },
+    {
+      "a": "deep-235",
+      "aText": "Does knowing life is short make you gentler?",
+      "b": "deep-234",
+      "bText": "Have you told the people who matter what they mean to you?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "Life's shortness softens you, yet the people who matter haven't heard it from you."
+    },
+    {
+      "a": "deep-173",
+      "aText": "Would the people close to you say they really know you?",
+      "b": "deep-168",
+      "bText": "Do you let people see the unpolished version of you?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You feel truly known, yet the unpolished version of you stays out of view."
+    },
+    {
+      "a": "growth-117",
+      "aText": "Are you measuring yourself by your own yardstick?",
+      "b": "deep-086",
+      "bText": "Are you measuring your life with someone else's ruler?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You measure by your own yardstick, yet someone else's ruler is still in your hand."
+    },
+    {
+      "a": "growth-219",
+      "aText": "Have you defined success on your own terms?",
+      "b": "growth-043",
+      "bText": "Are you comparing your chapter one to someone's chapter ten?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You've defined success your way, yet someone's chapter ten keeps grading your chapter one."
+    },
+    {
+      "a": "deep-204",
+      "aText": "Are you done arguing with the past?",
+      "b": "deep-007",
+      "bText": "Are you holding onto something you should let go?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You're done arguing with the past, yet something of it is still in your hands."
+    },
+    {
+      "a": "deep-164",
+      "aText": "Have you stopped pressing on a bruise just to check it still hurts?",
+      "b": "deep-021",
+      "bText": "Is there a wound you keep reopening?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You've stopped pressing on old bruises, yet one wound keeps finding itself reopened."
+    },
+    {
+      "a": "growth-128",
+      "aText": "Do you separate your worth from your output?",
+      "b": "deep-192",
+      "bText": "Do you like yourself without your achievements?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You separate worth from output, yet without the achievements, liking yourself gets harder."
+    },
+    {
+      "a": "growth-147",
+      "aText": "Do you believe slow progress is still progress?",
+      "b": "growth-058",
+      "bText": "Are you learning at a pace that feels kind?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You believe slow progress counts, yet your own pace doesn't feel kind to you."
+    },
+    {
+      "a": "growth-029",
+      "aText": "Do you finish what you start?",
+      "b": "creativity-028",
+      "bText": "Is there a half-finished project waiting patiently for you?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You finish what you start, yet one half-finished project is still waiting patiently."
+    },
+    {
+      "a": "growth-081",
+      "aText": "Would you bet on your own consistency?",
+      "b": "wellness-145",
+      "bText": "Did you follow through on what you promised yourself last night?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You'd bet on your own consistency, yet last night's promise to yourself slipped by."
+    },
+    {
+      "a": "growth-174",
+      "aText": "Have you earned your own trust lately?",
+      "b": "deep-151",
+      "bText": "Did you keep a promise to yourself today?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You feel you've earned your own trust, yet today's promise to yourself went unkept."
+    },
+    {
+      "a": "deep-112",
+      "aText": "Do you know what you actually want right now?",
+      "b": "deep-181",
+      "bText": "Have you let yourself want what you actually want?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You know what you want, yet you haven't quite let yourself want it."
+    },
+    {
+      "a": "growth-165",
+      "aText": "Have you let yourself want something big?",
+      "b": "deep-109",
+      "bText": "Are you scared of wanting too much?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You've let yourself want something big, yet wanting too much still scares you."
+    },
+    {
+      "a": "growth-171",
+      "aText": "Would you tell a friend the goal you're scared to say out loud?",
+      "b": "creativity-083",
+      "bText": "Is there a creative dream you've never said out loud?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You'd tell a friend the scary goal, yet one creative dream has never left your lips."
+    },
+    {
+      "a": "deep-083",
+      "aText": "Do you think today's worry will matter in five years?",
+      "b": "deep-108",
+      "bText": "Did worry steal a moment from you today?",
+      "conflict": [
+        [
+          "no",
+          "yes"
+        ]
+      ],
+      "note": "You know today's worry won't matter in five years, yet it still took a moment from you."
+    },
+    {
+      "a": "growth-067",
+      "aText": "Would you ask for help if you were stuck?",
+      "b": "wellness-120",
+      "bText": "Did you ask for help instead of pushing through alone?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You'd ask for help if stuck, you say, yet today you carried it alone."
+    },
+    {
+      "a": "deep-238",
+      "aText": "Can you be corrected without crumbling?",
+      "b": "growth-119",
+      "bText": "Did you let feedback land before defending yourself?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You can take correction, yet today the defense arrived before the feedback landed."
+    },
+    {
+      "a": "deep-189",
+      "aText": "Are you the same person in every room?",
+      "b": "deep-191",
+      "bText": "Is the role you play starting to feel like a costume?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You're the same person in every room, yet the role is starting to feel like a costume."
+    },
+    {
+      "a": "growth-157",
+      "aText": "Do you let small wins count?",
+      "b": "growth-187",
+      "bText": "Is there a milestone you passed without celebrating?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You let small wins count, yet a real milestone passed without its moment."
+    },
+    {
+      "a": "deep-103",
+      "aText": "Are you tired in a way that rest doesn't reach?",
+      "b": "wellness-045",
+      "bText": "Have you slept well most nights this week?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "The sleep has been good this week, yet a deeper tiredness remains untouched by it."
+    },
+    {
+      "a": "deep-037",
+      "aText": "Do you like the direction you're quietly heading?",
+      "b": "deep-126",
+      "bText": "Are your days adding up to the life you want?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You like the direction you're heading, yet the days don't seem to be adding up to it."
+    },
+    {
+      "a": "social-235",
+      "aText": "Do you keep your word even when it's inconvenient?",
+      "b": "pop-059",
+      "bText": "Would you cancel plans to watch a new episode the night it drops?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You keep your word even when it costs you, yet a new episode can outbid the plans you made."
+    },
+    {
+      "a": "social-141",
+      "aText": "Is your full attention something people can count on?",
+      "b": "pop-148",
+      "bText": "Do you watch concerts through your phone screen?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "People can count on your full attention, yet at concerts a screen stands between you and the moment."
+    },
+    {
+      "a": "social-064",
+      "aText": "Do you listen to understand rather than to reply?",
+      "b": "social-062",
+      "bText": "Did you let someone finish their story without jumping in?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You listen to understand, yet today someone's story didn't get to reach its ending."
+    },
+    {
+      "a": "social-079",
+      "aText": "Are you honest when someone asks how you're doing?",
+      "b": "deep-058",
+      "bText": "Did you say 'fine' this week when it wasn't true?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You answer honestly when asked how you are, yet 'fine' slipped out this week when it wasn't true."
+    },
+    {
+      "a": "social-114",
+      "aText": "Do you trust people until they give you a reason not to?",
+      "b": "social-119",
+      "bText": "Is it easy for you to let new people in?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You offer trust freely, yet the door to really letting someone in stays heavy."
+    },
+    {
+      "a": "social-105",
+      "aText": "Do you give without keeping score?",
+      "b": "deep-074",
+      "bText": "Would your days feel lighter if you stopped keeping score?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You say you give without counting, yet somewhere a quiet tally is still being kept."
+    },
+    {
+      "a": "social-042",
+      "aText": "Are you usually the one who reaches out first?",
+      "b": "social-047",
+      "bText": "Is there a friendship you've been quietly letting fade?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You're the one who reaches out first, yet one friendship is drifting while you watch."
+    },
+    {
+      "a": "light-116",
+      "aText": "Have you pretended not to see someone to avoid small talk?",
+      "b": "social-180",
+      "bText": "Would you strike up a chat in a waiting room?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You'd chat with a stranger in a waiting room, yet a familiar face can send you ducking behind a shelf."
+    },
+    {
+      "a": "social-049",
+      "aText": "Could you name a friend who knows the real you?",
+      "b": "deep-173",
+      "bText": "Would the people close to you say they really know you?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "One friend knows the real you, yet the people closest might not say the same."
+    },
+    {
+      "a": "social-045",
+      "aText": "Do you let your friends see you on your bad days?",
+      "b": "deep-168",
+      "bText": "Do you let people see the unpolished version of you?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "Your friends see your bad days, yet the unpolished version of you stays backstage."
+    },
+    {
+      "a": "pop-046",
+      "aText": "Have you promised yourself just one more episode, then lied?",
+      "b": "growth-174",
+      "bText": "Have you earned your own trust lately?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You've earned your own trust, yet 'one more episode' is a promise you break to yourself."
+    },
+    {
+      "a": "pop-172",
+      "aText": "Would you survive a week without streaming anything?",
+      "b": "deep-028",
+      "bText": "Can you sit with yourself without reaching for a distraction?",
+      "conflict": [
+        [
+          "no",
+          "yes"
+        ]
+      ],
+      "note": "You can sit with yourself without a distraction, yet a week without streaming feels unsurvivable."
+    },
+    {
+      "a": "pop-039",
+      "aText": "Would you watch a three-hour movie without checking your phone?",
+      "b": "trivia-245",
+      "bText": "Could you wait in a long line without checking your phone?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "A three-hour movie can hold your whole attention, yet a line is too long to stand in without your phone."
+    },
+    {
+      "a": "trivia-020",
+      "aText": "Do you know how to swim?",
+      "b": "trivia-152",
+      "bText": "Have you ever swum somewhere you couldn't see the bottom?",
+      "conflict": [
+        [
+          "no",
+          "yes"
+        ]
+      ],
+      "note": "You say you can't swim, yet you've floated over water with no visible bottom."
+    },
+    {
+      "a": "social-031",
+      "aText": "Are you quick to say it when someone does something well?",
+      "b": "social-030",
+      "bText": "Is there someone whose effort you've noticed but never mentioned?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "Praise comes quickly from you, yet one person's effort has been noticed and never named."
+    },
+    {
+      "a": "social-028",
+      "aText": "Do you tell people what you like about them while they're around?",
+      "b": "social-032",
+      "bText": "Does your sibling know what you admire about them?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You tell people what you like about them, yet your sibling hasn't heard what you admire."
+    },
+    {
+      "a": "social-076",
+      "aText": "Do you find it hard to ask for help?",
+      "b": "social-102",
+      "bText": "Do you offer help before people have to ask?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You offer help before anyone asks, yet asking for it yourself feels heavy."
+    },
+    {
+      "a": "light-010",
+      "aText": "Have you stayed in pajamas all day (unapologetically)?",
+      "b": "deep-063",
+      "bText": "Can you be still without feeling guilty?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "A pajama day needs no apology, yet stillness still hands you a bill of guilt."
+    },
+    {
+      "a": "light-194",
+      "aText": "Did you enjoy doing absolutely nothing for a while today?",
+      "b": "growth-044",
+      "bText": "Do you rest without guilt when you need to?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "Doing nothing felt good today, yet rest and guilt still tend to arrive together."
+    },
+    {
+      "a": "social-046",
+      "aText": "Would you drop your plans if a close friend needed you tonight?",
+      "b": "deep-152",
+      "bText": "Are you available to everyone except yourself?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You'd drop everything for a friend tonight, yet you're the one person you're rarely available to."
+    },
+    {
+      "a": "pop-176",
+      "aText": "Do you hide what you actually enjoy to seem cooler?",
+      "b": "deep-189",
+      "bText": "Are you the same person in every room?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You're the same person in every room, yet some of what you love stays hidden to look cooler."
+    },
+    {
+      "a": "social-231",
+      "aText": "Do you soften your opinions depending on who's listening?",
+      "b": "deep-056",
+      "bText": "Do you soften your opinions to keep the peace?",
+      "conflict": [
+        [
+          "no",
+          "yes"
+        ]
+      ],
+      "note": "You don't think the audience changes your opinions, yet they soften when peace is on the line."
+    },
+    {
+      "a": "social-161",
+      "aText": "Do you speak kindly about people who aren't in the room?",
+      "b": "pop-050",
+      "bText": "Would you spoil a twist for someone who annoyed you?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You speak kindly of people who aren't around, yet a spoiler waits for anyone who annoys you."
+    },
+    {
+      "a": "social-152",
+      "aText": "Are you patient with people who move slower than you?",
+      "b": "pop-134",
+      "bText": "Do you listen at double speed and feel quietly superior?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You're patient with people who move slowly, yet voices get hurried along at double speed."
+    },
+    {
+      "a": "light-173",
+      "aText": "Have you ever named a houseplant?",
+      "b": "trivia-089",
+      "bText": "Can you keep a houseplant alive for more than a year?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "Your plants get names, yet they rarely get a second year."
+    },
+    {
+      "a": "pop-088",
+      "aText": "Do you put on sad songs when you want to feel sad on purpose?",
+      "b": "pop-187",
+      "bText": "Do you use stories to avoid feelings you don't want to feel?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You invite sadness in when you choose it, yet stories also help you sidestep the feelings you don't."
+    },
+    {
+      "a": "pop-197",
+      "aText": "Do you cry more at fiction than at real life?",
+      "b": "social-077",
+      "bText": "Have you cried in front of someone you trust?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "Fiction unlocks your tears easily, yet the people you trust haven't seen them."
+    },
+    {
+      "a": "pop-061",
+      "aText": "Has a TV character ever felt like a friend?",
+      "b": "social-039",
+      "bText": "Have you made a new friend this year?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "A character on a screen feels like a friend, yet this year hasn't brought a new one in real life."
+    },
+    {
+      "a": "pop-164",
+      "aText": "Did an online community ever feel like a hometown?",
+      "b": "social-217",
+      "bText": "Have you shown up to something in your community this month?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "An online community feels like a hometown, yet your actual one hasn't seen you this month."
+    },
+    {
+      "a": "social-227",
+      "aText": "Are you still connected to where you come from?",
+      "b": "trivia-229",
+      "bText": "Do you know all four of your grandparents' first names?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You feel connected to where you come from, yet a grandparent's first name is out of reach."
+    },
+    {
+      "a": "pop-168",
+      "aText": "Have you binged videos of a hobby you'll never actually try?",
+      "b": "growth-030",
+      "bText": "Is there a skill you've been meaning to learn?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "There's a skill you've been meaning to learn, yet mostly you watch other people doing theirs."
+    },
+    {
+      "a": "light-122",
+      "aText": "Did you stay up way too late having fun this week?",
+      "b": "growth-172",
+      "bText": "Do you plan rest the way you plan work?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You plan rest like you plan work, yet this week fun rewrote the schedule past midnight."
+    },
+    {
+      "a": "light-164",
+      "aText": "Did you make someone laugh today?",
+      "b": "light-001",
+      "bText": "Did you laugh out loud today?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You handed out laughter today, yet none of it seems to have been yours."
+    },
+    {
+      "a": "social-017",
+      "aText": "Did you celebrate someone else's win today?",
+      "b": "growth-187",
+      "bText": "Is there a milestone you passed without celebrating?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You celebrated someone else's win today, yet one of your own milestones passed without a toast."
+    },
+    {
+      "a": "social-128",
+      "aText": "Could you cheer for a friend who got the thing you wanted?",
+      "b": "deep-226",
+      "bText": "Can you admit envy when it visits?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You believe you could cheer for a friend who got your dream, yet envy isn't something you can greet by name."
+    },
+    {
+      "a": "social-194",
+      "aText": "Could you forgive someone who never said sorry?",
+      "b": "social-203",
+      "bText": "Do you forgive yourself when you let a friend down?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You can forgive someone who never apologized, yet letting a friend down stays unforgiven in you."
+    },
+    {
+      "a": "social-150",
+      "aText": "Did you soften when someone snapped at you?",
+      "b": "deep-155",
+      "bText": "Did you speak to yourself kindly after a mistake today?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You softened when someone snapped at you, yet your own mistake didn't get the same gentle voice."
+    },
+    {
+      "a": "trivia-010",
+      "aText": "Can you cook a meal without a recipe?",
+      "b": "trivia-029",
+      "bText": "Can you make rice without burning it?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You can improvise a whole meal, yet rice still wins sometimes."
+    },
+    {
+      "a": "light-139",
+      "aText": "Have you ever nailed a parallel park on the first try?",
+      "b": "trivia-030",
+      "bText": "Could you parallel park on the first try?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You've already nailed it once, yet you doubt you could do it again."
+    },
+    {
+      "a": "light-117",
+      "aText": "Can you still do a cartwheel?",
+      "b": "trivia-189",
+      "bText": "Could you still do a cartwheel?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ],
+        [
+          "no",
+          "yes"
+        ]
+      ],
+      "note": "The same cartwheel got two different answers, depending on which version of you was asked."
+    },
+    {
+      "a": "social-052",
+      "aText": "Do you make people feel welcome in your home?",
+      "b": "social-216",
+      "bText": "Do you feel at home with the people around you?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You make people feel at home, yet that feeling doesn't always make it back to you."
+    },
+    {
+      "a": "social-220",
+      "aText": "Have you found your people, even just a few?",
+      "b": "social-219",
+      "bText": "Are there people who'd notice if you skipped a week?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You've found your people, yet you're not sure they'd notice a missing week."
+    },
+    {
+      "a": "social-250",
+      "aText": "Did you choose rest over one more social yes this week?",
+      "b": "deep-123",
+      "bText": "Do you need more alone time than you're getting?",
+      "conflict": [
+        [
+          "no",
+          "yes"
+        ]
+      ],
+      "note": "You need more alone time than you're getting, yet one more social yes still beat rest this week."
+    },
+    {
+      "a": "pop-048",
+      "aText": "Do you save the last episodes because you don't want a show to end?",
+      "b": "growth-029",
+      "bText": "Do you finish what you start?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You finish what you start, yet final episodes wait unwatched so the story never has to end."
+    },
+    {
+      "a": "social-073",
+      "aText": "Have you heard out an opinion you disagreed with, all the way?",
+      "b": "growth-018",
+      "bText": "Have you sought out a new perspective?",
+      "conflict": [
+        [
+          "no",
+          "yes"
+        ]
+      ],
+      "note": "You go looking for new perspectives, yet a disagreeing voice didn't get heard all the way through."
+    },
+    {
+      "a": "pop-156",
+      "aText": "Do you send memes instead of saying you miss someone?",
+      "b": "deep-169",
+      "bText": "Is there someone you miss but haven't told?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "The memes keep arriving in their inbox, yet the words 'I miss you' stay in drafts."
+    },
+    {
+      "a": "social-213",
+      "aText": "Is there someone whose presence you quietly count on?",
+      "b": "social-022",
+      "bText": "Have you thanked someone who's always there?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "There's someone whose presence you quietly count on, yet your thanks has stayed quiet too."
+    },
+    {
+      "a": "pop-066",
+      "aText": "Have you ever made a playlist for someone you cared about?",
+      "b": "social-205",
+      "bText": "Have you told a friend what their friendship means to you?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You've told someone how you feel in songs, yet not what their friendship means in words."
+    },
+    {
+      "a": "social-192",
+      "aText": "Would you say the loving thing now instead of waiting?",
+      "b": "social-181",
+      "bText": "Did you say 'I love you' out loud today?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You believe in saying the loving thing now, yet today's 'I love you' stayed unspoken."
+    },
+    {
+      "a": "pop-140",
+      "aText": "Have you ever binged a podcast's entire back catalog?",
+      "b": "growth-158",
+      "bText": "Is there a course, book, or class waiting for your yes?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "A whole back catalog got your hours, while the course you want still waits for your yes."
+    },
+    {
+      "a": "pop-137",
+      "aText": "Do you fall asleep to the same episode every night?",
+      "b": "deep-006",
+      "bText": "Did you make time for silence today?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "Even falling asleep has a soundtrack, and silence never found a minute of today."
+    },
+    {
+      "a": "pop-157",
+      "aText": "Have you fallen down a 2 a.m. video rabbit hole?",
+      "b": "deep-148",
+      "bText": "Do you rest before you're forced to?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You believe in resting before you're forced to, yet the 2 a.m. rabbit holes know your name."
+    },
+    {
+      "a": "pop-205",
+      "aText": "Are you keeping a list of everything you've watched?",
+      "b": "growth-216",
+      "bText": "Do you keep a record of what you've learned the hard way?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "Every show you've watched is carefully logged, yet the lessons you earned the hard way go unrecorded."
+    },
+    {
+      "a": "trivia-023",
+      "aText": "Do you know your Wi-Fi password by heart?",
+      "b": "trivia-131",
+      "bText": "Do you know anyone's phone number by heart besides your own?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "Your memory holds the Wi-Fi password, but no one's phone number besides your own."
+    },
+    {
+      "a": "pop-212",
+      "aText": "Do you still know your Hogwarts house without checking?",
+      "b": "trivia-130",
+      "bText": "Can you name all your cousins without pausing?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "Your Hogwarts house comes to you instantly, yet naming all your cousins takes a pause."
+    },
+    {
+      "a": "social-158",
+      "aText": "Have you done something kind that no one saw?",
+      "b": "deep-090",
+      "bText": "Were you kind to yourself in a small way today?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You were kind today where no one could see, except in the one place only you can see."
+    },
+    {
+      "a": "social-007",
+      "aText": "Did you ask someone how they're really doing?",
+      "b": "deep-201",
+      "bText": "Have you checked in with yourself about how you're really doing?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You asked someone how they're really doing, yet you haven't asked yourself."
+    },
+    {
+      "a": "social-070",
+      "aText": "Do you notice when someone's 'I'm fine' isn't?",
+      "b": "social-079",
+      "bText": "Are you honest when someone asks how you're doing?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You can hear when someone else's 'fine' isn't true, yet you hand out your own."
+    },
+    {
+      "a": "social-016",
+      "aText": "Have you said sorry when you were wrong?",
+      "b": "social-091",
+      "bText": "Is there an apology you're still hoping to give?",
+      "conflict": [
+        [
+          "yes",
+          "yes"
+        ]
+      ],
+      "note": "You say sorry when you're wrong, yet one apology is still waiting inside you."
+    },
+    {
+      "a": "social-092",
+      "aText": "Have you let a small grudge go this week?",
+      "b": "social-196",
+      "bText": "Have you stopped retelling a story that keeps a hurt alive?",
+      "conflict": [
+        [
+          "yes",
+          "no"
+        ]
+      ],
+      "note": "You let a grudge go this week, yet the story that keeps a hurt alive still gets retold."
+    }
+  ]
+}

@@ -85,6 +85,7 @@ export default function Home() {
           <QuestionCard
             question={currentQuestion.text}
             vibe={currentQuestion.vibe}
+            echo={currentQuestion._echo}
             isTransitioning={isTransitioning}
             onYes={() => handleAnswer('yes')}
             onNo={() => handleAnswer('no')}

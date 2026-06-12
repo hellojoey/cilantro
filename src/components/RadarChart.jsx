@@ -1,6 +1,8 @@
 import React from 'react';
 
-export default function RadarChart({ dimensions, scores, size = 280 }) {
+// `compareScores` (optional) renders a second, dashed polygon underneath —
+// used by Profile for the "then vs now" view of your character.
+export default function RadarChart({ dimensions, scores, compareScores, size = 280 }) {
   const center = size / 2;
   const radius = size * 0.35;
   const labelOffset = radius + 28;
@@ -31,6 +33,16 @@ export default function RadarChart({ dimensions, scores, size = 280 }) {
   const scorePolygon = scorePoints.map(p => `${p.x},${p.y}`).join(' ');
 
   const hasAnyData = scores.some(s => s !== null);
+
+  // Comparison polygon (then), drawn beneath the main one (now)
+  const comparePoints = compareScores
+    ? compareScores.map((score, i) => {
+        if (score === null) return getPoint(i, 0);
+        return getPoint(i, (score / 100) * radius);
+      })
+    : null;
+  const comparePolygon = comparePoints ? comparePoints.map(p => `${p.x},${p.y}`).join(' ') : null;
+  const hasCompareData = compareScores ? compareScores.some(s => s !== null) : false;
 
   return (
     <svg
@@ -70,6 +82,18 @@ export default function RadarChart({ dimensions, scores, size = 280 }) {
           />
         );
       })}
+
+      {/* Comparison polygon (who you were) */}
+      {hasCompareData && (
+        <polygon
+          points={comparePolygon}
+          fill="none"
+          className="stroke-stone-400 dark:stroke-stone-500"
+          strokeWidth={1.5}
+          strokeDasharray="4 4"
+          strokeLinejoin="round"
+        />
+      )}
 
       {/* Score polygon fill */}
       {hasAnyData && (

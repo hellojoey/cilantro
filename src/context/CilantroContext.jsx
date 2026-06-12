@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { questions, gardens, getDailyQuestions, SEEDS, typeToVibeMigration } from '../data/questions';
+import { getEchoCandidate, ECHO_FREQUENCY } from '../utils/insights';
 
 const CilantroContext = createContext(null);
 
@@ -142,7 +143,21 @@ export function CilantroProvider({ children }) {
   }, [showSeedAnimation]);
 
   // ── Get new question ──
+  const freePlayCount = useRef(0);
   const getNewQuestion = useCallback(() => {
+    // Every Nth question, try to resurface an echo — a question answered
+    // long ago, so answering again reveals constancy or drift
+    freePlayCount.current += 1;
+    if (freePlayCount.current % ECHO_FREQUENCY === 0) {
+      const echo = getEchoCandidate(answers, questions);
+      if (echo) {
+        return {
+          ...echo.question,
+          _echo: { previousAnswer: echo.previousAnswer, previousTime: echo.previousTime },
+        };
+      }
+    }
+
     let available = questions.filter((_, i) => !usedQuestions.includes(i));
     if (available.length === 0) {
       setUsedQuestions([]);
@@ -152,7 +167,7 @@ export function CilantroProvider({ children }) {
     const questionIndex = questions.indexOf(available[randomIndex]);
     setUsedQuestions(prev => [...prev, questionIndex]);
     return available[randomIndex];
-  }, [usedQuestions]);
+  }, [usedQuestions, answers]);
 
   // ── Answer a free-play question ──
   const handleAnswer = useCallback((answer) => {
@@ -160,8 +175,9 @@ export function CilantroProvider({ children }) {
     setIsTransitioning(true);
     earnSeeds(currentQuestion.difficulty);
 
+    const { _echo, ...question } = currentQuestion;
     setAnswers(prev => [...prev, {
-      ...currentQuestion,
+      ...question,
       answer,
       timestamp: new Date().toISOString()
     }]);
@@ -210,6 +226,21 @@ export function CilantroProvider({ children }) {
       return a;
     }));
   }, [seeds, showSeedAnimation]);
+
+  // ── Re-answer a question today (Mirror Moments) ──
+  // Free, earns no seeds: revisiting a tension is reflection, not farming.
+  // Appends a fresh entry so the old answer stays in your record.
+  const reanswer = useCallback((question, answer) => {
+    setAnswers(prev => [...prev, {
+      id: question.id,
+      text: question.text,
+      vibe: question.vibe,
+      difficulty: question.difficulty,
+      answer,
+      revisited: true,
+      timestamp: new Date().toISOString()
+    }]);
+  }, []);
 
   // ── Garden methods ──
   const isGardenUnlocked = useCallback((gardenId) => {
@@ -311,6 +342,7 @@ export function CilantroProvider({ children }) {
     earnSeeds(currentQ.difficulty);
 
     setAnswers(prev => [...prev, {
+      id: currentQ.id,
       text: currentQ.text,
       vibe: currentQ.vibe || 'daily',
       difficulty: currentQ.difficulty,
@@ -361,7 +393,7 @@ export function CilantroProvider({ children }) {
     currentQuestion, isTransitioning,
     handleAnswer, handleSkip,
     // Answers
-    answers, changeAnswer,
+    answers, changeAnswer, reanswer,
     skippedQuestions,
     // Seeds
     seeds, seedAnimation, earnSeeds, showSeedAnimation,

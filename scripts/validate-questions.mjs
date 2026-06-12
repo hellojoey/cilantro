@@ -87,7 +87,52 @@ for (const file of files) {
   });
 }
 
-console.log(`Checked ${total} questions across ${files.length} files.`);
+// ── Contradiction pairs (src/data/contradictions.json) ──
+// Every pair must reference real question ids with exactly matching text,
+// valid conflict combos, and a note. Duplicate pairs (either order) are errors.
+let pairTotal = 0;
+try {
+  const contradictions = JSON.parse(readFileSync(join(root, 'src', 'data', 'contradictions.json'), 'utf8'));
+  const textById = new Map();
+  for (const file of files) {
+    try {
+      const data = JSON.parse(readFileSync(join(questionsDir, file), 'utf8'));
+      (data.questions || []).forEach(q => textById.set(q.id, q.text));
+    } catch { /* already reported above */ }
+  }
+
+  const seenPairs = new Set();
+  (contradictions.pairs || []).forEach((p, i) => {
+    const where = `contradictions.json[${i}]`;
+    pairTotal++;
+
+    for (const side of ['a', 'b']) {
+      const id = p[side];
+      const text = p[`${side}Text`];
+      if (!textById.has(id)) errors.push(`${where}: unknown question id "${id}"`);
+      else if (textById.get(id) !== text)
+        errors.push(`${where}: ${side}Text doesn't match bank text for "${id}"`);
+    }
+
+    if (p.a && p.b) {
+      const key = [p.a, p.b].sort().join('|');
+      if (seenPairs.has(key)) errors.push(`${where}: duplicate pair ${p.a} / ${p.b}`);
+      else seenPairs.add(key);
+      if (p.a === p.b) errors.push(`${where}: pair references the same question twice`);
+    }
+
+    if (!Array.isArray(p.conflict) || p.conflict.length === 0 ||
+        !p.conflict.every(c => Array.isArray(c) && c.length === 2 && c.every(x => x === 'yes' || x === 'no')))
+      errors.push(`${where}: "conflict" must be a non-empty array of [yes|no, yes|no] combos`);
+
+    if (!p.note || typeof p.note !== 'string' || p.note.trim().length < 10)
+      errors.push(`${where}: missing or too-short "note"`);
+  });
+} catch (e) {
+  errors.push(`contradictions.json: ${e.message}`);
+}
+
+console.log(`Checked ${total} questions across ${files.length} files, plus ${pairTotal} contradiction pairs.`);
 if (warnings.length) {
   console.log(`\n⚠ ${warnings.length} warning(s):`);
   warnings.slice(0, 40).forEach(w => console.log('  -', w));

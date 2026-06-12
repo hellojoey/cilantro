@@ -1,7 +1,7 @@
 import React from 'react';
-import { vibeColor } from '../data/questions';
+import { vibeColor, formatTime } from '../data/questions';
 
-export default function QuestionCard({ question, vibe, color, label, isTransitioning, onYes, onNo, onSkip }) {
+export default function QuestionCard({ question, vibe, color, label, echo, isTransitioning, onYes, onNo, onSkip }) {
   const dotColor = color || vibeColor(vibe) || '#a8a29e';
 
   return (
@@ -30,6 +30,22 @@ export default function QuestionCard({ question, vibe, color, label, isTransitio
           />
         )}
       </div>
+
+      {/* Echo: this question is returning from your past */}
+      {echo && (
+        <div className="flex justify-center mb-6">
+          <div className="px-4 py-2 rounded-2xl bg-stone-100/80 dark:bg-stone-700/50 border border-stone-200 dark:border-stone-600 text-center">
+            <p className="text-xs text-stone-400 dark:text-stone-400 font-light">
+              an echo — last time you said{' '}
+              <span className={echo.previousAnswer === 'yes' ? 'text-emerald-500' : 'text-rose-400'}>
+                {echo.previousAnswer}
+              </span>
+              <span className="text-stone-300 dark:text-stone-500"> · {formatTime(echo.previousTime)}</span>
+            </p>
+            <p className="text-xs text-stone-300 dark:text-stone-500 font-light mt-0.5">is it still true?</p>
+          </div>
+        </div>
+      )}
 
       {/* Question */}
       <h2 className="text-2xl md:text-3xl font-light text-stone-700 dark:text-stone-200 text-center leading-relaxed mb-12 px-4">
