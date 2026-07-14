@@ -12,6 +12,7 @@ Do these once; everything else is already coded.
 2. Paste the entire contents of `supabase/migrations/001_init.sql` → **Run**. Should say "Success".
 3. New query → paste `supabase/migrations/002_fine_print_sources.sql` → **Run**. (Safe to run even if you did step 2 earlier — it only adds columns.)
 4. New query → paste `supabase/migrations/003_tags_and_garden_ties.sql` → **Run**. (Also just adds columns.)
+5. New query → paste `supabase/migrations/004_fine_print_notes.sql` → **Run**. (Also just adds columns.)
 
 ## 3. Seed the content
 1. New query → paste the contents of `supabase/seed.sql` → **Run**.
