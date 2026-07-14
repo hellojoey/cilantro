@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { vibeColor } from '../data/questions';
 import { getFinePrint } from '../data/finePrint';
 
 export default function QuestionCard({ question, vibe, color, label, resurfaced, isTransitioning, onYes, onNo, onSkip, skipLabel = 'skip' }) {
   const dotColor = color || vibeColor(vibe) || '#a8a29e';
   const finePrint = getFinePrint(question);
+
+  // Fine print is opt-in per question — collapsed again on every new question
+  // so quick reflection stays frictionless.
+  const [showFinePrint, setShowFinePrint] = useState(false);
+  useEffect(() => setShowFinePrint(false), [question]);
 
   return (
     <div
@@ -63,13 +68,21 @@ export default function QuestionCard({ question, vibe, color, label, resurfaced,
         </button>
       </div>
 
-      {/* Fine print: sits beneath the card — neutral details for a more educated answer */}
+      {/* Fine print: beneath the card, opt-in via toggle so it never distracts */}
       {finePrint && (
         <div className="mt-8 px-8 text-center">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-stone-300 dark:text-stone-600 mb-1.5 font-medium">fine print</p>
-          <p className="text-xs font-light text-stone-400 dark:text-stone-500 leading-relaxed">
-            {finePrint}
-          </p>
+          <button
+            onClick={() => setShowFinePrint((v) => !v)}
+            aria-expanded={showFinePrint}
+            className="text-[10px] uppercase tracking-[0.2em] text-stone-300 dark:text-stone-600 hover:text-stone-400 dark:hover:text-stone-400 font-medium transition-colors"
+          >
+            fine print {showFinePrint ? '−' : '+'}
+          </button>
+          {showFinePrint && (
+            <p className="mt-1.5 text-xs font-light text-stone-400 dark:text-stone-500 leading-relaxed">
+              {finePrint}
+            </p>
+          )}
         </div>
       )}
 
