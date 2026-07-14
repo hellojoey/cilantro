@@ -2,7 +2,7 @@ import React from 'react';
 import { vibeColor } from '../data/questions';
 import { getFinePrint } from '../data/finePrint';
 
-export default function QuestionCard({ question, vibe, color, label, isTransitioning, onYes, onNo, onSkip }) {
+export default function QuestionCard({ question, vibe, color, label, resurfaced, isTransitioning, onYes, onNo, onSkip, skipLabel = 'skip' }) {
   const dotColor = color || vibeColor(vibe) || '#a8a29e';
   const finePrint = getFinePrint(question);
 
@@ -32,6 +32,13 @@ export default function QuestionCard({ question, vibe, color, label, isTransitio
           />
         )}
       </div>
+
+      {/* Gentle note when a skipped question comes back around */}
+      {resurfaced && (
+        <p className="text-[11px] text-stone-300 dark:text-stone-600 text-center font-light italic -mt-2 mb-4">
+          you skipped this one before — feel any different?
+        </p>
+      )}
 
       {/* Question */}
       <h2 className="text-2xl md:text-3xl font-light text-stone-700 dark:text-stone-200 text-center leading-relaxed mb-12 px-4">
@@ -74,7 +81,7 @@ export default function QuestionCard({ question, vibe, color, label, isTransitio
             className="text-xs text-stone-300 dark:text-stone-500 hover:text-stone-400 dark:hover:text-stone-400 transition-colors font-light"
             aria-label="Skip this question"
           >
-            skip
+            {skipLabel}
           </button>
         </div>
       )}

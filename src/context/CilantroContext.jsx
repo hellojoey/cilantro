@@ -203,11 +203,32 @@ export function CilantroProvider({ children }) {
 
   const insertSkip = useCallback((skip) => {
     if (!supabase || !userIdRef.current) return;
+    // Re-skipping re-queues the question: replace any prior row so created_at
+    // (the resurface clock) restarts.
     supabase
       .from('skips')
-      .insert({ user_id: userIdRef.current, question_text: skip.text, vibe: skip.vibe ?? null })
+      .delete()
+      .eq('user_id', userIdRef.current)
+      .eq('question_text', skip.text)
+      .then(() =>
+        supabase
+          .from('skips')
+          .insert({ user_id: userIdRef.current, question_text: skip.text, vibe: skip.vibe ?? null })
+      )
       .then(({ error }) => {
         if (error) console.error('insert skip failed', error);
+      });
+  }, []);
+
+  const deleteSkip = useCallback((text) => {
+    if (!supabase || !userIdRef.current) return;
+    supabase
+      .from('skips')
+      .delete()
+      .eq('user_id', userIdRef.current)
+      .eq('question_text', text)
+      .then(({ error }) => {
+        if (error) console.error('delete skip failed', error);
       });
   }, []);
 
@@ -324,7 +345,9 @@ export function CilantroProvider({ children }) {
         setGardenUnlocks(unlocks);
         setGardenCompletions(completions);
 
-        setSkippedQuestions(skipRows.map((s) => ({ text: s.question_text, vibe: s.vibe })));
+        setSkippedQuestions(
+          skipRows.map((s) => ({ text: s.question_text, vibe: s.vibe, skippedAt: s.created_at }))
+        );
 
         setIsLoggedIn(true);
 
@@ -427,17 +450,40 @@ export function CilantroProvider({ children }) {
   }, [showSeedAnimation]);
 
   // ── Get new question ──
+  // Skips are a "not right now" queue: once a skip has aged past the resurface
+  // delay, it occasionally comes back around — the user may feel differently.
+  const RESURFACE_AFTER_MS = 60 * 60 * 1000; // 1 hour
+  const RESURFACE_CHANCE = 0.25;
+
+  const getResurfaceCandidate = useCallback(() => {
+    const now = Date.now();
+    const ripe = skippedQuestions.filter(
+      (s) => s.skippedAt && now - new Date(s.skippedAt).getTime() > RESURFACE_AFTER_MS
+    );
+    for (const skip of ripe) { // oldest first (load order is created_at asc)
+      const q = questions.find((x) => x.text === skip.text);
+      if (q) return q;
+    }
+    return null;
+  }, [skippedQuestions]);
+
   const getNewQuestion = useCallback(() => {
+    const resurfaceable = getResurfaceCandidate();
     let available = questions.filter((_, i) => !usedQuestions.includes(i));
     if (available.length === 0) {
+      // Pool exhausted: give ripe skips one more look before recycling everything.
+      if (resurfaceable) return { ...resurfaceable, resurfaced: true };
       setUsedQuestions([]);
       available = [...questions];
+    }
+    if (resurfaceable && Math.random() < RESURFACE_CHANCE) {
+      return { ...resurfaceable, resurfaced: true };
     }
     const randomIndex = Math.floor(Math.random() * available.length);
     const questionIndex = questions.indexOf(available[randomIndex]);
     setUsedQuestions((prev) => [...prev, questionIndex]);
     return available[randomIndex];
-  }, [usedQuestions]);
+  }, [usedQuestions, getResurfaceCandidate]);
 
   // ── Answer a free-play question ──
   const handleAnswer = useCallback((answer) => {
@@ -445,27 +491,39 @@ export function CilantroProvider({ children }) {
     setIsTransitioning(true);
     earnSeeds(currentQuestion.difficulty);
 
+    const { resurfaced, ...questionFields } = currentQuestion;
     const newAnswer = {
       id: crypto.randomUUID(),
-      ...currentQuestion,
+      ...questionFields,
       answer,
       timestamp: new Date().toISOString(),
     };
     setAnswers((prev) => [...prev, newAnswer]);
     insertAnswerRow(newAnswer, 'free');
 
+    // Answering resolves any pending skip for this question.
+    if (skippedQuestions.some((s) => s.text === currentQuestion.text)) {
+      setSkippedQuestions((prev) => prev.filter((s) => s.text !== currentQuestion.text));
+      deleteSkip(currentQuestion.text);
+    }
+
     setTimeout(() => {
       setCurrentQuestion(getNewQuestion());
       setIsTransitioning(false);
     }, 400);
-  }, [currentQuestion, earnSeeds, getNewQuestion, insertAnswerRow]);
+  }, [currentQuestion, earnSeeds, getNewQuestion, insertAnswerRow, skippedQuestions, deleteSkip]);
 
-  // ── Skip a free-play question ──
+  // ── Skip a free-play question ("not right now" — re-queues for later) ──
   const handleSkip = useCallback(() => {
     if (!currentQuestion) return;
     setIsTransitioning(true);
-    setSkippedQuestions((prev) => [...prev, currentQuestion]);
-    insertSkip({ text: currentQuestion.text, vibe: currentQuestion.vibe });
+    const entry = {
+      text: currentQuestion.text,
+      vibe: currentQuestion.vibe,
+      skippedAt: new Date().toISOString(),
+    };
+    setSkippedQuestions((prev) => [...prev.filter((s) => s.text !== entry.text), entry]);
+    insertSkip(entry);
     setTimeout(() => {
       setCurrentQuestion(getNewQuestion());
       setIsTransitioning(false);

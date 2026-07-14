@@ -85,10 +85,12 @@ export default function Home() {
           <QuestionCard
             question={currentQuestion.text}
             vibe={currentQuestion.vibe}
+            resurfaced={currentQuestion.resurfaced}
             isTransitioning={isTransitioning}
             onYes={() => handleAnswer('yes')}
             onNo={() => handleAnswer('no')}
             onSkip={handleSkip}
+            skipLabel="skip for now"
           />
         </div>
       </main>
