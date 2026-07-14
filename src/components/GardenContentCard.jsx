@@ -30,16 +30,9 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
       {/* Content based on type */}
       {item.contentType === 'question' && (
         <>
-          <h2 className={`text-2xl md:text-3xl font-light text-stone-700 dark:text-stone-200 text-center leading-relaxed px-4 ${finePrint ? 'mb-4' : 'mb-12'}`}>
+          <h2 className="text-2xl md:text-3xl font-light text-stone-700 dark:text-stone-200 text-center leading-relaxed mb-12 px-4">
             {item.text}
           </h2>
-
-          {/* Fine print: neutral clarifier so the answer is more educated */}
-          {finePrint && (
-            <p className="text-xs italic font-light text-stone-400 dark:text-stone-500 text-center leading-relaxed mb-10 px-8">
-              {finePrint}
-            </p>
-          )}
 
           {/* Yes/No buttons */}
           <div className="flex gap-4 px-4" role="group" aria-label="Answer options">
@@ -58,6 +51,16 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
               no
             </button>
           </div>
+
+          {/* Fine print: sits beneath the card — neutral details for a more educated answer */}
+          {finePrint && (
+            <div className="mt-8 px-8 text-center">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-stone-300 dark:text-stone-600 mb-1.5 font-medium">fine print</p>
+              <p className="text-xs font-light text-stone-400 dark:text-stone-500 leading-relaxed">
+                {finePrint}
+              </p>
+            </div>
+          )}
         </>
       )}
 
