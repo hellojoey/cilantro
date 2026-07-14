@@ -5,26 +5,33 @@ import { useCilantro } from '../context/CilantroContext';
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useCilantro();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (!username.trim()) {
-      setError('Please enter a username');
+    if (!email.trim()) {
+      setError('Please enter your email');
       return;
     }
     if (!password.trim()) {
-      setError('Please enter a password');
+      setError('Please enter your password');
       return;
     }
 
-    // TODO: Connect to actual auth
-    login(username);
-    navigate('/');
+    setSubmitting(true);
+    const { error: authError } = await login(email.trim(), password);
+    if (authError) {
+      setError(authError);
+      setSubmitting(false);
+      return;
+    }
+    // On success, the auth listener flips isLoggedIn and the guest guard
+    // redirects away from /login automatically.
   };
 
   return (
@@ -49,15 +56,15 @@ export default function Login() {
           )}
 
           <div>
-            <label htmlFor="login-username" className="sr-only">Username</label>
+            <label htmlFor="login-email" className="sr-only">Email</label>
             <input
-              id="login-username"
-              type="text"
-              placeholder="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="login-email"
+              type="email"
+              placeholder="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full py-4 px-4 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-2xl text-stone-600 dark:text-stone-200 placeholder-stone-300 dark:placeholder-stone-500 focus:outline-none focus:border-stone-400 dark:focus:border-stone-500 focus:ring-1 focus:ring-stone-300 dark:focus:ring-stone-600 font-light"
-              autoComplete="username"
+              autoComplete="email"
               required
             />
           </div>
@@ -77,9 +84,10 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full py-4 bg-stone-700 hover:bg-stone-800 dark:bg-stone-600 dark:hover:bg-stone-500 text-white rounded-2xl font-light text-lg transition-all shadow-sm mt-6 active:scale-[0.98]"
+            disabled={submitting}
+            className="w-full py-4 bg-stone-700 hover:bg-stone-800 dark:bg-stone-600 dark:hover:bg-stone-500 text-white rounded-2xl font-light text-lg transition-all shadow-sm mt-6 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            sign in
+            {submitting ? 'signing in…' : 'sign in'}
           </button>
         </form>
 

@@ -5,15 +5,23 @@ import { useCilantro } from '../context/CilantroContext';
 export default function Signup() {
   const navigate = useNavigate();
   const { signup } = useCilantro();
+  const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setInfo('');
 
+    if (!email.trim()) {
+      setError('Please enter your email');
+      return;
+    }
     if (!firstName.trim()) {
       setError('Please enter your first name');
       return;
@@ -27,9 +35,25 @@ export default function Signup() {
       return;
     }
 
-    // TODO: Connect to actual auth
-    signup(firstName, username);
-    navigate('/');
+    setSubmitting(true);
+    const { error: authError, needsConfirmation } = await signup({
+      email: email.trim(),
+      password,
+      firstName: firstName.trim(),
+      username: username.trim(),
+    });
+    if (authError) {
+      setError(authError);
+      setSubmitting(false);
+      return;
+    }
+    if (needsConfirmation) {
+      setInfo('Check your email to confirm your account, then sign in.');
+      setSubmitting(false);
+      return;
+    }
+    // On success the auth listener flips isLoggedIn and the guest guard
+    // redirects away from /signup automatically.
   };
 
   return (
@@ -52,7 +76,25 @@ export default function Signup() {
               {error}
             </div>
           )}
+          {info && (
+            <div className="text-sm text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl px-4 py-3 font-light" role="status">
+              {info}
+            </div>
+          )}
 
+          <div>
+            <label htmlFor="signup-email" className="sr-only">Email</label>
+            <input
+              id="signup-email"
+              type="email"
+              placeholder="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full py-4 px-4 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-2xl text-stone-600 dark:text-stone-200 placeholder-stone-300 dark:placeholder-stone-500 focus:outline-none focus:border-stone-400 dark:focus:border-stone-500 focus:ring-1 focus:ring-stone-300 dark:focus:ring-stone-600 font-light"
+              autoComplete="email"
+              required
+            />
+          </div>
           <div>
             <label htmlFor="signup-firstname" className="sr-only">First name</label>
             <input
@@ -95,9 +137,10 @@ export default function Signup() {
 
           <button
             type="submit"
-            className="w-full py-4 bg-stone-700 hover:bg-stone-800 dark:bg-stone-600 dark:hover:bg-stone-500 text-white rounded-2xl font-light text-lg transition-all shadow-sm mt-6 active:scale-[0.98]"
+            disabled={submitting}
+            className="w-full py-4 bg-stone-700 hover:bg-stone-800 dark:bg-stone-600 dark:hover:bg-stone-500 text-white rounded-2xl font-light text-lg transition-all shadow-sm mt-6 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            create account
+            {submitting ? 'creating account…' : 'create account'}
           </button>
         </form>
 
