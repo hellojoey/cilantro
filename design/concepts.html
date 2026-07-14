@@ -1,0 +1,596 @@
+<title>Cilantro v4 — Design Concepts</title>
+<style>
+  :root {
+    --chrome-bg: #faf9f7;
+    --chrome-ink: #35322d;
+    --chrome-muted: #8a857c;
+    --chrome-line: #e5e1da;
+    --chrome-card: #ffffff;
+    --chrome-accent: #6b8f5e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --chrome-bg: #191714;
+      --chrome-ink: #e8e4dd;
+      --chrome-muted: #8f897e;
+      --chrome-line: #2e2a25;
+      --chrome-card: #211e1a;
+      --chrome-accent: #94b585;
+    }
+  }
+  :root[data-theme="dark"] {
+    --chrome-bg: #191714;
+    --chrome-ink: #e8e4dd;
+    --chrome-muted: #8f897e;
+    --chrome-line: #2e2a25;
+    --chrome-card: #211e1a;
+    --chrome-accent: #94b585;
+  }
+  :root[data-theme="light"] {
+    --chrome-bg: #faf9f7;
+    --chrome-ink: #35322d;
+    --chrome-muted: #8a857c;
+    --chrome-line: #e5e1da;
+    --chrome-card: #ffffff;
+    --chrome-accent: #6b8f5e;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--chrome-bg);
+    color: var(--chrome-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 48px 20px 80px; }
+
+  header.brief { margin-bottom: 28px; }
+  .eyebrow {
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--chrome-accent); font-weight: 600; margin-bottom: 10px;
+  }
+  h1.title {
+    font-size: clamp(26px, 4vw, 38px); font-weight: 300; margin: 0 0 10px;
+    letter-spacing: -0.01em; text-wrap: balance;
+  }
+  .lede { color: var(--chrome-muted); font-weight: 300; max-width: 62ch; line-height: 1.6; margin: 0; }
+
+  nav.tabs { display: flex; gap: 8px; margin: 30px 0 18px; flex-wrap: wrap; }
+  .tab {
+    appearance: none; border: 1px solid var(--chrome-line); background: var(--chrome-card);
+    color: var(--chrome-muted); border-radius: 999px; padding: 10px 20px;
+    font-size: 14px; cursor: pointer; transition: all .25s ease; font-family: inherit;
+  }
+  .tab:hover { color: var(--chrome-ink); }
+  .tab:focus-visible { outline: 2px solid var(--chrome-accent); outline-offset: 2px; }
+  .tab.active { background: var(--chrome-ink); color: var(--chrome-bg); border-color: var(--chrome-ink); }
+  .tab small { opacity: .65; margin-left: 6px; font-size: 11px; letter-spacing: .06em; }
+
+  .stage { border-radius: 24px; overflow: hidden; border: 1px solid var(--chrome-line); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Shared mock layout inside each concept */
+  .mock {
+    position: relative; min-height: 640px; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 64px 24px; text-align: center; isolation: isolate;
+  }
+  .bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .fg { position: relative; z-index: 1; width: 100%; max-width: 400px; }
+
+  .qcard { border-radius: 24px; padding: 30px 26px 26px; text-align: center; margin-top: 44px; transition: opacity .35s ease, transform .35s ease; }
+  .qcard.swap { opacity: 0; transform: translateY(10px); }
+  .qvibe { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; margin-bottom: 14px; display: inline-block; padding: 4px 12px; border-radius: 999px; }
+  .qtext { font-size: 21px; line-height: 1.45; margin: 0 0 10px; font-weight: 300; text-wrap: balance; }
+  .fineprint { font-size: 12.5px; line-height: 1.55; margin: 0 0 22px; font-style: italic; opacity: .62; font-weight: 300; }
+  .yn { display: flex; gap: 12px; }
+  .yn button {
+    flex: 1; padding: 15px 0; border-radius: 16px; font-size: 15px; cursor: pointer;
+    font-family: inherit; font-weight: 400; transition: transform .15s ease, background .2s ease, border-color .2s ease;
+  }
+  .yn button:active { transform: scale(.97); }
+  .yn button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+  .notes {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0; border-top: 1px solid var(--chrome-line); background: var(--chrome-card);
+  }
+  .note { padding: 20px 22px; border-right: 1px solid var(--chrome-line); }
+  .note:last-child { border-right: none; }
+  .note h3 { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--chrome-muted); margin: 0 0 8px; font-weight: 600; }
+  .note p { font-size: 13.5px; line-height: 1.55; margin: 0; color: var(--chrome-ink); font-weight: 300; }
+  .chips { display: flex; gap: 6px; margin-top: 10px; }
+  .chip { width: 22px; height: 22px; border-radius: 50%; border: 1px solid rgba(0,0,0,.08); }
+
+  footer.choose { margin-top: 34px; color: var(--chrome-muted); font-size: 14px; line-height: 1.7; font-weight: 300; max-width: 68ch; }
+  footer.choose strong { color: var(--chrome-ink); font-weight: 500; }
+
+  /* ════════ CONCEPT 1 — DRIFT ════════ */
+  .c1 .mock { background: linear-gradient(165deg, #faf8f4 0%, #f6efe2 55%, #f2e8d8 100%); color: #57534e; }
+  .c1 .orb { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .55; }
+  .c1 .o1 { width: 420px; height: 420px; background: #f3ddb5; top: -12%; left: -10%; animation: drift1 46s ease-in-out infinite; }
+  .c1 .o2 { width: 360px; height: 360px; background: #d6e3c8; bottom: -14%; right: -8%; animation: drift2 58s ease-in-out infinite; }
+  .c1 .o3 { width: 260px; height: 260px; background: #f0cfc2; top: 42%; left: 58%; animation: drift3 52s ease-in-out infinite; }
+  @keyframes drift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(90px, 60px) scale(1.15); } }
+  @keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-110px, -50px) scale(1.1); } }
+  @keyframes drift3 { 0%,100% { transform: translate(0,0); } 33% { transform: translate(-70px, 40px); } 66% { transform: translate(40px, -60px); } }
+  .c1 .wordmark { font-family: "New York", "Iowan Old Style", Georgia, serif; font-size: 52px; font-weight: 400; letter-spacing: .01em; color: #4a4540; margin: 0 0 12px; }
+  .c1 .tagline { font-size: 15px; font-weight: 300; letter-spacing: .12em; color: #8a8078; margin: 0 0 30px; }
+  .c1 .cta { display: inline-block; padding: 15px 44px; border-radius: 999px; background: #57534e; color: #faf8f4; font-size: 15px; border: none; cursor: pointer; font-family: inherit; transition: background .2s; }
+  .c1 .cta:hover { background: #44403c; }
+  .c1 .qcard { background: rgba(255,255,255,.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.85); box-shadow: 0 18px 50px -22px rgba(120,95,60,.28); }
+  .c1 .qvibe { background: #f3e6cf; color: #a08350; }
+  .c1 .qtext { font-family: "New York", "Iowan Old Style", Georgia, serif; color: #4a4540; }
+  .c1 .fineprint { color: #6b6560; }
+  .c1 .yn button { border: 1px solid #e5ded2; background: rgba(255,255,255,.85); color: #57534e; }
+  .c1 .yes:hover { background: #eef4e8; border-color: #cfdec2; }
+  .c1 .no:hover { background: #fbecec; border-color: #ecd0d0; }
+
+  /* ════════ CONCEPT 2 — GREENHOUSE (chosen · adaptive color) ════════ */
+  .c2 .mock {
+    --g-bg: #f2f6ee; --g-soft: #e4efd2; --g-mid: #cde3b8; --g-accent: #7fb069;
+    --g-deep: #43682f; --g-deeper: #2f4c20; --g-ink: #2f3a2a; --g-sub: #6d825f;
+    background: var(--g-bg); color: var(--g-ink);
+    transition: background-color 1.1s ease;
+  }
+  /* Shapes wander via a JS random walk (the `translate` property), so each one
+     drifts on its own unrepeating path. Rotation stays CSS, randomized per shape. */
+  .c2 .shape { position: absolute; opacity: .75; transition: background-color 1.1s ease, border-color 1.1s ease, color 1.1s ease; }
+  .c2 .ring { width: 300px; height: 300px; border-radius: 50%; border: 34px solid var(--g-mid); top: -70px; right: -60px; animation: spin 70s linear infinite; }
+  .c2 .pill { width: 220px; height: 90px; border-radius: 999px; background: var(--g-accent); opacity: .55; bottom: 12%; left: -60px; }
+  .c2 .tri { width: 0; height: 0; border-left: 70px solid transparent; border-right: 70px solid transparent; border-bottom: 120px solid var(--g-soft); top: 56%; right: 8%; animation: spinSlow 80s linear infinite; }
+  .c2 .dot { width: 46px; height: 46px; border-radius: 50%; background: var(--g-accent); top: 20%; left: 12%; }
+  .c2 .squig { top: 8%; left: 42%; color: var(--g-accent); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes spinSlow { to { transform: rotate(-360deg); } }
+  .c2 .wordmark { font-family: ui-rounded, "SF Pro Rounded", -apple-system, sans-serif; font-size: 54px; font-weight: 700; letter-spacing: -0.03em; color: var(--g-deep); margin: 0 0 10px; transition: color 1.1s ease; }
+  .c2 .tagline { font-size: 16px; font-weight: 400; color: var(--g-sub); margin: 0 0 30px; transition: color 1.1s ease; }
+  .c2 .cta { display: inline-block; padding: 16px 46px; border-radius: 18px; background: var(--g-deep); color: var(--g-bg); font-size: 16px; font-weight: 600; border: none; cursor: pointer; font-family: ui-rounded, "SF Pro Rounded", -apple-system, sans-serif; box-shadow: 0 6px 0 var(--g-deeper); transition: transform .12s, box-shadow .12s, background-color 1.1s ease; }
+  .c2 .cta:hover { transform: translateY(2px); box-shadow: 0 4px 0 var(--g-deeper); }
+  .c2 .qcard { background: #ffffff; border: 2px solid var(--g-ink); box-shadow: 8px 8px 0 var(--g-ink); border-radius: 20px; transition: border-color 1.1s ease, box-shadow 1.1s ease, opacity .35s ease, transform .35s ease; }
+  .c2 .qvibe { background: var(--g-soft); color: var(--g-deep); font-weight: 700; transition: background-color 1.1s ease, color 1.1s ease; }
+  .c2 .qtext { font-family: ui-rounded, "SF Pro Rounded", -apple-system, sans-serif; font-weight: 600; color: var(--g-ink); margin-bottom: 22px; }
+  .c2 .yn button { border: 2px solid var(--g-ink); background: #fff; color: var(--g-ink); border-radius: 14px; font-weight: 700; font-family: ui-rounded, "SF Pro Rounded", -apple-system, sans-serif; }
+  .c2 .yes:hover { background: var(--g-mid); }
+  .c2 .no:hover { background: #f5d9cf; }
+  /* Skip = "not right now": subtle, question comes back around later */
+  .c2 .skip { display: block; margin: 14px auto 0; background: none; border: none; cursor: pointer; font-family: ui-rounded, "SF Pro Rounded", -apple-system, sans-serif; font-size: 12px; font-weight: 600; color: var(--g-sub); opacity: .55; transition: opacity .2s ease, color 1.1s ease; }
+  .c2 .skip:hover { opacity: 1; }
+  .c2 .resurf { font-size: 11px; font-style: italic; color: var(--g-sub); margin: 0 0 10px; opacity: .8; transition: color 1.1s ease; }
+  .c2 .resurf[hidden] { display: none; }
+
+  /* Fine Print 2.0 — beneath and OUTSIDE the card: details + sources + tags + gardens */
+  .c2 .fp-block { margin-top: 26px; text-align: left; background: transparent; transition: opacity .35s ease, transform .35s ease; }
+  .c2 .fp-block.swap { opacity: 0; transform: translateY(10px); }
+  .c2 .fp-label { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; font-weight: 800; color: var(--g-deep); margin: 0 auto 6px; display: block; background: none; border: none; cursor: pointer; font-family: inherit; transition: color 1.1s ease; }
+  .c2 .fp-label:hover { opacity: .75; }
+  .c2 .fp-body[hidden] { display: none; }
+  .c2 .fp-text { font-size: 13.5px; line-height: 1.6; color: var(--g-sub); margin: 0 0 12px; font-weight: 400; transition: color 1.1s ease; }
+  .c2 .fp-sources { display: flex; flex-direction: column; gap: 7px; }
+  .c2 .fp-sources[hidden] { display: none; }
+  .c2 .src { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; line-height: 1.45; color: var(--g-ink); background: rgba(255,255,255,.55); border: 1px solid var(--g-mid); border-radius: 10px; padding: 8px 11px; cursor: pointer; transition: border-color 1.1s ease, background .2s ease; }
+  .c2 .src:hover { background: rgba(255,255,255,.9); }
+  .c2 .src-tag { flex-shrink: 0; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; font-weight: 800; color: var(--g-deep); border: 1.5px solid var(--g-mid); border-radius: 999px; padding: 2px 8px; transition: color 1.1s ease, border-color 1.1s ease; }
+  .c2 .src-note { font-size: 10.5px; color: var(--g-sub); margin-top: 2px; font-style: italic; transition: color 1.1s ease; }
+  /* Topic hashtags + associated-garden thumbnails */
+  .c2 .fp-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 12px 0 0; }
+  .c2 .fp-tags:empty, .c2 .fp-gardens:empty { display: none; }
+  .c2 .tag { font-size: 11px; font-weight: 700; color: var(--g-deep); background: var(--g-soft); border-radius: 999px; padding: 3px 10px; transition: background-color 1.1s ease, color 1.1s ease; }
+  .c2 .fp-gardens { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 12px 0 0; }
+  .c2 .garden-thumb { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; color: var(--g-ink); background: #fff; border: 2px solid var(--g-ink); border-radius: 12px; padding: 6px 11px 6px 7px; cursor: pointer; box-shadow: 3px 3px 0 var(--g-ink); font-family: ui-rounded, "SF Pro Rounded", -apple-system, sans-serif; transition: transform .12s ease, box-shadow .12s ease, border-color 1.1s ease; }
+  .c2 .garden-thumb:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--g-ink); }
+  .c2 .garden-thumb .gt-icon { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; font-size: 14px; }
+
+  /* ════════ CONCEPT 3 — EMBER ════════ */
+  .c3 .mock { background: #171412; color: #d8d2c8; }
+  .c3 .haze { position: absolute; border-radius: 50%; filter: blur(90px); }
+  .c3 .h1 { width: 480px; height: 480px; background: rgba(224,122,58,.16); top: -18%; right: -12%; animation: emberDrift 40s ease-in-out infinite; }
+  .c3 .h2 { width: 380px; height: 380px; background: rgba(120,90,200,.10); bottom: -16%; left: -10%; animation: emberDrift 55s ease-in-out -20s infinite; }
+  @keyframes emberDrift { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-70px, 50px); } }
+  .c3 .lines { position: absolute; inset: 0; }
+  .c3 .line { position: absolute; width: 1px; height: 140%; top: -20%; background: linear-gradient(to bottom, transparent, rgba(216,210,200,.10) 30%, rgba(216,210,200,.10) 70%, transparent); animation: sway 16s ease-in-out infinite; transform-origin: top center; }
+  @keyframes sway { 0%,100% { transform: rotate(6deg); } 50% { transform: rotate(-6deg); } }
+  .c3 .spark { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #e07a3a; opacity: 0; animation: rise 9s linear infinite; }
+  @keyframes rise { 0% { transform: translateY(0); opacity: 0; } 12% { opacity: .8; } 85% { opacity: .25; } 100% { transform: translateY(-520px); opacity: 0; } }
+  .c3 .wordmark { font-family: "Iowan Old Style", "New York", Georgia, serif; font-size: 50px; font-weight: 400; font-style: italic; color: #ece5d8; margin: 0 0 12px; }
+  .c3 .tagline { font-size: 13px; font-weight: 300; letter-spacing: .3em; text-transform: uppercase; color: #8f8578; margin: 0 0 32px; }
+  .c3 .cta { display: inline-block; padding: 15px 46px; border-radius: 4px; background: transparent; color: #e8a06b; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; border: 1px solid rgba(224,122,58,.55); cursor: pointer; font-family: inherit; transition: background .25s, color .25s; }
+  .c3 .cta:hover { background: rgba(224,122,58,.14); }
+  .c3 .qcard { background: rgba(30,26,23,.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(216,210,200,.14); border-radius: 8px; }
+  .c3 .qvibe { background: rgba(224,122,58,.14); color: #e8a06b; }
+  .c3 .qtext { font-family: "Iowan Old Style", "New York", Georgia, serif; color: #ece5d8; font-size: 22px; }
+  .c3 .fineprint { color: #97897b; }
+  .c3 .yn button { border: 1px solid rgba(216,210,200,.22); background: transparent; color: #d8d2c8; border-radius: 6px; letter-spacing: .1em; text-transform: uppercase; font-size: 13px; }
+  .c3 .yes:hover { border-color: rgba(140,180,120,.7); color: #b5cfa4; }
+  .c3 .no:hover { border-color: rgba(210,110,90,.7); color: #dda093; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orb, .shape, .haze, .line, .spark, .ring, .pill, .tri, .dot, .squig { animation: none !important; }
+  }
+  @media (max-width: 560px) {
+    .mock { min-height: 560px; padding: 48px 16px; }
+    .note { border-right: none; border-bottom: 1px solid var(--chrome-line); }
+  }
+</style>
+
+<div class="wrap">
+  <header class="brief">
+    <div class="eyebrow">Cilantro v4 · Design Concepts</div>
+    <h1 class="title">Greenhouse, now adaptive</h1>
+    <p class="lede">Direction chosen: Greenhouse. The palette re-tints to each question's vibe, and Fine Print 2.0 lives beneath the card as a toggle — details, cited perspectives on societal questions, topic hashtags, and thumbnails of the gardens a question connects to. Skip is in too: "skip for now" brings the question back around later. Drift and Ember stay here for reference.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" role="tab" aria-selected="true" data-panel="p1">Drift <small>evolves today's look</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="p2">Greenhouse <small>✓ chosen · adaptive</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="p3">Ember <small>dark editorial</small></button>
+  </nav>
+
+  <div class="stage">
+    <!-- ═══ Concept 1: Drift ═══ -->
+    <section class="panel c1 active" id="p1">
+      <div class="mock">
+        <div class="bg">
+          <div class="orb o1"></div>
+          <div class="orb o2"></div>
+          <div class="orb o3"></div>
+        </div>
+        <div class="fg">
+          <h2 class="wordmark">cilantro</h2>
+          <p class="tagline">yes or no. find yourself.</p>
+          <button class="cta">begin</button>
+          <div class="qcard" data-demo="1">
+            <span class="qvibe">honesty</span>
+            <p class="qtext">Do you forgive easily?</p>
+            <p class="fineprint">Forgiving means letting go of the resentment — it doesn't require reconciling.</p>
+            <div class="yn">
+              <button class="yes">yes</button>
+              <button class="no">no</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3>Palette</h3>
+          <p>Warm parchment ground with amber, sage, and clay orbs — today's stone/amber identity, deepened.</p>
+          <div class="chips">
+            <span class="chip" style="background:#faf8f4"></span>
+            <span class="chip" style="background:#f3ddb5"></span>
+            <span class="chip" style="background:#d6e3c8"></span>
+            <span class="chip" style="background:#f0cfc2"></span>
+            <span class="chip" style="background:#57534e"></span>
+          </div>
+        </div>
+        <div class="note">
+          <h3>Motion</h3>
+          <p>Blurred orbs drift on 45–60 second loops — like light through a window. Calm, never distracting.</p>
+        </div>
+        <div class="note">
+          <h3>Why it fits</h3>
+          <p>Lowest-risk evolution: existing users still recognize the app, but it gains a serif voice and glass cards. Dark mode keeps the same orbs on deep stone.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Concept 2: Greenhouse ═══ -->
+    <section class="panel c2" id="p2">
+      <div class="mock">
+        <div class="bg">
+          <div class="shape ring"></div>
+          <div class="shape pill"></div>
+          <div class="shape tri"></div>
+          <div class="shape dot"></div>
+          <svg class="shape squig" width="160" height="60" viewBox="0 0 160 60" aria-hidden="true"><path d="M4 30 Q 24 4, 44 30 T 84 30 T 124 30 T 164 30" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/></svg>
+        </div>
+        <div class="fg">
+          <h2 class="wordmark">cilantro</h2>
+          <p class="tagline">yes or no. find yourself.</p>
+          <button class="cta">let's go</button>
+          <div class="qcard" data-demo="2">
+            <p class="resurf" hidden>you skipped this one before — feel any different?</p>
+            <span class="qvibe">humor</span>
+            <p class="qtext">Would you survive a zombie apocalypse?</p>
+            <div class="yn">
+              <button class="yes">yes</button>
+              <button class="no">no</button>
+            </div>
+            <button class="skip">skip for now</button>
+          </div>
+          <div class="fp-block" id="fp2">
+            <button class="fp-label" aria-expanded="false">fine print +</button>
+            <div class="fp-body" hidden>
+              <p class="fp-text">Assume the classic slow shufflers, starting with whatever is in your home right now.</p>
+              <div class="fp-sources" hidden></div>
+              <div class="fp-tags"></div>
+              <div class="fp-gardens"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3>Adaptive color</h3>
+          <p>Herb green is home base, but the whole scene re-tints to the question's vibe — society goes slate blue, intimacy goes plum. Answer the demo twice and watch it shift.</p>
+          <div class="chips">
+            <span class="chip" style="background:#f2f6ee"></span>
+            <span class="chip" style="background:#7fb069"></span>
+            <span class="chip" style="background:#6898bd"></span>
+            <span class="chip" style="background:#b07fa4"></span>
+            <span class="chip" style="background:#2f3a2a"></span>
+          </div>
+        </div>
+        <div class="note">
+          <h3>Fine Print 2.0</h3>
+          <p>A toggle beneath the card — collapsed by default. Open it for details, cited perspectives (placeholders here; real articles come from the research pipeline with your approval), topic hashtags, and tappable thumbnails of the gardens this question connects to.</p>
+        </div>
+        <div class="note">
+          <h3>Motion</h3>
+          <p>Each shape wanders on its own unrepeating path — a slow random drift to a nearby spot, an easing pause, then a new direction. Same gentle amplitude as before, but organic instead of metronomic. Calming, never busy.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Concept 3: Ember ═══ -->
+    <section class="panel c3" id="p3">
+      <div class="mock">
+        <div class="bg">
+          <div class="haze h1"></div>
+          <div class="haze h2"></div>
+          <div class="lines">
+            <div class="line" style="left:18%; animation-delay:0s"></div>
+            <div class="line" style="left:38%; animation-delay:-4s"></div>
+            <div class="line" style="left:61%; animation-delay:-9s"></div>
+            <div class="line" style="left:82%; animation-delay:-6s"></div>
+          </div>
+          <div class="spark" style="left:24%; bottom:10%; animation-delay:0s"></div>
+          <div class="spark" style="left:52%; bottom:6%; animation-delay:3s"></div>
+          <div class="spark" style="left:74%; bottom:12%; animation-delay:6s"></div>
+        </div>
+        <div class="fg">
+          <h2 class="wordmark">cilantro</h2>
+          <p class="tagline">yes or no · find yourself</p>
+          <button class="cta">Enter</button>
+          <div class="qcard" data-demo="3">
+            <span class="qvibe">mortality</span>
+            <p class="qtext">Have you made peace with your mortality?</p>
+            <p class="fineprint">Peace means you can sit with the thought without pushing it away — not that it never stings.</p>
+            <div class="yn">
+              <button class="yes">yes</button>
+              <button class="no">no</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3>Palette</h3>
+          <p>Charcoal night with ember-orange haze and a whisper of violet — one warm accent, everything else quiet.</p>
+          <div class="chips">
+            <span class="chip" style="background:#171412"></span>
+            <span class="chip" style="background:#e07a3a"></span>
+            <span class="chip" style="background:#ece5d8"></span>
+            <span class="chip" style="background:#8f8578"></span>
+            <span class="chip" style="background:#7a5ac8"></span>
+          </div>
+        </div>
+        <div class="note">
+          <h3>Motion</h3>
+          <p>Slow ember haze, swaying hairlines, and the occasional spark rising — a fireplace for 11pm reflection.</p>
+        </div>
+        <div class="note">
+          <h3>Why it fits</h3>
+          <p>Leans into the blog's "society and inner conflict" editorial voice. Strongest for Gardens like Shadows and Depths; would ship with a lighter day mode.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="choose">
+    <strong>What happens next:</strong> if the adaptive Greenhouse feels right, this becomes the Phase D spec — the full app (all 14 screens) restyled with vibe-tinted palettes, and Fine Print 2.0 rendered beneath every card. Sourced fine print (real cited articles with differing perspectives) gets generated by the Phase B research pipeline and lands in your admin approval queue before users ever see it.
+  </footer>
+</div>
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      document.getElementById(tab.dataset.panel).classList.add('active');
+    });
+  });
+
+  // Garden info for the fine print thumbnails (id → icon/name/color)
+  const GARDEN_INFO = {
+    shadows:    { icon: '🌑', name: 'Shadows',    color: '#4A5568' },
+    mirrors:    { icon: '🪞', name: 'Mirrors',    color: '#718096' },
+    crossroads: { icon: '⚖️', name: 'Crossroads', color: '#9F7AEA' },
+    roots:      { icon: '🌳', name: 'Roots',      color: '#48BB78' },
+    depths:     { icon: '🌊', name: 'Depths',     color: '#4299E1' },
+    embers:     { icon: '🔥', name: 'Embers',     color: '#E53E3E' },
+    compass:    { icon: '🧭', name: 'Compass',    color: '#DD6B20' },
+    still:      { icon: '🕊️', name: 'Still',      color: '#B794F4' }
+  };
+
+  // Demo question cycling per concept
+  const demoSets = {
+    1: [
+      { vibe: 'honesty', text: 'Do you forgive easily?', fp: "Forgiving means letting go of the resentment — it doesn't require reconciling." },
+      { vibe: 'peace', text: 'Can you enjoy silence without reaching for your phone?', fp: 'Any silence counts — a commute, a queue, the minute before sleep.' },
+      { vibe: 'becoming', text: 'Are you closer to who you want to be than a year ago?', fp: 'Measure direction, not distance.' }
+    ],
+    2: [
+      {
+        vibe: 'humor', text: 'Would you survive a zombie apocalypse?',
+        fp: 'Assume the classic slow shufflers, starting with whatever is in your home right now.',
+        sources: [],
+        tags: ['survival', 'instinct', 'play'],
+        gardens: ['compass'],
+        pal: { '--g-bg': '#f2f6ee', '--g-soft': '#e4efd2', '--g-mid': '#cde3b8', '--g-accent': '#7fb069', '--g-deep': '#43682f', '--g-deeper': '#2f4c20', '--g-ink': '#2f3a2a', '--g-sub': '#6d825f' }
+      },
+      {
+        vibe: 'society', text: 'Do you trust the news you read?',
+        fp: 'Think of the outlets you actually read most weeks — not the media as a whole. Trust means you\'d act on what they report without double-checking. Where that trust comes from, and whether it\'s deserved, is genuinely contested:',
+        sources: [
+          { tag: 'optimistic', title: '"Local newsrooms are quietly rebuilding trust" — The Beacon (placeholder)' },
+          { tag: 'skeptical', title: '"Why institutional trust keeps falling — and should" — City Ledger (placeholder)' },
+          { tag: 'data', title: 'Annual media-trust survey, methodology + numbers — Field Institute (placeholder)' }
+        ],
+        tags: ['media', 'trust', 'society', 'skepticism'],
+        gardens: ['mirrors', 'crossroads'],
+        pal: { '--g-bg': '#eef3f7', '--g-soft': '#dbe7f0', '--g-mid': '#b9d4e6', '--g-accent': '#6898bd', '--g-deep': '#2f5875', '--g-deeper': '#234259', '--g-ink': '#26333d', '--g-sub': '#5c7386' }
+      },
+      {
+        vibe: 'embers', text: 'Have you outgrown someone you love?',
+        fp: 'Outgrowing means your paths have genuinely diverged — it isn\'t the same as loving them less, and both can be true at once.',
+        sources: [],
+        tags: ['love', 'growth', 'letting-go'],
+        gardens: ['embers', 'roots'],
+        pal: { '--g-bg': '#f6eff4', '--g-soft': '#ecdbe8', '--g-mid': '#dcc0d4', '--g-accent': '#b07fa4', '--g-deep': '#6d3f60', '--g-deeper': '#532e49', '--g-ink': '#3a2a35', '--g-sub': '#84687c' }
+      }
+    ],
+    3: [
+      { vibe: 'mortality', text: 'Have you made peace with your mortality?', fp: 'Peace means you can sit with the thought without pushing it away — not that it never stings.' },
+      { vibe: 'shadow', text: 'Is there a version of you that only strangers meet?', fp: 'Think of who you are in a city where no one knows your name.' },
+      { vibe: 'truth', text: 'Would your closest friend describe you the way you describe yourself?', fp: 'Answer with their words, not your hopes.' }
+    ]
+  };
+  const demoIndex = { 1: 0, 2: 0, 3: 0 };
+
+  const skippedTexts = { 1: new Set(), 2: new Set(), 3: new Set() };
+
+  // Fill the Greenhouse fine print panel (text, sources, hashtags, garden thumbnails)
+  function renderFpBody(fpBlock, q) {
+    fpBlock.querySelector('.fp-text').textContent = q.fp;
+    const srcWrap = fpBlock.querySelector('.fp-sources');
+    srcWrap.innerHTML = '';
+    if (q.sources && q.sources.length) {
+      srcWrap.hidden = false;
+      for (const s of q.sources) {
+        const row = document.createElement('div');
+        row.className = 'src';
+        const tag = document.createElement('span');
+        tag.className = 'src-tag';
+        tag.textContent = s.tag;
+        const title = document.createElement('span');
+        title.textContent = s.title;
+        row.append(tag, title);
+        srcWrap.append(row);
+      }
+      const note = document.createElement('div');
+      note.className = 'src-note';
+      note.textContent = 'sample sources for illustration — the real pipeline cites actual articles, approved by you';
+      srcWrap.append(note);
+    } else {
+      srcWrap.hidden = true;
+    }
+    const tagWrap = fpBlock.querySelector('.fp-tags');
+    tagWrap.innerHTML = '';
+    for (const t of q.tags || []) {
+      const chip = document.createElement('span');
+      chip.className = 'tag';
+      chip.textContent = '#' + t;
+      tagWrap.append(chip);
+    }
+    const gWrap = fpBlock.querySelector('.fp-gardens');
+    gWrap.innerHTML = '';
+    for (const gid of q.gardens || []) {
+      const g = GARDEN_INFO[gid];
+      if (!g) continue;
+      const thumb = document.createElement('button');
+      thumb.className = 'garden-thumb';
+      thumb.title = 'Explore the ' + g.name + ' garden';
+      const icon = document.createElement('span');
+      icon.className = 'gt-icon';
+      icon.style.background = g.color + '33';
+      icon.textContent = g.icon;
+      const name = document.createElement('span');
+      name.textContent = g.name;
+      thumb.append(icon, name);
+      gWrap.append(thumb);
+    }
+  }
+
+  document.querySelectorAll('.qcard').forEach(card => {
+    const set = card.dataset.demo;
+    const fpBlock = set === '2' ? document.getElementById('fp2') : null;
+    const advance = (action) => {
+        const leaving = demoSets[set][demoIndex[set]];
+        if (action === 'skip') skippedTexts[set].add(leaving.text);
+        else skippedTexts[set].delete(leaving.text); // answering resolves the skip
+        demoIndex[set] = (demoIndex[set] + 1) % demoSets[set].length;
+        const q = demoSets[set][demoIndex[set]];
+        card.classList.add('swap');
+        if (fpBlock) fpBlock.classList.add('swap');
+        // Greenhouse: re-tint the whole scene to the incoming question's palette
+        if (q.pal) {
+          const mock = card.closest('.mock');
+          for (const [k, v] of Object.entries(q.pal)) mock.style.setProperty(k, v);
+        }
+        setTimeout(() => {
+          card.querySelector('.qvibe').textContent = q.vibe;
+          card.querySelector('.qtext').textContent = q.text;
+          // A previously skipped question coming back around gets the gentle note
+          const resurf = card.querySelector('.resurf');
+          if (resurf) resurf.hidden = !skippedTexts[set].has(q.text);
+          const inlineFp = card.querySelector('.fineprint');
+          if (inlineFp) inlineFp.textContent = q.fp;
+          if (fpBlock) {
+            // New question ⇒ fine print collapses again (opt-in per question)
+            const body = fpBlock.querySelector('.fp-body');
+            const toggle = fpBlock.querySelector('.fp-label');
+            body.hidden = true;
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.textContent = 'fine print +';
+            renderFpBody(fpBlock, q);
+            fpBlock.classList.remove('swap');
+          }
+          card.classList.remove('swap');
+        }, 350);
+    };
+    card.querySelectorAll('.yn button').forEach(btn => {
+      btn.addEventListener('click', () => advance('answer'));
+    });
+    const skipBtn = card.querySelector('.skip');
+    if (skipBtn) skipBtn.addEventListener('click', () => advance('skip'));
+  });
+
+  // Fine print toggle (Greenhouse) + initial fill
+  renderFpBody(document.getElementById('fp2'), demoSets[2][0]);
+  const fp2Toggle = document.querySelector('#fp2 .fp-label');
+  fp2Toggle.addEventListener('click', () => {
+    const body = document.querySelector('#fp2 .fp-body');
+    body.hidden = !body.hidden;
+    fp2Toggle.setAttribute('aria-expanded', String(!body.hidden));
+    fp2Toggle.textContent = body.hidden ? 'fine print +' : 'fine print −';
+  });
+
+  // Greenhouse shapes: calm random walk. Each shape drifts to a random nearby
+  // point over 8–15s, eases to a stop, then picks a new destination — same
+  // amplitude as the old bob, but no two shapes ever move in sync.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.c2 .shape').forEach(el => {
+      const AMP = 30; // px, matches the old ±26px bob
+      let x = 0, y = 0;
+      const wander = () => {
+        const nx = (Math.random() * 2 - 1) * AMP;
+        const ny = (Math.random() * 2 - 1) * AMP;
+        const anim = el.animate(
+          [{ translate: `${x}px ${y}px` }, { translate: `${nx}px ${ny}px` }],
+          { duration: 8000 + Math.random() * 7000, easing: 'ease-in-out', fill: 'forwards' }
+        );
+        x = nx; y = ny;
+        anim.onfinish = wander;
+      };
+      setTimeout(wander, Math.random() * 3000); // stagger the starts
+    });
+  }
+</script>

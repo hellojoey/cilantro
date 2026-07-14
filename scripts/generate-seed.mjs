@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { questions, gardens } from '../src/data/questions.js';
 import { getFinePrint } from '../src/data/finePrint.js';
+import { getQuestionMeta } from '../src/data/questionMeta.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outPath = path.join(__dirname, '..', 'supabase', 'seed.sql');
@@ -18,6 +19,9 @@ const sqlString = (value) => `'${String(value).replace(/'/g, "''")}'`;
 const sqlStringOrNull = (value) =>
   value === null || value === undefined || value === '' ? 'NULL' : sqlString(value);
 const sqlInt = (value) => String(Number(value));
+// Postgres text[] literal, e.g. ARRAY['a','b'] or '{}' for empty.
+const sqlTextArray = (arr) =>
+  !arr || arr.length === 0 ? `'{}'` : `ARRAY[${arr.map((v) => sqlString(v)).join(', ')}]`;
 
 const lines = [];
 const irregularities = [];
@@ -63,8 +67,8 @@ questions.forEach((q, i) => {
   const vibe = q.vibe || 'reflection';
 
   lines.push(
-    `insert into public.questions (text, vibe, difficulty, fine_print, source, status, owner_id) values ` +
-      `(${sqlString(q.text)}, ${sqlString(vibe)}, ${sqlInt(difficulty)}, ${sqlStringOrNull(getFinePrint(q.text))}, 'seed', 'published', NULL);`
+    `insert into public.questions (text, vibe, difficulty, fine_print, tags, related_gardens, source, status, owner_id) values ` +
+      `(${sqlString(q.text)}, ${sqlString(vibe)}, ${sqlInt(difficulty)}, ${sqlStringOrNull(getFinePrint(q.text))}, ${sqlTextArray(getQuestionMeta(q.text).tags)}, ${sqlTextArray(getQuestionMeta(q.text).gardens)}, 'seed', 'published', NULL);`
   );
   questionInsertCount++;
 });
@@ -134,8 +138,8 @@ gardens.forEach((g, gi) => {
     }
 
     lines.push(
-      `insert into public.garden_items (garden_id, position, content_type, text, attribution, vibe, difficulty, fine_print) values ` +
-        `(${sqlString(g.id)}, ${sqlInt(ii)}, ${sqlString(contentType)}, ${sqlString(item.text)}, ${sqlStringOrNull(item.attribution)}, ${sqlStringOrNull(item.vibe)}, ${sqlInt(difficulty)}, ${sqlStringOrNull(getFinePrint(item.text))});`
+      `insert into public.garden_items (garden_id, position, content_type, text, attribution, vibe, difficulty, fine_print, tags, related_gardens) values ` +
+        `(${sqlString(g.id)}, ${sqlInt(ii)}, ${sqlString(contentType)}, ${sqlString(item.text)}, ${sqlStringOrNull(item.attribution)}, ${sqlStringOrNull(item.vibe)}, ${sqlInt(difficulty)}, ${sqlStringOrNull(getFinePrint(item.text))}, ${sqlTextArray(getQuestionMeta(item.text).tags)}, ${sqlTextArray(getQuestionMeta(item.text).gardens)});`
     );
     gardenItemInsertCount++;
   });

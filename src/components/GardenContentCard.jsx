@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { vibeColor } from '../data/questions';
+import { Link } from 'react-router-dom';
+import { vibeColor, gardens } from '../data/questions';
 import { getFinePrint } from '../data/finePrint';
+import { getQuestionMeta } from '../data/questionMeta';
+import { useCilantro } from '../context/CilantroContext';
 
 export default function GardenContentCard({ item, gardenColor, gardenLabel, isTransitioning, onYes, onNo, onContinue, onSkip }) {
+  const { isGardenUnlocked } = useCilantro();
   const dotColor = gardenColor || vibeColor(item.vibe) || '#a8a29e';
-  const finePrint = item.contentType === 'question' ? getFinePrint(item.text) : null;
+  const isQuestion = item.contentType === 'question';
+  const finePrint = isQuestion ? getFinePrint(item.text) : null;
+  const meta = isQuestion ? getQuestionMeta(item.text) : { tags: [], gardens: [] };
+  const relatedGardens = meta.gardens
+    .map((id) => gardens.find((g) => g.id === id))
+    .filter(Boolean);
+  const hasFinePrint = Boolean(finePrint) || meta.tags.length > 0 || relatedGardens.length > 0;
 
   // Fine print is opt-in per item — collapsed again on every new item.
   const [showFinePrint, setShowFinePrint] = useState(false);
@@ -56,8 +66,9 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
             </button>
           </div>
 
-          {/* Fine print: beneath the card, opt-in via toggle so it never distracts */}
-          {finePrint && (
+          {/* Fine print: beneath the card, opt-in via toggle so it never distracts.
+              Expands to clarifier + topic hashtags + cross-garden thumbnails. */}
+          {hasFinePrint && (
             <div className="mt-8 px-8 text-center">
               <button
                 onClick={() => setShowFinePrint((v) => !v)}
@@ -67,9 +78,46 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
                 fine print {showFinePrint ? '−' : '+'}
               </button>
               {showFinePrint && (
-                <p className="mt-1.5 text-xs font-light text-stone-400 dark:text-stone-500 leading-relaxed">
-                  {finePrint}
-                </p>
+                <div className="mt-1.5">
+                  {finePrint && (
+                    <p className="text-xs font-light text-stone-400 dark:text-stone-500 leading-relaxed">
+                      {finePrint}
+                    </p>
+                  )}
+                  {meta.tags.length > 0 && (
+                    <div className="flex flex-wrap justify-center gap-1.5 mt-2.5">
+                      {meta.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="text-[10px] font-light px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-400 dark:text-stone-500"
+                        >
+                          #{t}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {relatedGardens.length > 0 && (
+                    <div className="flex flex-wrap justify-center gap-2 mt-2.5">
+                      {relatedGardens.map((g) => (
+                        <Link
+                          key={g.id}
+                          to={isGardenUnlocked(g.id) ? `/gardens/${g.id}` : '/gardens'}
+                          className="flex items-center gap-1.5 text-[11px] font-light text-stone-500 dark:text-stone-400 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-xl px-2.5 py-1.5 hover:border-stone-300 dark:hover:border-stone-500 transition-colors"
+                          aria-label={`Explore the ${g.name} garden`}
+                        >
+                          <span
+                            className="w-5 h-5 rounded-md grid place-items-center text-xs"
+                            style={{ backgroundColor: g.color + '26' }}
+                            aria-hidden="true"
+                          >
+                            {g.icon}
+                          </span>
+                          {g.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           )}
