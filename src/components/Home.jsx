@@ -86,6 +86,7 @@ export default function Home() {
             question={currentQuestion.text}
             vibe={currentQuestion.vibe}
             resurfaced={currentQuestion.resurfaced}
+            echo={currentQuestion._echo}
             isTransitioning={isTransitioning}
             onYes={() => handleAnswer('yes')}
             onNo={() => handleAnswer('no')}

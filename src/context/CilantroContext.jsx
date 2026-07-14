@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { questions, gardens, getDailyQuestions, SEEDS } from '../data/questions';
+import { getEchoCandidate, ECHO_FREQUENCY } from '../utils/insights';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { migrateLocalData } from '../lib/migrateLocal';
 
@@ -64,10 +65,12 @@ const normalizeAnswered = (a) => {
 // Map a DB answer row → the in-memory answer shape the UI expects.
 const mapAnswerRow = (r) => ({
   id: r.id,
+  ...(r.question_slug ? { questionSlug: r.question_slug } : {}),
   text: r.question_text,
   vibe: r.vibe,
   difficulty: r.difficulty,
   answer: r.answer,
+  ...(r.revisited ? { revisited: true } : {}),
   timestamp: new Date(r.created_at).toISOString(),
   ...(r.updated_at && r.updated_at !== r.created_at
     ? { updatedAt: new Date(r.updated_at).toISOString() }
@@ -162,12 +165,14 @@ export function CilantroProvider({ children }) {
         id: a.id,
         user_id: userIdRef.current,
         question_text: a.text,
+        question_slug: a.questionSlug ?? null,
         vibe: a.vibe,
         difficulty: a.difficulty ?? 1,
         garden_id: a.gardenId ?? null,
         garden_name: a.gardenName ?? null,
         answer: a.answer,
         source,
+        revisited: a.revisited ?? false,
         history: a.history ?? [],
         created_at: a.timestamp,
         updated_at: a.updatedAt ?? a.timestamp,
@@ -451,8 +456,11 @@ export function CilantroProvider({ children }) {
   }, [showSeedAnimation]);
 
   // ── Get new question ──
-  // Skips are a "not right now" queue: once a skip has aged past the resurface
-  // delay, it occasionally comes back around — the user may feel differently.
+  // Two ways a past question comes back around, in priority order:
+  //  1. Skip-resurface: a "not right now" skip aged past the delay returns —
+  //     the user may feel differently now.
+  //  2. Echo (every Nth draw): a question answered long ago returns, so
+  //     answering again reveals constancy or drift.
   const RESURFACE_AFTER_MS = 60 * 60 * 1000; // 1 hour
   const RESURFACE_CHANCE = 0.25;
 
@@ -468,8 +476,24 @@ export function CilantroProvider({ children }) {
     return null;
   }, [skippedQuestions]);
 
+  const freePlayCount = useRef(0);
   const getNewQuestion = useCallback(() => {
     const resurfaceable = getResurfaceCandidate();
+    if (resurfaceable && Math.random() < RESURFACE_CHANCE) {
+      return { ...resurfaceable, resurfaced: true };
+    }
+
+    freePlayCount.current += 1;
+    if (freePlayCount.current % ECHO_FREQUENCY === 0) {
+      const echo = getEchoCandidate(answers, questions);
+      if (echo) {
+        return {
+          ...echo.question,
+          _echo: { previousAnswer: echo.previousAnswer, previousTime: echo.previousTime },
+        };
+      }
+    }
+
     let available = questions.filter((_, i) => !usedQuestions.includes(i));
     if (available.length === 0) {
       // Pool exhausted: give ripe skips one more look before recycling everything.
@@ -477,14 +501,11 @@ export function CilantroProvider({ children }) {
       setUsedQuestions([]);
       available = [...questions];
     }
-    if (resurfaceable && Math.random() < RESURFACE_CHANCE) {
-      return { ...resurfaceable, resurfaced: true };
-    }
     const randomIndex = Math.floor(Math.random() * available.length);
     const questionIndex = questions.indexOf(available[randomIndex]);
     setUsedQuestions((prev) => [...prev, questionIndex]);
     return available[randomIndex];
-  }, [usedQuestions, getResurfaceCandidate]);
+  }, [usedQuestions, answers, getResurfaceCandidate]);
 
   // ── Answer a free-play question ──
   const handleAnswer = useCallback((answer) => {
@@ -492,10 +513,14 @@ export function CilantroProvider({ children }) {
     setIsTransitioning(true);
     earnSeeds(currentQuestion.difficulty);
 
-    const { resurfaced, ...questionFields } = currentQuestion;
+    // Strip transient flags, and pull the question's string id (v3.1 bank,
+    // e.g. "deep-042") out as a slug for the Mirror engine — the answer's own
+    // id must stay a UUID (it is the answers-table primary key).
+    const { resurfaced, _echo, id: questionSlug, ...questionFields } = currentQuestion;
     const newAnswer = {
-      id: crypto.randomUUID(),
       ...questionFields,
+      id: crypto.randomUUID(),
+      ...(questionSlug ? { questionSlug } : {}),
       answer,
       timestamp: new Date().toISOString(),
     };
@@ -540,6 +565,7 @@ export function CilantroProvider({ children }) {
 
     const newAnswer = {
       id: crypto.randomUUID(),
+      ...(q?.id ? { questionSlug: q.id } : {}),
       text,
       vibe: q?.vibe ?? skip.vibe ?? 'reflection',
       difficulty: q?.difficulty ?? 1,
@@ -579,6 +605,24 @@ export function CilantroProvider({ children }) {
     setAnswers((prev) => prev.map((a, i) => (i === index ? updated : a)));
     updateAnswerRow(updated);
   }, [answers, seeds, showSeedAnimation, updateAnswerRow]);
+
+  // ── Re-answer a question today (Mirror Moments) ──
+  // Free, earns no seeds: revisiting a tension is reflection, not farming.
+  // Appends a fresh entry so the old answer stays in your record.
+  const reanswer = useCallback((question, answer) => {
+    const newAnswer = {
+      id: crypto.randomUUID(),
+      ...(question.id ? { questionSlug: question.id } : {}),
+      text: question.text,
+      vibe: question.vibe,
+      difficulty: question.difficulty,
+      answer,
+      revisited: true,
+      timestamp: new Date().toISOString(),
+    };
+    setAnswers((prev) => [...prev, newAnswer]);
+    insertAnswerRow(newAnswer, 'free');
+  }, [insertAnswerRow]);
 
   // ── Garden methods ──
   const isGardenUnlocked = useCallback((gardenId) => {
@@ -703,6 +747,7 @@ export function CilantroProvider({ children }) {
 
     const newAnswer = {
       id: crypto.randomUUID(),
+      ...(currentQ.id ? { questionSlug: currentQ.id } : {}),
       text: currentQ.text,
       vibe: currentQ.vibe || 'daily',
       difficulty: currentQ.difficulty,
@@ -763,7 +808,7 @@ export function CilantroProvider({ children }) {
     currentQuestion, isTransitioning,
     handleAnswer, handleSkip,
     // Answers
-    answers, changeAnswer,
+    answers, changeAnswer, reanswer,
     skippedQuestions, answerSkipped,
     // Seeds
     seeds, seedAnimation, earnSeeds, showSeedAnimation,

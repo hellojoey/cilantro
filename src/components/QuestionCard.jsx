@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { vibeColor, gardens } from '../data/questions';
+import { vibeColor, formatTime, gardens } from '../data/questions';
 import { getFinePrint } from '../data/finePrint';
 import { getQuestionMeta } from '../data/questionMeta';
 import { useCilantro } from '../context/CilantroContext';
 
-export default function QuestionCard({ question, vibe, color, label, resurfaced, isTransitioning, onYes, onNo, onSkip, skipLabel = 'skip' }) {
+export default function QuestionCard({ question, vibe, color, label, echo, resurfaced, isTransitioning, onYes, onNo, onSkip, skipLabel = 'skip' }) {
   const { isGardenUnlocked } = useCilantro();
   const dotColor = color || vibeColor(vibe) || '#a8a29e';
   const finePrint = getFinePrint(question);
@@ -52,6 +52,22 @@ export default function QuestionCard({ question, vibe, color, label, resurfaced,
         <p className="text-[11px] text-stone-300 dark:text-stone-600 text-center font-light italic -mt-2 mb-4">
           you skipped this one before — feel any different?
         </p>
+      )}
+
+      {/* Echo: this question is returning from your past */}
+      {echo && (
+        <div className="flex justify-center mb-6">
+          <div className="px-4 py-2 rounded-2xl bg-stone-100/80 dark:bg-stone-700/50 border border-stone-200 dark:border-stone-600 text-center">
+            <p className="text-xs text-stone-400 dark:text-stone-400 font-light">
+              an echo — last time you said{' '}
+              <span className={echo.previousAnswer === 'yes' ? 'text-emerald-500' : 'text-rose-400'}>
+                {echo.previousAnswer}
+              </span>
+              <span className="text-stone-300 dark:text-stone-500"> · {formatTime(echo.previousTime)}</span>
+            </p>
+            <p className="text-xs text-stone-300 dark:text-stone-500 font-light mt-0.5">is it still true?</p>
+          </div>
+        </div>
       )}
 
       {/* Question */}

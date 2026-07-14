@@ -67,8 +67,8 @@ questions.forEach((q, i) => {
   const vibe = q.vibe || 'reflection';
 
   lines.push(
-    `insert into public.questions (text, vibe, difficulty, fine_print, tags, related_gardens, source, status, owner_id) values ` +
-      `(${sqlString(q.text)}, ${sqlString(vibe)}, ${sqlInt(difficulty)}, ${sqlStringOrNull(getFinePrint(q.text))}, ${sqlTextArray(getQuestionMeta(q.text).tags)}, ${sqlTextArray(getQuestionMeta(q.text).gardens)}, 'seed', 'published', NULL);`
+    `insert into public.questions (slug, text, vibe, difficulty, fine_print, tags, related_gardens, source, status, owner_id) values ` +
+      `(${sqlStringOrNull(q.id)}, ${sqlString(q.text)}, ${sqlString(vibe)}, ${sqlInt(difficulty)}, ${sqlStringOrNull(getFinePrint(q.text))}, ${sqlTextArray(getQuestionMeta(q.text).tags)}, ${sqlTextArray(getQuestionMeta(q.text).gardens)}, 'seed', 'published', NULL);`
   );
   questionInsertCount++;
 });
