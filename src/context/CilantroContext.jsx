@@ -320,6 +320,7 @@ export function CilantroProvider({ children }) {
           email: sessionUser.email,
           id,
           isAdmin: profile?.is_admin ?? false,
+          memberSince: profile?.created_at ?? null,
         });
         setSeeds(profile ? profile.seeds : SEEDS.STARTING_BALANCE);
 
@@ -529,6 +530,28 @@ export function CilantroProvider({ children }) {
       setIsTransitioning(false);
     }, 300);
   }, [currentQuestion, getNewQuestion, insertSkip]);
+
+  // ── Answer a previously-skipped question (from Profile's "waiting for you") ──
+  const answerSkipped = useCallback((text, answer) => {
+    const skip = skippedQuestions.find((s) => s.text === text);
+    if (!skip) return;
+    const q = questions.find((x) => x.text === text);
+    earnSeeds(q?.difficulty ?? 1);
+
+    const newAnswer = {
+      id: crypto.randomUUID(),
+      text,
+      vibe: q?.vibe ?? skip.vibe ?? 'reflection',
+      difficulty: q?.difficulty ?? 1,
+      answer,
+      timestamp: new Date().toISOString(),
+    };
+    setAnswers((prev) => [...prev, newAnswer]);
+    insertAnswerRow(newAnswer, 'free');
+
+    setSkippedQuestions((prev) => prev.filter((s) => s.text !== text));
+    deleteSkip(text);
+  }, [skippedQuestions, earnSeeds, insertAnswerRow, deleteSkip]);
 
   // ── Change an answer (costs seeds) ──
   const changeAnswer = useCallback((index) => {
@@ -741,7 +764,7 @@ export function CilantroProvider({ children }) {
     handleAnswer, handleSkip,
     // Answers
     answers, changeAnswer,
-    skippedQuestions,
+    skippedQuestions, answerSkipped,
     // Seeds
     seeds, seedAnimation, earnSeeds, showSeedAnimation,
     // Gardens

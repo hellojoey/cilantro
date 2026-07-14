@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCilantro } from '../context/CilantroContext';
 import { vibeColor, formatTime, radarDimensions, calculateRadarScores } from '../data/questions';
+import { getQuestionMeta } from '../data/questionMeta';
 import SeedBadge from './SeedBadge';
 import RadarChart from './RadarChart';
 
@@ -10,15 +11,38 @@ export default function Profile() {
   const {
     user, logout,
     answers, changeAnswer,
-    skippedQuestions,
+    skippedQuestions, answerSkipped,
+    gardenUnlocks,
     dailyAnswered, dailyStreak,
   } = useCilantro();
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTag, setActiveTag] = useState(null);
 
-  const filteredAnswers = searchQuery
-    ? answers.filter(a => a.text.toLowerCase().includes(searchQuery.toLowerCase()))
-    : answers;
+  // Most-used topic tags across this user's reflections (top 8)
+  const topTags = useMemo(() => {
+    const counts = {};
+    for (const a of answers) {
+      for (const t of getQuestionMeta(a.text).tags) {
+        counts[t] = (counts[t] || 0) + 1;
+      }
+    }
+    return Object.entries(counts)
+      .sort((x, y) => y[1] - x[1])
+      .slice(0, 8)
+      .map(([t]) => t);
+  }, [answers]);
+
+  const filteredAnswers = answers.filter((a) => {
+    if (searchQuery && !a.text.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    if (activeTag && !getQuestionMeta(a.text).tags.includes(activeTag)) return false;
+    return true;
+  });
+
+  const gardensUnlockedCount = Object.values(gardenUnlocks).filter(Boolean).length;
+  const memberSince = user?.memberSince
+    ? new Date(user.memberSince).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    : null;
 
   // Radar chart scores
   const radarScores = calculateRadarScores(answers);
@@ -55,7 +79,9 @@ export default function Profile() {
                   </div>
                   <div>
                     <p className="text-stone-600 dark:text-stone-200 font-light">{user.firstName}</p>
-                    <p className="text-xs text-stone-300 dark:text-stone-500">@{user.username}</p>
+                    <p className="text-xs text-stone-300 dark:text-stone-500">
+                      @{user.username}{memberSince ? ` · since ${memberSince}` : ''}
+                    </p>
                   </div>
                 </div>
                 <button
@@ -69,6 +95,22 @@ export default function Profile() {
               {/* Seeds display */}
               <div className="mt-4 pt-4 border-t border-stone-100 dark:border-stone-700">
                 <SeedBadge size="lg" />
+              </div>
+
+              {/* Quick stats */}
+              <div className="mt-4 pt-4 border-t border-stone-100 dark:border-stone-700 grid grid-cols-3 gap-2 text-center">
+                <div>
+                  <p className="text-lg font-light text-stone-600 dark:text-stone-200">{answers.length}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-stone-300 dark:text-stone-500">reflections</p>
+                </div>
+                <div>
+                  <p className="text-lg font-light text-stone-600 dark:text-stone-200">{gardensUnlockedCount}<span className="text-stone-300 dark:text-stone-500">/8</span></p>
+                  <p className="text-[10px] uppercase tracking-wider text-stone-300 dark:text-stone-500">gardens</p>
+                </div>
+                <div>
+                  <p className="text-lg font-light text-stone-600 dark:text-stone-200">{dailyStreak.count}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-stone-300 dark:text-stone-500">day streak</p>
+                </div>
               </div>
             </div>
           )}
@@ -123,13 +165,48 @@ export default function Profile() {
             </button>
           </div>
 
-          {/* Skipped questions */}
+          {/* Skipped questions — "not right now" queue, answerable in place */}
           {skippedQuestions.length > 0 && (
             <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700 mb-6">
-              <h3 className="text-sm text-stone-400 mb-4 font-light">skipped ({skippedQuestions.length})</h3>
-              <div className="space-y-3 max-h-48 overflow-auto">
-                {skippedQuestions.map((q, i) => (
-                  <p key={i} className="text-sm text-stone-500 dark:text-stone-400 font-light">{q.text}</p>
+              <h3 className="text-sm text-stone-400 mb-1 font-light">waiting for you ({skippedQuestions.length})</h3>
+              <p className="text-xs text-stone-300 dark:text-stone-500 font-light mb-4">
+                questions you skipped — answer when it feels right, or let them come back around
+              </p>
+              <div className="space-y-4 max-h-64 overflow-auto">
+                {skippedQuestions.map((q) => (
+                  <div key={q.text} className="border-b border-stone-50 dark:border-stone-700 pb-4 last:border-0 last:pb-0">
+                    <div className="flex items-start gap-3">
+                      <div
+                        className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                        style={{ backgroundColor: vibeColor(q.vibe || 'reflection') }}
+                        aria-hidden="true"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-stone-600 dark:text-stone-300 font-light leading-relaxed">{q.text}</p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <button
+                            onClick={() => answerSkipped(q.text, 'yes')}
+                            className="text-xs font-medium px-3 py-1 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 text-stone-500 dark:text-stone-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:border-emerald-200 dark:hover:border-emerald-700 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
+                            aria-label={`Answer yes to: ${q.text}`}
+                          >
+                            yes
+                          </button>
+                          <button
+                            onClick={() => answerSkipped(q.text, 'no')}
+                            className="text-xs font-medium px-3 py-1 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 text-stone-500 dark:text-stone-300 hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:border-rose-200 dark:hover:border-rose-700 hover:text-rose-500 dark:hover:text-rose-400 transition-all"
+                            aria-label={`Answer no to: ${q.text}`}
+                          >
+                            no
+                          </button>
+                          {q.skippedAt && (
+                            <span className="text-xs text-stone-300 dark:text-stone-500 ml-1">
+                              skipped {formatTime(q.skippedAt)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -163,6 +240,26 @@ export default function Profile() {
                   </button>
                 )}
               </div>
+
+              {/* Topic filter chips (from question hashtags) */}
+              {topTags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {topTags.map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setActiveTag(activeTag === t ? null : t)}
+                      aria-pressed={activeTag === t}
+                      className={`text-[10px] font-light px-2 py-0.5 rounded-full transition-colors ${
+                        activeTag === t
+                          ? 'bg-stone-700 dark:bg-stone-600 text-white'
+                          : 'bg-stone-100 dark:bg-stone-700 text-stone-400 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-600'
+                      }`}
+                    >
+                      #{t}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               <div className="space-y-4 max-h-96 overflow-auto">
                 {[...filteredAnswers].reverse().map((a, i) => {
@@ -234,7 +331,7 @@ export default function Profile() {
                   );
                 })}
 
-                {filteredAnswers.length === 0 && searchQuery && (
+                {filteredAnswers.length === 0 && (searchQuery || activeTag) && (
                   <p className="text-center text-stone-300 dark:text-stone-500 text-sm font-light py-4">
                     no matches found
                   </p>
