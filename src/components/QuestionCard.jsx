@@ -1,8 +1,10 @@
 import React from 'react';
 import { vibeColor } from '../data/questions';
+import { getFinePrint } from '../data/finePrint';
 
 export default function QuestionCard({ question, vibe, color, label, isTransitioning, onYes, onNo, onSkip }) {
   const dotColor = color || vibeColor(vibe) || '#a8a29e';
+  const finePrint = getFinePrint(question);
 
   return (
     <div
@@ -32,9 +34,16 @@ export default function QuestionCard({ question, vibe, color, label, isTransitio
       </div>
 
       {/* Question */}
-      <h2 className="text-2xl md:text-3xl font-light text-stone-700 dark:text-stone-200 text-center leading-relaxed mb-12 px-4">
+      <h2 className={`text-2xl md:text-3xl font-light text-stone-700 dark:text-stone-200 text-center leading-relaxed px-4 ${finePrint ? 'mb-4' : 'mb-12'}`}>
         {question}
       </h2>
+
+      {/* Fine print: neutral clarifier so the answer is more educated */}
+      {finePrint && (
+        <p className="text-xs italic font-light text-stone-400 dark:text-stone-500 text-center leading-relaxed mb-10 px-8">
+          {finePrint}
+        </p>
+      )}
 
       {/* Yes/No buttons */}
       <div className="flex gap-4 px-4" role="group" aria-label="Answer options">

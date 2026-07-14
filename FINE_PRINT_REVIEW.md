@@ -1,0 +1,433 @@
+# Fine Print — Review Draft
+
+AI-drafted neutral clarifiers for existing questions (Jul 13, 2026). **Edit or delete any line here, then tell Claude to sync** — this file is the review surface; src/data/finePrint.js and supabase/seed.sql are regenerated from your edits.
+
+Rule: fine print clarifies scope/terms/rules so the answer is more educated. It never leans yes or no.
+
+## Base questions (145 of 200 — the rest were self-evident)
+
+- **Did you feel at peace today?**
+  - Peace here means calm and settled — it doesn't have to mean happy.
+- **Are you proud of who you're becoming?**
+  - Think about your trajectory lately, not just how you feel in this moment.
+- **Did you listen to your intuition recently?**
+  - "Recently" means the past week or so — and listening means you noticed and acted on it.
+- **Is there something you need to forgive yourself for?**
+  - Any size counts, from a small slip to something you've carried for years.
+- **Are you being honest with yourself?**
+  - Answer for the parts of life you actually think about — no one audits every corner at once.
+- **Did you make time for silence today?**
+  - Silence means no screens or conversation — even a few quiet minutes count.
+- **Are you holding onto something you should let go?**
+  - Could be a grudge, a belief, a habit, or a person — you decide what fits.
+- **Did you feel grateful for something small?**
+  - Small means easy to overlook, not a big event.
+- **Are you where you thought you'd be at this point in life?**
+  - Compare to how you imagined things a few years back, not to anyone else's timeline.
+- **Did you choose kindness over being right?**
+  - A moment you could have corrected or won an argument, and chose warmth instead.
+- **Is your heart lighter than it was yesterday?**
+  - Go by your emotional weight, not anything that happened literally.
+- **Did you do something that scared you?**
+  - Any size of fear counts, from a small risk to a big leap.
+- **Have you been avoiding a truth about yourself?**
+  - Think about the last few weeks, not your whole life.
+- **Did you spend time with your thoughts today?**
+  - Unstructured thinking, without a screen or distraction pulling you away.
+- **Are you living with intention?**
+  - Intention means choosing deliberately, rather than drifting through your days.
+- **Have you outgrown a version of yourself recently?**
+  - A belief, habit, or way of seeing things you've since moved past.
+- **Did you notice something beautiful that others missed?**
+  - Any scale counts, from a sunset to a small detail in a room.
+- **Are you carrying a burden that isn't yours to carry?**
+  - Someone else's problem, emotion, or expectation you've taken on as your own.
+- **Did you honor a boundary today?**
+  - Either one you set for yourself or one someone else asked you to respect.
+- **Have you been gentle with yourself lately?**
+  - Think about your self-talk after a mistake, not just how you feel right now.
+- **Is there a wound you keep reopening?**
+  - A pain you return to in your mind, even without anyone bringing it up.
+- **Did you feel truly seen by someone today?**
+  - "Seen" means understood, not just noticed or spoken to.
+- **Are you becoming more yourself or less?**
+  - Think about the direction you've been moving lately, not one single moment.
+- **Have you sat with an uncomfortable emotion recently?**
+  - "Sat with" means let yourself feel it, rather than distracting from it.
+- **Did you give yourself permission to feel today?**
+  - Any emotion counts — the point is letting it exist without judging it.
+- **Did you laugh out loud today?**
+  - A real laugh out loud counts — a smile or silent chuckle doesn't.
+- **Have you danced when nobody was watching?**
+  - Any kind of movement counts, even a quick shimmy in the kitchen.
+- **Did you eat something delicious?**
+  - Delicious by your own standard, however simple or fancy.
+- **Have you taken a really good nap recently?**
+  - "Recently" means anytime in the last week or so.
+- **Did you sing in the shower?**
+  - Has to be an actual shower — humming elsewhere doesn't count.
+- **Have you worn your favorite outfit this week?**
+  - Your current favorite, not necessarily an all-time one.
+- **Did you pet a dog or cat today?**
+  - Yours or someone else's — even a quick pet counts.
+- **Have you watched the clouds go by?**
+  - No specific timeframe — today or any day you remember counts.
+- **Did you treat yourself to something nice?**
+  - Any size treat counts, from a coffee to something bigger.
+- **Did you take a photo of something beautiful?**
+  - Any timeframe counts, and a phone photo is enough.
+- **Did you try a new food recently?**
+  - "Recently" means the last couple of weeks or so.
+- **Have you done something silly today?**
+  - Anything that felt silly to you counts, no matter how small.
+- **Did you make a wish on something today?**
+  - A candle, a star, a dandelion — any wish-making moment counts.
+- **Did you doodle or draw something just for fun?**
+  - No artistic skill required — doodles and scribbles count.
+- **Have you had an entire conversation with a pet?**
+  - One-sided is fine — talking to them counts even if they don't talk back.
+- **Did you find money in an old pocket?**
+  - Any time you can remember, not just today.
+- **Did you tell someone you appreciate them?**
+  - In person, text, or any way you told them — as long as they knew.
+- **Have you called a friend just to chat?**
+  - A phone or video call, not just texting — voice counts either way.
+- **Did you make someone smile today?**
+  - Doesn't have to be on purpose — you just need to know it happened.
+- **Have you hugged someone you love?**
+  - Any timeframe you can recall, not just today.
+- **Did you really listen when someone talked to you?**
+  - "Really listen" means not planning your response or checking your phone.
+- **Have you reconnected with an old friend?**
+  - Someone you'd lost touch with — any reach-out counts, big or small.
+- **Did you ask someone how they're really doing?**
+  - Beyond the small-talk version — you wanted the honest answer.
+- **Have you shared a meal with someone?**
+  - Any meal, any setting — cooking together or just eating together counts.
+- **Did you compliment a stranger?**
+  - Someone you don't know personally — a cashier or passerby counts.
+- **Did you forgive someone today?**
+  - Forgiving means releasing the resentment, not necessarily reconciling or saying so out loud.
+- **Have you made plans to see someone you miss?**
+  - Even a loose plan or a "let's find a time" counts.
+- **Did you let someone help you today?**
+  - Big or small — accepting help counts even if you could've managed alone.
+- **Did you hold space for someone's feelings?**
+  - Holding space means listening without trying to fix or redirect it.
+- **Have you said sorry when you were wrong?**
+  - Any timeframe you remember, not just today.
+- **Did you celebrate someone else's win today?**
+  - Big or small — a congratulations text counts as much as a party.
+- **Have you had a deep conversation recently?**
+  - "Deep" means beyond logistics or small talk; "recently" means the last week or two.
+- **Have you checked in on someone who went quiet?**
+  - Someone who'd gone quiet on you or seemed off, for any reason.
+- **Did you let someone go first today?**
+  - Any small courtesy counts — a line, a door, a turn to speak.
+- **Have you thanked someone who's always there?**
+  - Anyone who consistently shows up for you, said aloud or in a message.
+- **Did you share something vulnerable with someone?**
+  - Something you don't usually say out loud, big or small.
+- **Did you put your phone away during a conversation?**
+  - Out of reach or sight, not just face-down on the table.
+- **Have you watched a movie that made you cry?**
+  - Any timeframe, any movie — tearing up counts as crying.
+- **Do you know all the words to a Taylor Swift song?**
+  - Just one song fully memorized counts, not her whole catalog.
+- **Have you binged an entire series in one sitting?**
+  - Same-day counts, even with normal breaks — it doesn't need to be unbroken.
+- **Have you ever dressed up for a movie premiere?**
+  - Costume, cosplay, or just dressing nicer than usual — any of it counts.
+- **Do you have a celebrity crush?**
+  - Past or present, however long it lasted.
+- **Did you rewatch a comfort show recently?**
+  - "Recently" means the last few weeks or so.
+- **Have you listened to a song on repeat for hours?**
+  - Literal hours, or however long it felt like you'd been at it.
+- **Do you know more about a fictional universe than real history?**
+  - Compare any one fictional world you love to your general history knowledge.
+- **Did you discover a new artist you love?**
+  - No timeframe — anytime you can remember discovering them.
+- **Have you stayed up too late finishing a book?**
+  - Too late by your own standard, not anyone else's bedtime rule.
+- **Have you cried at a song in public?**
+  - Anywhere outside your own space alone — a car with others counts.
+- **Have you recommended a show to everyone you know?**
+  - "Everyone" is a feeling, not a headcount — a few enthusiastic recommendations count.
+- **Do you judge a person by their taste in music?**
+  - Forming any opinion about them counts, not just harsh judgment.
+- **Can you name all the planets in order?**
+  - The eight recognized planets — Pluto is optional either way.
+- **Have you ever seen a shooting star?**
+  - A meteor you took to be a shooting star counts, confirmed or not.
+- **Can you fold a paper crane?**
+  - From memory, without looking up the steps.
+- **Do you know how to read a map without GPS?**
+  - A paper map or general sense of direction — not memorizing every road.
+- **Can you name a constellation in the night sky?**
+  - Naming it is enough — you don't need to be able to spot it in the sky.
+- **Do you remember your childhood phone number?**
+  - Any phone number from your childhood home counts.
+- **Have you ever been to a different continent?**
+  - Different from the continent you live on — any trip there counts.
+- **Can you cook a meal without a recipe?**
+  - A simple meal counts — it doesn't need to be elaborate.
+- **Have you ever written a letter by hand?**
+  - Any handwritten note sent by mail counts, not just a formal letter.
+- **Do you know what your name means?**
+  - Either the literal meaning or the story behind why you were given it.
+- **Have you ever been awake for more than 24 hours?**
+  - Straight through, without a nap in between.
+- **Do you know how to change a tire?**
+  - Knowing the steps counts, even if you've never actually done it.
+- **Have you ever seen the Northern Lights?**
+  - In person, not just in photos or video.
+- **Do you know how to swim?**
+  - Comfortable enough to stay afloat and move — you don't need to be fast.
+- **Can you do mental math faster than your phone?**
+  - Compare start-to-finish, including the time it takes to unlock your phone.
+- **Have you ever built something with your hands?**
+  - Anything from furniture to a small craft project counts.
+- **Can you type without looking at the keyboard?**
+  - Mostly without looking is fine — you don't need to never glance down.
+- **Did you drink enough water today?**
+  - Go by what feels like enough for your body, not a specific number of glasses.
+- **Have you stretched your body?**
+  - Any stretching counts, formal or just reaching before getting up.
+- **Did you get some fresh air?**
+  - Even a few minutes outside or by an open window counts.
+- **Did you put your phone down for an hour?**
+  - Counts whether it was one continuous hour or added up across the day.
+- **Have you done something just for yourself?**
+  - Anything chosen purely for your own enjoyment, no matter how small.
+- **Did you go to bed at a reasonable time?**
+  - Reasonable by your own standard and schedule, not a fixed hour.
+- **Have you moved your body today?**
+  - Any movement counts — a walk or chores, not just formal exercise.
+- **Have you taken a walk outside today?**
+  - Any length counts, from a quick loop around the block to a longer walk.
+- **Did you eat a home-cooked meal?**
+  - Made by you or anyone in your household — reheated takeout doesn't count.
+- **Have you said no to something that drains you?**
+  - Could be a request, an obligation, or your own habit — any "no" counts.
+- **Have you cleaned or organized a space today?**
+  - Any space counts, even a single drawer or your desk.
+- **Have you listened to your body's signals?**
+  - Signals like hunger, fatigue, or tension — noticing them is enough, acting isn't required.
+- **Did you do something that made you feel strong?**
+  - Physical, mental, or emotional strength all count.
+- **Have you journaled or reflected in writing?**
+  - Any format counts, from a full journal entry to a few scribbled notes.
+- **Did you avoid comparing yourself to others today?**
+  - Noticing a comparison and letting it go counts as avoiding it.
+- **Have you created something today?**
+  - Anything you made counts, from a meal to a piece of art.
+- **Did you rest without guilt?**
+  - Any kind of rest counts — the point is the absence of guilt, not the activity.
+- **Have you spent time in nature this week?**
+  - A park or a backyard counts — it doesn't have to be wilderness.
+- **Did you set a healthy boundary today?**
+  - Could be spoken aloud or simply held firm in your own mind.
+- **Did you have a vivid dream last night?**
+  - Vivid means detailed or memorable, not necessarily pleasant.
+- **Have you written something creative recently?**
+  - "Recently" means the last few weeks — a few lines count, not just finished pieces.
+- **Did you make something with your hands today?**
+  - Anything physical counts, from a meal to a repair.
+- **Have you had a new idea that excited you?**
+  - No timeframe — any idea you can remember getting excited about.
+- **Have you tried a new creative medium?**
+  - Any art form you haven't tried before, however briefly.
+- **Did you take a photo that tells a story?**
+  - It just needs to capture a moment or feeling, not a whole narrative.
+- **Did you solve a problem in a creative way?**
+  - Any problem counts, from a recipe substitution to something bigger.
+- **Have you shared your creative work with someone?**
+  - Anything you made counts, even something small or unfinished.
+- **Have you reimagined something ordinary?**
+  - Seeing an everyday object or moment differently than usual counts.
+- **Have you arranged something beautifully?**
+  - A table, a room, a plate of food — any arranging counts.
+- **Have you experimented in the kitchen?**
+  - No timeframe — any time you tried something new with food.
+- **Did you see art that moved you?**
+  - Any form counts — visual art, music, film, or anything else.
+- **Did you express yourself in a new way?**
+  - Any form of self-expression you don't usually reach for counts.
+- **Have you built or fixed something recently?**
+  - "Recently" means the last few weeks or so.
+- **Did you find beauty in something broken?**
+  - Literal or metaphorical — a cracked object or a hard situation both count.
+- **Did you learn something new today?**
+  - Any size counts, from a small fact to a real insight.
+- **Have you taken a step toward a goal this week?**
+  - Any size step counts, even a small one.
+- **Did you step outside your comfort zone?**
+  - Any size counts — it's about the discomfort, not the scale of the act.
+- **Have you asked for feedback recently?**
+  - "Recently" means the last few weeks or so.
+- **Did you fail at something and try again?**
+  - Any size of failure counts, as long as you tried again after.
+- **Have you read something that challenged your thinking?**
+  - No timeframe — books, articles, or anything else you've read.
+- **Have you invested in your future self?**
+  - Time, money, or effort — any investment in where you're headed counts.
+- **Did you have a productive day?**
+  - Productive by your own definition, not anyone else's checklist.
+- **Have you mentored or taught someone?**
+  - Formal or informal — showing someone how to do something counts.
+- **Did you choose progress over perfection?**
+  - Any moment you let "good enough" be enough counts.
+- **Have you written down your goals?**
+  - On paper or digitally, either counts.
+- **Have you changed your mind about something important?**
+  - Important by your own measure, any time you can remember.
+- **Did you prioritize what matters over what's urgent?**
+  - A moment you chose the meaningful task over the loud, time-pressured one.
+- **Have you sought out a new perspective?**
+  - Deliberately seeking it out counts, not just stumbling into one.
+- **Did you show up for yourself today?**
+  - Any way you kept a promise to yourself today, big or small.
+- **Have you been patient with your own progress?**
+  - Not rushing or berating yourself for how slow it's felt.
+- **Have you thought about your purpose lately?**
+  - "Lately" means the last few weeks or so.
+- **Have you acknowledged how far you've come?**
+  - Compare to any earlier point in your life, not just recently.
+- **Did you invest time in something meaningful today?**
+  - Meaningful by your own definition, whatever that looks like for you.
+
+## Garden questions (58 of 80 items — quotes and vibes have no fine print)
+
+
+### shadows
+- **Are you running from something you should face?**
+  - "Running" means avoiding, distracting yourself, or postponing — not necessarily fleeing outright.
+- **Do you judge others for traits you see in yourself?**
+  - This includes traits you're only dimly aware of in yourself, not just ones you'd openly admit to.
+- **Have you been lying to yourself about something important?**
+  - This means avoiding a truth you already sense on some level, not simply being unsure.
+- **Are you the villain in someone else's story?**
+  - This asks how someone else might cast you in their account, not whether you meant harm.
+- **Do you self-sabotage when things are going well?**
+  - Self-sabotage means undermining your own progress, even unconsciously — not just an occasional slip.
+- **Do you secretly enjoy other people's failures?**
+  - "Secretly" means a private flicker of satisfaction, even one you'd never admit out loud.
+- **Are you pretending to be someone you're not?**
+  - This can apply to one relationship or context, not necessarily your whole life.
+
+### mirrors
+- **Would you want to be friends with yourself?**
+  - Judge this by who you are right now, not who you're trying to become.
+- **Do people know the real you?**
+  - This is about the people closest to you, not casual acquaintances or strangers.
+- **If you met yourself, would you trust you?**
+  - Trust here means keeping your word and having your own back, not liking everything about yourself.
+- **Are your values actually reflected in your actions?**
+  - Think about your actions over recent months, not a single lapse.
+- **Are you the same person in private as in public?**
+  - Small social adjustments don't count — this is about your core character and honesty.
+- **Would your younger self be disappointed in you?**
+  - Picture your younger self judging your character and choices, not your job title or income.
+- **Are you kind when no one is watching?**
+  - Think of moments with no audience and nothing to gain, not just public politeness.
+- **Do you take more than you give?**
+  - Weigh this across your relationships overall, not any single one.
+
+### crossroads
+- **Is there a decision you've been avoiding?**
+  - "Avoiding" means you know it needs deciding but keep delaying it, not that you haven't thought about it.
+- **Are you staying somewhere out of fear, not love?**
+  - "Somewhere" can mean a relationship, job, city, or any situation you haven't left.
+- **Are you in the right career for your soul?**
+  - "For your soul" means it feels meaningful to you, not necessarily prestigious or lucrative.
+- **Are you choosing comfort over growth?**
+  - Think of a specific choice you're facing now, not your general life philosophy.
+- **Would you make the same choices if you could start over?**
+  - Judge with the knowledge you have now, not by blaming your past self for not knowing it then.
+- **Are you waiting for permission to live your life?**
+  - "Permission" means external approval — from a person, institution, or timeline — not your own readiness.
+- **Is fear making your decisions for you?**
+  - This is about fear overriding what you actually want, not reasonable caution.
+
+### roots
+- **Have you forgiven your parents for their mistakes?**
+  - Forgiving means releasing the resentment — it doesn't require excusing what happened or reconciling.
+- **Are you repeating patterns from your childhood?**
+  - This includes patterns you repeat unconsciously, not just ones you've deliberately chosen.
+- **Are there family wounds you haven't healed?**
+  - "Family" here includes any relative, not just parents or siblings.
+- **Have you become what your family expected?**
+  - This includes expectations they voiced directly or ones you absorbed without them saying so.
+- **Is there a conversation with family you need to have?**
+  - "Need" means it feels overdue to you, not that anyone is demanding it.
+- **Do you know where you come from?**
+  - This can mean your family history, heritage, or the place that shaped you — however you read it.
+- **Are you running toward something or away from your past?**
+  - Either direction counts as "running" here — this isn't about which one is healthier.
+- **Have you made peace with your upbringing?**
+  - Peace here means you can think about it without it derailing you, not that it never stings.
+
+### depths
+- **Are you afraid of dying?**
+  - This is about the fact of dying itself, not fear of pain or how it might happen.
+- **Do you know what you're living for?**
+  - This doesn't require one grand purpose — a person, value, or daily reason can count.
+- **Have you accepted that you won't live forever?**
+  - "Accepted" means the thought no longer feels unbearable, not that you never think about it.
+- **Do you believe you matter in the grand scheme?**
+  - "Matter" can mean cosmic significance or impact on the people and world around you — however you read it.
+- **Have you found something worth suffering for?**
+  - "Suffering" here means real sacrifice or hardship, not everyday inconvenience.
+- **Are you running out of time for what matters most?**
+  - This is about how it feels to you right now, not an actuarial calculation.
+- **Have you truly lived, or just existed?**
+  - Judge this by your own sense of aliveness and engagement, not by outward achievements.
+
+### embers
+- **Are you in love right now?**
+  - This means present tense — feelings you're experiencing now, not memories of past love.
+- **Have you lost someone you still think about?**
+  - "Lost" can mean death, breakup, or falling out of touch — any way they're no longer in your life.
+- **Are you afraid of being truly known by someone?**
+  - "Truly known" means someone seeing your flaws and inner world, not just your public self.
+- **Do you express love the way your people need it?**
+  - "Need" means how they actually receive love best, which may differ from how you naturally express it.
+- **Are you holding onto a love that's already gone?**
+  - "Gone" can mean a relationship that ended, or one that quietly stopped being mutual.
+- **Have you let someone love you fully?**
+  - "Fully" means accepting their love without deflecting, minimizing, or holding part of yourself back.
+- **Do you believe you deserve the love you want?**
+  - This is about what you believe deep down, even if your actions don't always reflect it.
+
+### compass
+- **Do you know what you'd do if money didn't matter?**
+  - Assume your basic needs would still be met — the question is how you'd spend your time.
+- **Are you building someone else's dream?**
+  - "Someone else" can be a parent, boss, partner, or a script you inherited without choosing it.
+- **Do you feel like you're on the right path?**
+  - "Right" here means it feels aligned to you, not measured against anyone else's timeline.
+- **Have you sacrificed passion for stability?**
+  - This can be one major decision or a pattern of smaller ones over time.
+- **Do you wake up excited about your life?**
+  - Think of your general pattern lately, not a single hard morning.
+- **Are you living by someone else's definition of success?**
+  - "Someone else's" can mean family, culture, or a social norm you never actually examined.
+- **Have you followed your curiosity to somewhere unexpected?**
+  - "Somewhere" can be a place, a skill, a relationship, or a line of thought — anywhere curiosity led.
+
+### still
+- **Can you sit in silence without reaching for your phone?**
+  - Think of a stretch of a few minutes or more, not a single urge you resist once.
+- **Have you found a place where you feel completely calm?**
+  - "Place" can be physical or somewhere you get to mentally, like a memory or state of mind.
+- **Are you comfortable being alone?**
+  - This is about extended time alone, not brief solitude, and about comfort rather than preference.
+- **Do you know what peace feels like in your body?**
+  - This means recognizing physical sensations — like a loosened jaw or slower breath — not just the idea of peace.
+- **Are you always running from silence?**
+  - "Always" means as a consistent pattern, not that you've never once sat quietly.
+- **Do you give yourself permission to do nothing?**
+  - "Nothing" means unstructured time with no productive goal, not just a change of activity.
+- **Is your inner voice kind or critical?**
+  - Think of your general inner tone, not just how you talk to yourself after a single mistake.

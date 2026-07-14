@@ -6,6 +6,7 @@ import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { questions, gardens } from '../src/data/questions.js';
+import { getFinePrint } from '../src/data/finePrint.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outPath = path.join(__dirname, '..', 'supabase', 'seed.sql');
@@ -63,7 +64,7 @@ questions.forEach((q, i) => {
 
   lines.push(
     `insert into public.questions (text, vibe, difficulty, fine_print, source, status, owner_id) values ` +
-      `(${sqlString(q.text)}, ${sqlString(vibe)}, ${sqlInt(difficulty)}, NULL, 'seed', 'published', NULL);`
+      `(${sqlString(q.text)}, ${sqlString(vibe)}, ${sqlInt(difficulty)}, ${sqlStringOrNull(getFinePrint(q.text))}, 'seed', 'published', NULL);`
   );
   questionInsertCount++;
 });
@@ -133,8 +134,8 @@ gardens.forEach((g, gi) => {
     }
 
     lines.push(
-      `insert into public.garden_items (garden_id, position, content_type, text, attribution, vibe, difficulty) values ` +
-        `(${sqlString(g.id)}, ${sqlInt(ii)}, ${sqlString(contentType)}, ${sqlString(item.text)}, ${sqlStringOrNull(item.attribution)}, ${sqlStringOrNull(item.vibe)}, ${sqlInt(difficulty)});`
+      `insert into public.garden_items (garden_id, position, content_type, text, attribution, vibe, difficulty, fine_print) values ` +
+        `(${sqlString(g.id)}, ${sqlInt(ii)}, ${sqlString(contentType)}, ${sqlString(item.text)}, ${sqlStringOrNull(item.attribution)}, ${sqlStringOrNull(item.vibe)}, ${sqlInt(difficulty)}, ${sqlStringOrNull(getFinePrint(item.text))});`
     );
     gardenItemInsertCount++;
   });
