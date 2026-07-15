@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { familyForVibe } from './palettes';
+import { syncThemeColor } from './syncThemeColor';
 
 // Re-tints the whole scene to a question's vibe.
 //
@@ -14,5 +15,7 @@ export function useVibeTheme(vibe) {
   const family = familyForVibe(vibe);
   useEffect(() => {
     document.documentElement.dataset.palette = family;
+    // Mobile chrome / PWA status bar follows the scene.
+    syncThemeColor();
   }, [family]);
 }

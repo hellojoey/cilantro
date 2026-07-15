@@ -12,8 +12,10 @@ export default defineConfig({
         name: 'Cilantro',
         short_name: 'Cilantro',
         description: 'A calming yes/no reflection app to help you find yourself',
-        theme_color: '#fafaf9',
-        background_color: '#fafaf9',
+        // Greenhouse herb home-base canvas (--c-bg light). The installed-app
+        // splash and chrome should open on the theme, not v3's stone.
+        theme_color: '#f2f6ee',
+        background_color: '#f2f6ee',
         display: 'standalone',
         start_url: '/',
         icons: [

@@ -15,6 +15,7 @@ import { CilantroProvider } from './context/CilantroContext';
 import QuestionCard from './components/QuestionCard';
 import ShapesBackground from './components/ShapesBackground';
 import { useVibeTheme } from './theme/useVibeTheme';
+import { syncThemeColor } from './theme/syncThemeColor';
 import { questions } from './data/questions';
 import { getFinePrint } from './data/finePrint';
 import { getQuestionMeta } from './data/questionMeta';
@@ -38,8 +39,12 @@ function Harness() {
   const q = SAMPLES[i];
   useVibeTheme(q?.vibe);
 
+  // Mirrors CilantroContext's dark-mode effect (class + theme-color sync). The
+  // harness toggles dark locally rather than through the context, so it has to
+  // do the same work — otherwise it would misrepresent the real app.
   React.useEffect(() => {
     document.documentElement.classList.toggle('dark', dark);
+    syncThemeColor();
   }, [dark]);
 
   if (!q) return <p>no samples</p>;

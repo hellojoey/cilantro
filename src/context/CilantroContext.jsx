@@ -3,6 +3,7 @@ import { questions, gardens, getDailyQuestions, SEEDS } from '../data/questions'
 import { getEchoCandidate, ECHO_FREQUENCY } from '../utils/insights';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { migrateLocalData } from '../lib/migrateLocal';
+import { syncThemeColor } from '../theme/syncThemeColor';
 
 const CilantroContext = createContext(null);
 
@@ -109,6 +110,9 @@ export function CilantroProvider({ children }) {
     } else {
       document.documentElement.classList.remove('dark');
     }
+    // The dark class changes what --c-bg resolves to, so the mobile status bar
+    // has to follow it as well as the per-vibe palette (see useVibeTheme).
+    syncThemeColor();
     saveToStorage('darkMode', darkMode);
   }, [darkMode]);
 
