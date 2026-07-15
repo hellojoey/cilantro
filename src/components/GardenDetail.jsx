@@ -16,11 +16,11 @@ export default function GardenDetail() {
   // Guard: if garden not found or not unlocked, redirect
   if (!garden || !isGardenUnlocked(gardenId)) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 dark:from-stone-900 dark:to-stone-800 flex flex-col items-center justify-center px-6">
-        <p className="text-stone-400 dark:text-stone-500 font-light mb-4">Garden not available</p>
+      <div className="min-h-screen bg-canvas flex flex-col items-center justify-center px-6">
+        <p className="text-sub mb-4">Garden not available</p>
         <button
           onClick={() => navigate('/gardens')}
-          className="text-sm text-stone-600 dark:text-stone-300 hover:text-stone-800 dark:hover:text-stone-100 underline"
+          className="text-sm text-ink hover:text-deep underline font-rounded font-semibold"
         >
           back to gardens
         </button>
@@ -72,24 +72,24 @@ export default function GardenDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 dark:from-stone-900 dark:to-stone-800 flex flex-col">
+    <div className="min-h-screen bg-canvas flex flex-col">
       <header className="pt-8 pb-4 px-6">
         <div className="max-w-sm mx-auto">
           <div className="flex justify-between items-center mb-4">
             <button
               onClick={() => navigate('/gardens')}
-              className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 transition-colors text-sm"
+              className="text-sub hover:text-ink transition-colors text-sm font-rounded font-semibold"
               aria-label="Exit garden"
             >
               ← exit garden
             </button>
-            <span className="text-xs text-stone-400 dark:text-stone-500" aria-label={`Item ${itemIndex + 1} of ${garden.items.length}`}>
+            <span className="text-xs text-sub" aria-label={`Item ${itemIndex + 1} of ${garden.items.length}`}>
               {itemIndex + 1} / {garden.items.length}
             </span>
           </div>
           {/* Progress bar */}
           <div
-            className="h-1 bg-stone-100 dark:bg-stone-700 rounded-full overflow-hidden"
+            className="h-1 bg-soft rounded-full overflow-hidden retint"
             role="progressbar"
             aria-valuenow={itemIndex + 1}
             aria-valuemin={0}

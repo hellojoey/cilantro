@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCilantro } from '../context/CilantroContext';
-import { vibeColor, formatTime, radarDimensions } from '../data/questions';
+import { formatTime, radarDimensions } from '../data/questions';
+import { vibeAccent } from '../theme/palettes';
 import { radarComparison } from '../utils/insights';
 import { getQuestionMeta } from '../data/questionMeta';
 import SeedBadge from './SeedBadge';
@@ -15,6 +16,7 @@ export default function Profile() {
     skippedQuestions, answerSkipped,
     gardenUnlocks,
     dailyAnswered, dailyStreak,
+    darkMode,
   } = useCilantro();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -51,17 +53,17 @@ export default function Profile() {
   const radarScores = hasComparison ? current : allTime;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 dark:from-stone-900 dark:to-stone-800 flex flex-col">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col retint">
       <header className="pt-8 pb-4 px-6">
         <div className="max-w-sm mx-auto flex justify-between items-center">
           <button
             onClick={() => navigate('/')}
-            className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 transition-colors text-sm"
+            className="text-sub opacity-55 hover:opacity-100 transition-opacity text-sm font-rounded font-semibold retint"
             aria-label="Go back to home"
           >
             ← back
           </button>
-          <h1 className="text-2xl font-light tracking-wide text-stone-400">
+          <h1 className="text-2xl font-rounded font-semibold tracking-wide text-deep retint">
             profile
           </h1>
           <div className="w-12" aria-hidden="true"></div>
@@ -72,47 +74,47 @@ export default function Profile() {
         <div className="max-w-sm mx-auto">
           {/* User info */}
           {user && (
-            <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700 mb-6">
+            <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6 mb-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-stone-200 to-stone-300 dark:from-stone-600 dark:to-stone-700 flex items-center justify-center" aria-hidden="true">
-                    <span className="text-stone-500 dark:text-stone-300 font-light text-lg">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-soft to-mid flex items-center justify-center retint" aria-hidden="true">
+                    <span className="text-deep font-rounded font-bold text-lg">
                       {user.firstName?.charAt(0).toUpperCase() || '?'}
                     </span>
                   </div>
                   <div>
-                    <p className="text-stone-600 dark:text-stone-200 font-light">{user.firstName}</p>
-                    <p className="text-xs text-stone-300 dark:text-stone-500">
+                    <p className="text-ink font-rounded font-semibold">{user.firstName}</p>
+                    <p className="text-xs text-sub">
                       @{user.username}{memberSince ? ` · since ${memberSince}` : ''}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => { logout(); navigate('/welcome'); }}
-                  className="text-xs text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 transition-colors"
+                  className="text-xs text-sub opacity-55 hover:opacity-100 transition-opacity font-rounded font-semibold"
                 >
                   sign out
                 </button>
               </div>
 
               {/* Seeds display */}
-              <div className="mt-4 pt-4 border-t border-stone-100 dark:border-stone-700">
+              <div className="mt-4 pt-4 border-t border-mid">
                 <SeedBadge size="lg" />
               </div>
 
               {/* Quick stats */}
-              <div className="mt-4 pt-4 border-t border-stone-100 dark:border-stone-700 grid grid-cols-3 gap-2 text-center">
+              <div className="mt-4 pt-4 border-t border-mid grid grid-cols-3 gap-2 text-center">
                 <div>
-                  <p className="text-lg font-light text-stone-600 dark:text-stone-200">{answers.length}</p>
-                  <p className="text-[10px] uppercase tracking-wider text-stone-300 dark:text-stone-500">reflections</p>
+                  <p className="text-lg font-rounded font-semibold text-ink">{answers.length}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-sub">reflections</p>
                 </div>
                 <div>
-                  <p className="text-lg font-light text-stone-600 dark:text-stone-200">{gardensUnlockedCount}<span className="text-stone-300 dark:text-stone-500">/8</span></p>
-                  <p className="text-[10px] uppercase tracking-wider text-stone-300 dark:text-stone-500">gardens</p>
+                  <p className="text-lg font-rounded font-semibold text-ink">{gardensUnlockedCount}<span className="text-sub">/8</span></p>
+                  <p className="text-[10px] uppercase tracking-wider text-sub">gardens</p>
                 </div>
                 <div>
-                  <p className="text-lg font-light text-stone-600 dark:text-stone-200">{dailyStreak.count}</p>
-                  <p className="text-[10px] uppercase tracking-wider text-stone-300 dark:text-stone-500">day streak</p>
+                  <p className="text-lg font-rounded font-semibold text-ink">{dailyStreak.count}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-sub">day streak</p>
                 </div>
               </div>
             </div>
@@ -120,8 +122,8 @@ export default function Profile() {
 
           {/* Radar Chart — Your Character */}
           {answers.length > 0 && (
-            <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700 mb-6">
-              <h3 className="text-xs text-stone-400 font-light uppercase tracking-wide mb-2 text-center">your character</h3>
+            <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6 mb-6">
+              <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-2 text-center">your character</h3>
               <RadarChart
                 dimensions={radarDimensions}
                 scores={radarScores}
@@ -130,16 +132,16 @@ export default function Profile() {
               />
               {hasComparison && (
                 <div className="flex items-center justify-center gap-4 mt-2">
-                  <span className="flex items-center gap-1.5 text-xs text-stone-400 font-light">
-                    <span className="inline-block w-4 border-t-2 border-amber-500" aria-hidden="true" /> now
+                  <span className="flex items-center gap-1.5 text-xs text-sub">
+                    <span className="inline-block w-4 border-t-2 border-accent" aria-hidden="true" /> now
                   </span>
-                  <span className="flex items-center gap-1.5 text-xs text-stone-400 font-light">
-                    <span className="inline-block w-4 border-t-2 border-dashed border-stone-400" aria-hidden="true" /> then
+                  <span className="flex items-center gap-1.5 text-xs text-sub">
+                    <span className="inline-block w-4 border-t-2 border-dashed border-sub" aria-hidden="true" /> then
                   </span>
                 </div>
               )}
               {radarScores.every(s => s === null) && (
-                <p className="text-xs text-stone-300 dark:text-stone-500 text-center mt-2 font-light">
+                <p className="text-xs text-sub text-center mt-2">
                   answer more questions to reveal your character
                 </p>
               )}
@@ -147,32 +149,32 @@ export default function Profile() {
           )}
 
           {/* Daily 30 Section */}
-          <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700 mb-6">
+          <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-sm font-medium text-stone-600 dark:text-stone-300">Daily 30</h3>
-                <p className="text-xs text-stone-400 dark:text-stone-500 mt-1">
+                <h3 className="text-sm font-rounded font-semibold text-ink">Daily 30</h3>
+                <p className="text-xs text-sub mt-1">
                   {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                 </p>
               </div>
               {dailyStreak.count > 0 && (
-                <span className="text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 px-2 py-1 rounded-full">
+                <span className="text-xs bg-soft text-deep font-bold px-2 py-1 rounded-full retint">
                   🔥 {dailyStreak.count} day streak
                 </span>
               )}
             </div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex-1 h-2 bg-stone-100 dark:bg-stone-700 rounded-full overflow-hidden" role="progressbar" aria-valuenow={dailyAnswered.count} aria-valuemin={0} aria-valuemax={30} aria-label="Daily 30 progress">
+              <div className="flex-1 h-2 bg-soft rounded-full overflow-hidden retint" role="progressbar" aria-valuenow={dailyAnswered.count} aria-valuemin={0} aria-valuemax={30} aria-label="Daily 30 progress">
                 <div
-                  className="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full transition-all"
+                  className="h-full bg-accent rounded-full transition-all retint"
                   style={{ width: `${(dailyAnswered.count / 30) * 100}%` }}
                 />
               </div>
-              <span className="text-xs text-stone-400 dark:text-stone-500">{dailyAnswered.count}/30</span>
+              <span className="text-xs text-sub">{dailyAnswered.count}/30</span>
             </div>
             <button
               onClick={() => navigate('/daily30')}
-              className="w-full py-3 bg-stone-700 hover:bg-stone-800 dark:bg-stone-600 dark:hover:bg-stone-500 text-white rounded-xl font-light text-sm transition-all active:scale-[0.98]"
+              className="w-full py-3 bg-deep text-canvas rounded-[18px] font-rounded font-semibold text-sm shadow-ledge retint transition-all active:scale-[0.98] hover:translate-y-[2px] hover:shadow-ledge-sm disabled:hover:translate-y-0 disabled:hover:shadow-ledge"
               disabled={dailyAnswered.count >= 30}
             >
               {dailyAnswered.count === 0 ? "start today's daily 30" : dailyAnswered.count < 30 ? 'continue daily 30' : 'completed ✓'}
@@ -181,39 +183,39 @@ export default function Profile() {
 
           {/* Skipped questions — "not right now" queue, answerable in place */}
           {skippedQuestions.length > 0 && (
-            <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700 mb-6">
-              <h3 className="text-sm text-stone-400 mb-1 font-light">waiting for you ({skippedQuestions.length})</h3>
-              <p className="text-xs text-stone-300 dark:text-stone-500 font-light mb-4">
+            <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6 mb-6">
+              <h3 className="text-sm text-sub font-rounded font-semibold mb-1">waiting for you ({skippedQuestions.length})</h3>
+              <p className="text-xs text-sub mb-4">
                 questions you skipped — answer when it feels right, or let them come back around
               </p>
               <div className="space-y-4 max-h-64 overflow-auto">
                 {skippedQuestions.map((q) => (
-                  <div key={q.text} className="border-b border-stone-50 dark:border-stone-700 pb-4 last:border-0 last:pb-0">
+                  <div key={q.text} className="border-b border-mid pb-4 last:border-0 last:pb-0">
                     <div className="flex items-start gap-3">
                       <div
                         className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                        style={{ backgroundColor: vibeColor(q.vibe || 'reflection') }}
+                        style={{ backgroundColor: vibeAccent(q.vibe, darkMode ? 'dark' : 'light') }}
                         aria-hidden="true"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-stone-600 dark:text-stone-300 font-light leading-relaxed">{q.text}</p>
+                        <p className="text-sm text-ink leading-relaxed">{q.text}</p>
                         <div className="flex items-center gap-2 mt-2">
                           <button
                             onClick={() => answerSkipped(q.text, 'yes')}
-                            className="text-xs font-medium px-3 py-1 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 text-stone-500 dark:text-stone-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:border-emerald-200 dark:hover:border-emerald-700 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
+                            className="text-xs font-bold px-3 py-1 rounded-full bg-soft text-deep hover:bg-mid transition-colors retint"
                             aria-label={`Answer yes to: ${q.text}`}
                           >
                             yes
                           </button>
                           <button
                             onClick={() => answerSkipped(q.text, 'no')}
-                            className="text-xs font-medium px-3 py-1 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 text-stone-500 dark:text-stone-300 hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:border-rose-200 dark:hover:border-rose-700 hover:text-rose-500 dark:hover:text-rose-400 transition-all"
+                            className="text-xs font-bold px-3 py-1 rounded-full bg-soft text-deep hover:bg-negate transition-colors retint"
                             aria-label={`Answer no to: ${q.text}`}
                           >
                             no
                           </button>
                           {q.skippedAt && (
-                            <span className="text-xs text-stone-300 dark:text-stone-500 ml-1">
+                            <span className="text-xs text-sub ml-1">
                               skipped {formatTime(q.skippedAt)}
                             </span>
                           )}
@@ -228,9 +230,9 @@ export default function Profile() {
 
           {/* Answer Log */}
           {answers.length > 0 && (
-            <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700">
+            <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm text-stone-400 font-light">your reflections</h3>
+                <h3 className="text-sm text-sub font-rounded font-semibold">your reflections</h3>
               </div>
 
               {/* Search input */}
@@ -242,12 +244,12 @@ export default function Profile() {
                   placeholder="search reflections..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full py-2 px-3 text-sm bg-stone-50 dark:bg-stone-700 border border-stone-100 dark:border-stone-600 rounded-xl text-stone-600 dark:text-stone-200 placeholder-stone-300 dark:placeholder-stone-500 focus:outline-none focus:border-stone-200 dark:focus:border-stone-500 font-light"
+                  className="w-full py-2 px-3 text-sm bg-soft border-2 border-mid rounded-xl text-ink placeholder-sub focus:outline-none focus:border-ink retint"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-300 dark:text-stone-500 hover:text-stone-400 dark:hover:text-stone-400"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-sub opacity-55 hover:opacity-100 transition-opacity"
                     aria-label="Clear search"
                   >
                     ×
@@ -263,10 +265,10 @@ export default function Profile() {
                       key={t}
                       onClick={() => setActiveTag(activeTag === t ? null : t)}
                       aria-pressed={activeTag === t}
-                      className={`text-[10px] font-light px-2 py-0.5 rounded-full transition-colors ${
+                      className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-colors retint ${
                         activeTag === t
-                          ? 'bg-stone-700 dark:bg-stone-600 text-white'
-                          : 'bg-stone-100 dark:bg-stone-700 text-stone-400 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-600'
+                          ? 'bg-deep text-canvas'
+                          : 'bg-soft text-deep hover:bg-mid'
                       }`}
                     >
                       #{t}
@@ -279,21 +281,21 @@ export default function Profile() {
                 {[...filteredAnswers].reverse().map((a, i) => {
                   const actualIndex = answers.indexOf(a);
                   return (
-                    <div key={i} className="border-b border-stone-50 dark:border-stone-700 pb-4 last:border-0 last:pb-0">
+                    <div key={i} className="border-b border-mid pb-4 last:border-0 last:pb-0">
                       <div className="flex items-start gap-3">
                         <div
                           className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                          style={{ backgroundColor: vibeColor(a.vibe || 'reflection') }}
+                          style={{ backgroundColor: vibeAccent(a.vibe, darkMode ? 'dark' : 'light') }}
                           aria-hidden="true"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-stone-600 dark:text-stone-300 font-light leading-relaxed">
+                          <p className="text-sm text-ink leading-relaxed">
                             {a.text}
                           </p>
 
                           {/* Garden/Daily30 tag */}
                           {a.gardenName && (
-                            <span className="inline-block text-xs text-stone-400 bg-stone-50 dark:bg-stone-700 px-2 py-0.5 rounded-full mt-1">
+                            <span className="inline-block text-[11px] font-bold text-deep bg-soft px-2.5 py-0.5 rounded-full mt-1 retint">
                               {a.gardenName}
                             </span>
                           )}
@@ -301,38 +303,32 @@ export default function Profile() {
                           {/* Current answer */}
                           <div className="flex items-center gap-3 mt-2">
                             {a.answer === 'reflected' ? (
-                              <span className="text-xs font-medium px-3 py-1 rounded-full bg-stone-50 dark:bg-stone-700 text-stone-400 dark:text-stone-500">
+                              <span className="text-xs font-bold px-3 py-1 rounded-full bg-soft text-sub retint">
                                 reflected
                               </span>
                             ) : (
                               <button
                                 onClick={() => changeAnswer(actualIndex)}
-                                className={`text-xs font-medium px-3 py-1 rounded-full transition-all ${
-                                  a.answer === 'yes'
-                                    ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50'
-                                    : 'bg-rose-50 dark:bg-rose-900/30 text-rose-500 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50'
-                                }`}
+                                className="text-xs font-bold px-3 py-1 rounded-full bg-soft text-deep hover:bg-mid transition-colors retint"
                                 aria-label={`Change answer from ${a.answer} (costs 5 seeds)`}
                               >
                                 {a.answer}
                               </button>
                             )}
-                            <span className="text-xs text-stone-300 dark:text-stone-500">
+                            <span className="text-xs text-sub">
                               {formatTime(a.updatedAt || a.timestamp)}
                             </span>
                           </div>
 
                           {/* Answer history */}
                           {a.history && a.history.length > 0 && (
-                            <div className="mt-2 pl-2 border-l-2 border-stone-100 dark:border-stone-700">
+                            <div className="mt-2 pl-2 border-l-2 border-mid">
                               {[...a.history].reverse().map((h, hi) => (
                                 <div key={hi} className="flex items-center gap-2 py-1">
-                                  <span className={`text-xs ${
-                                    h.answer === 'yes' ? 'text-emerald-400' : 'text-rose-300 dark:text-rose-400'
-                                  }`}>
+                                  <span className="text-xs text-sub">
                                     {h.answer}
                                   </span>
-                                  <span className="text-xs text-stone-200 dark:text-stone-600">
+                                  <span className="text-xs text-sub opacity-60">
                                     {formatTime(h.timestamp)}
                                   </span>
                                 </div>
@@ -346,7 +342,7 @@ export default function Profile() {
                 })}
 
                 {filteredAnswers.length === 0 && (searchQuery || activeTag) && (
-                  <p className="text-center text-stone-300 dark:text-stone-500 text-sm font-light py-4">
+                  <p className="text-center text-sub text-sm py-4">
                     no matches found
                   </p>
                 )}
@@ -355,7 +351,7 @@ export default function Profile() {
           )}
 
           {answers.length === 0 && skippedQuestions.length === 0 && (
-            <p className="text-center text-stone-400 dark:text-stone-500 font-light mt-12">
+            <p className="text-center text-sub mt-12">
               no reflections yet
             </p>
           )}

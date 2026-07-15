@@ -8,14 +8,14 @@ export default function SeedBadge({ size = 'sm' }) {
     return (
       <div className="flex items-center gap-2">
         <span className="text-lg" aria-hidden="true">🌱</span>
-        <span className="text-2xl font-light text-stone-700 dark:text-stone-200">{seeds}</span>
-        <span className="text-sm text-stone-400 dark:text-stone-500">seeds</span>
+        <span className="text-2xl font-rounded font-bold text-ink retint">{seeds}</span>
+        <span className="text-sm text-sub retint">seeds</span>
         {seedAnimation && (
           <span
-            className={`text-sm font-medium animate-pulse ${
+            className={`text-sm font-semibold animate-pulse retint ${
               seedAnimation.startsWith('-') || seedAnimation.startsWith('Not')
-                ? 'text-rose-400'
-                : 'text-emerald-500'
+                ? 'text-alert'
+                : 'text-deep'
             }`}
             role="status"
             aria-live="polite"
@@ -28,15 +28,15 @@ export default function SeedBadge({ size = 'sm' }) {
   }
 
   return (
-    <div className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-stone-700 border border-stone-200 dark:border-stone-600 rounded-full shadow-sm" aria-label={`${seeds} seeds`}>
+    <div className="flex items-center gap-1 px-2 py-1 bg-card border-2 border-ink rounded-full shadow-chunk-xs retint" aria-label={`${seeds} seeds`}>
       <span className="text-sm" aria-hidden="true">🌱</span>
-      <span className="text-xs font-medium text-stone-500 dark:text-stone-300">{seeds}</span>
+      <span className="text-xs font-semibold text-ink retint">{seeds}</span>
       {seedAnimation && (
         <span
-          className={`text-xs font-medium ${
+          className={`text-xs font-semibold retint ${
             seedAnimation.startsWith('-') || seedAnimation.startsWith('Not')
-              ? 'text-rose-400'
-              : 'text-emerald-500'
+              ? 'text-alert'
+              : 'text-deep'
           }`}
           role="status"
           aria-live="polite"

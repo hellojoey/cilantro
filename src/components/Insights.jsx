@@ -59,18 +59,18 @@ export default function Insights() {
 
   if (totalAnswered === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 dark:from-stone-900 dark:to-stone-800 flex flex-col">
+      <div className="min-h-screen bg-canvas text-ink flex flex-col retint">
         <header className="pt-8 pb-4 px-6">
           <div className="max-w-sm mx-auto flex justify-between items-center">
-            <button onClick={() => navigate('/')} className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 transition-colors text-sm" aria-label="Go back">← back</button>
-            <h1 className="text-2xl font-light tracking-wide text-stone-400">insights</h1>
+            <button onClick={() => navigate('/')} className="text-sub opacity-55 hover:opacity-100 transition-opacity text-sm font-rounded font-semibold retint" aria-label="Go back">← back</button>
+            <h1 className="text-2xl font-rounded font-semibold tracking-wide text-deep retint">insights</h1>
             <div className="w-12"></div>
           </div>
         </header>
         <main className="flex-1 flex items-center justify-center px-6 pb-8">
           <div className="text-center">
             <div className="text-4xl mb-4">📊</div>
-            <p className="text-stone-400 dark:text-stone-500 font-light">answer some questions first to see your insights</p>
+            <p className="text-sub">answer some questions first to see your insights</p>
           </div>
         </main>
       </div>
@@ -78,11 +78,11 @@ export default function Insights() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 dark:from-stone-900 dark:to-stone-800 flex flex-col">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col retint">
       <header className="pt-8 pb-4 px-6">
         <div className="max-w-sm mx-auto flex justify-between items-center">
-          <button onClick={() => navigate('/')} className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 transition-colors text-sm" aria-label="Go back">← back</button>
-          <h1 className="text-2xl font-light tracking-wide text-stone-400">insights</h1>
+          <button onClick={() => navigate('/')} className="text-sub opacity-55 hover:opacity-100 transition-opacity text-sm font-rounded font-semibold retint" aria-label="Go back">← back</button>
+          <h1 className="text-2xl font-rounded font-semibold tracking-wide text-deep retint">insights</h1>
           <div className="w-12"></div>
         </div>
       </header>
@@ -92,15 +92,15 @@ export default function Insights() {
 
           {/* ── Mirror Moments ── */}
           {mirrorMoments.length > 0 && (
-            <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700">
-              <h3 className="text-xs text-stone-400 font-light uppercase tracking-wide mb-1">Mirror Moments</h3>
-              <p className="text-xs text-stone-300 dark:text-stone-500 font-light mb-4">
+            <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
+              <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-1">Mirror Moments</h3>
+              <p className="text-xs text-sub mb-4">
                 two of your answers are looking at each other
               </p>
               <div className="space-y-5">
                 {mirrorMoments.slice(0, 5).map((m, i) => (
-                  <div key={`${m.pair.a}-${m.pair.b}`} className={i > 0 ? 'pt-5 border-t border-stone-50 dark:border-stone-700' : ''}>
-                    <p className="text-sm text-stone-500 dark:text-stone-400 font-light italic leading-relaxed mb-3">
+                  <div key={`${m.pair.a}-${m.pair.b}`} className={i > 0 ? 'pt-5 border-t border-mid' : ''}>
+                    <p className="text-sm text-sub italic leading-relaxed mb-3">
                       {m.pair.note}
                     </p>
                     {[
@@ -109,25 +109,21 @@ export default function Insights() {
                     ].map((side) => (
                       <div key={side.id} className="flex items-start gap-2 mb-2 last:mb-0">
                         <span
-                          className={`text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 mt-0.5 ${
-                            side.entry.answer === 'yes'
-                              ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
-                              : 'bg-rose-50 dark:bg-rose-900/30 text-rose-500 dark:text-rose-400'
-                          }`}
+                          className="text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0 mt-0.5 bg-soft text-deep retint"
                         >
                           {side.entry.answer}
                         </span>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-stone-600 dark:text-stone-300 font-light leading-snug">
+                          <p className="text-sm text-ink leading-snug">
                             {side.text}
                           </p>
                           <div className="flex items-center gap-2 mt-0.5">
-                            <span className="text-xs text-stone-300 dark:text-stone-500">
+                            <span className="text-xs text-sub">
                               {formatTime(side.entry.effectiveTime)}
                             </span>
                             <button
                               onClick={() => handleRevisit(side.id, side.entry, side.entry.answer === 'yes' ? 'no' : 'yes')}
-                              className="text-xs text-stone-300 dark:text-stone-500 hover:text-stone-500 dark:hover:text-stone-300 underline decoration-stone-200 dark:decoration-stone-600 underline-offset-2 transition-colors font-light"
+                              className="text-xs text-sub opacity-70 hover:opacity-100 underline decoration-mid underline-offset-2 transition-opacity font-rounded font-semibold"
                               aria-label={`Change your answer to: ${side.text}`}
                             >
                               actually, {side.entry.answer === 'yes' ? 'no' : 'yes'}
@@ -140,7 +136,7 @@ export default function Insights() {
                 ))}
               </div>
               {mirrorMoments.length > 5 && (
-                <p className="text-xs text-stone-300 dark:text-stone-500 font-light mt-4 text-center">
+                <p className="text-xs text-sub mt-4 text-center">
                   + {mirrorMoments.length - 5} more reflections waiting
                 </p>
               )}
@@ -149,11 +145,11 @@ export default function Insights() {
 
           {/* ── Noticing ── */}
           {noticingLines.length > 0 && (
-            <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700">
-              <h3 className="text-xs text-stone-400 font-light uppercase tracking-wide mb-4">Noticing</h3>
+            <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
+              <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-4">Noticing</h3>
               <div className="space-y-3">
                 {noticingLines.map((line, i) => (
-                  <p key={i} className="text-sm text-stone-500 dark:text-stone-400 font-light leading-relaxed">
+                  <p key={i} className="text-sm text-sub leading-relaxed">
                     {line}
                   </p>
                 ))}
@@ -163,21 +159,19 @@ export default function Insights() {
 
           {/* ── Character Drift ── */}
           {hasComparison && (
-            <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700">
-              <h3 className="text-xs text-stone-400 font-light uppercase tracking-wide mb-1">Character Drift</h3>
-              <p className="text-xs text-stone-300 dark:text-stone-500 font-light mb-4">
+            <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
+              <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-1">Character Drift</h3>
+              <p className="text-xs text-sub mb-4">
                 last 30 days against everything before
               </p>
               <div className="grid grid-cols-2 gap-2">
                 {trends.map((t) => (
-                  <div key={t.dimension} className="flex items-center justify-between bg-stone-50 dark:bg-stone-700/50 rounded-xl px-3 py-2">
-                    <span className="text-xs text-stone-500 dark:text-stone-400 font-light">{t.dimension}</span>
+                  <div key={t.dimension} className="flex items-center justify-between bg-soft rounded-xl px-3 py-2 retint">
+                    <span className="text-xs text-sub">{t.dimension}</span>
                     {t.delta === null ? (
-                      <span className="text-xs text-stone-300 dark:text-stone-600">—</span>
+                      <span className="text-xs text-sub opacity-60">—</span>
                     ) : (
-                      <span className={`text-xs font-medium ${
-                        t.delta > 5 ? 'text-emerald-500' : t.delta < -5 ? 'text-rose-400' : 'text-stone-400'
-                      }`}>
+                      <span className="text-xs font-bold text-deep">
                         {t.delta > 0 ? '+' : ''}{t.delta}
                       </span>
                     )}
@@ -188,44 +182,44 @@ export default function Insights() {
           )}
 
           {/* ── Overview Card ── */}
-          <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700">
-            <h3 className="text-xs text-stone-400 font-light uppercase tracking-wide mb-4">Your Reflection Style</h3>
+          <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
+            <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-4">Your Reflection Style</h3>
             <div className="text-center mb-4">
-              <div className="text-5xl font-light text-stone-700 dark:text-stone-200">{yesPercent}%</div>
-              <div className="text-sm text-stone-400 mt-1">yes responses</div>
-              <div className="mt-2 inline-block px-3 py-1 rounded-full text-xs font-medium bg-stone-100 dark:bg-stone-700 text-stone-600 dark:text-stone-300">
+              <div className="text-5xl font-rounded font-semibold text-ink">{yesPercent}%</div>
+              <div className="text-sm text-sub mt-1">yes responses</div>
+              <div className="mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-soft text-deep retint">
                 {moodLabel}
               </div>
             </div>
-            <div className="flex justify-around text-center mt-4 pt-4 border-t border-stone-100 dark:border-stone-700">
+            <div className="flex justify-around text-center mt-4 pt-4 border-t border-mid">
               <div>
-                <div className="text-2xl font-light text-stone-700 dark:text-stone-200">{totalAnswered}</div>
-                <div className="text-xs text-stone-400">total</div>
+                <div className="text-2xl font-rounded font-semibold text-ink">{totalAnswered}</div>
+                <div className="text-xs text-sub">total</div>
               </div>
               <div>
-                <div className="text-2xl font-light text-emerald-500">{yesCount}</div>
-                <div className="text-xs text-stone-400">yes</div>
+                <div className="text-2xl font-rounded font-semibold text-ink">{yesCount}</div>
+                <div className="text-xs text-sub">yes</div>
               </div>
               <div>
-                <div className="text-2xl font-light text-rose-400">{noCount}</div>
-                <div className="text-xs text-stone-400">no</div>
+                <div className="text-2xl font-rounded font-semibold text-ink">{noCount}</div>
+                <div className="text-xs text-sub">no</div>
               </div>
             </div>
           </div>
 
           {/* ── Weekly Activity ── */}
-          <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700">
-            <h3 className="text-xs text-stone-400 font-light uppercase tracking-wide mb-4">This Week</h3>
+          <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
+            <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-4">This Week</h3>
             <div className="flex items-end justify-between gap-1 h-24 mb-2">
               {dayActivity.map((day, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center gap-1">
                   <div
-                    className={`w-full rounded-t-md transition-all ${
+                    className={`w-full rounded-t-md transition-all retint ${
                       day.isToday
-                        ? 'bg-gradient-to-t from-amber-400 to-amber-300'
+                        ? 'bg-accent'
                         : day.count > 0
-                        ? 'bg-stone-300 dark:bg-stone-600'
-                        : 'bg-stone-100 dark:bg-stone-700'
+                        ? 'bg-mid'
+                        : 'bg-soft'
                     }`}
                     style={{
                       height: `${Math.max((day.count / maxDayCount) * 100, day.count > 0 ? 12 : 4)}%`,
@@ -238,20 +232,20 @@ export default function Insights() {
             </div>
             <div className="flex justify-between">
               {dayActivity.map((day, i) => (
-                <div key={i} className={`flex-1 text-center text-xs ${day.isToday ? 'text-amber-500 font-medium' : 'text-stone-300 dark:text-stone-500'}`}>
+                <div key={i} className={`flex-1 text-center text-xs ${day.isToday ? 'text-deep font-bold' : 'text-sub'}`}>
                   {day.label}
                 </div>
               ))}
             </div>
-            <div className="mt-3 pt-3 border-t border-stone-100 dark:border-stone-700 flex justify-between text-xs text-stone-400">
+            <div className="mt-3 pt-3 border-t border-mid flex justify-between text-xs text-sub">
               <span>{recentAnswers.length} answers this week</span>
               <span>{recentAnswers.length > 0 ? Math.round((recentYes / recentAnswers.length) * 100) : 0}% yes</span>
             </div>
           </div>
 
           {/* ── Milestones ── */}
-          <div className="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-100 dark:border-stone-700">
-            <h3 className="text-xs text-stone-400 font-light uppercase tracking-wide mb-4">Milestones</h3>
+          <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
+            <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-4">Milestones</h3>
             <div className="grid grid-cols-2 gap-3">
               {[
                 { icon: '🌱', label: 'Seeds', value: seeds, sub: 'earned' },
@@ -259,10 +253,10 @@ export default function Insights() {
                 { icon: '🌿', label: 'Gardens', value: gardensCompleted, sub: 'completed' },
                 { icon: '💭', label: 'Reflections', value: totalAnswered, sub: 'total' },
               ].map((m, i) => (
-                <div key={i} className="bg-stone-50 dark:bg-stone-700/50 rounded-xl p-3 text-center">
+                <div key={i} className="border-2 border-ink bg-card rounded-xl shadow-chunk-sm retint p-3 text-center">
                   <div className="text-lg">{m.icon}</div>
-                  <div className="text-xl font-light text-stone-700 dark:text-stone-200">{m.value}</div>
-                  <div className="text-xs text-stone-400">{m.sub}</div>
+                  <div className="text-xl font-rounded font-semibold text-ink">{m.value}</div>
+                  <div className="text-xs text-sub">{m.sub}</div>
                 </div>
               ))}
             </div>

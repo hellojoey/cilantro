@@ -57,27 +57,27 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 dark:from-stone-900 dark:to-stone-800 flex flex-col px-6 pt-12">
+    <div className="min-h-screen bg-canvas retint flex flex-col px-6 pt-12">
       <div className="max-w-sm w-full mx-auto">
         <button
           onClick={() => navigate('/welcome')}
-          className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 transition-colors text-sm mb-8"
+          className="text-sub text-xs font-rounded font-semibold opacity-55 hover:opacity-100 retint mb-8"
           aria-label="Go back to welcome screen"
         >
           ← back
         </button>
 
-        <h2 className="text-3xl font-light text-stone-600 dark:text-stone-200 mb-2">create account</h2>
-        <p className="text-stone-400 dark:text-stone-500 font-light mb-8">start your journey of reflection</p>
+        <h2 className="text-3xl font-rounded font-bold text-deep retint mb-2">create account</h2>
+        <p className="text-sub retint mb-8">start your journey of reflection</p>
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           {error && (
-            <div className="text-sm text-rose-500 bg-rose-50 dark:bg-rose-900/30 rounded-xl px-4 py-3 font-light" role="alert">
+            <div className="text-sm text-ink bg-negate rounded-xl px-4 py-3 retint" role="alert">
               {error}
             </div>
           )}
           {info && (
-            <div className="text-sm text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl px-4 py-3 font-light" role="status">
+            <div className="text-sm text-deep bg-soft rounded-xl px-4 py-3 retint" role="status">
               {info}
             </div>
           )}
@@ -90,7 +90,7 @@ export default function Signup() {
               placeholder="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full py-4 px-4 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-2xl text-stone-600 dark:text-stone-200 placeholder-stone-300 dark:placeholder-stone-500 focus:outline-none focus:border-stone-400 dark:focus:border-stone-500 focus:ring-1 focus:ring-stone-300 dark:focus:ring-stone-600 font-light"
+              className="w-full py-4 px-4 bg-card border-2 border-ink rounded-2xl text-ink placeholder-sub/60 focus:border-deep retint"
               autoComplete="email"
               required
             />
@@ -103,7 +103,7 @@ export default function Signup() {
               placeholder="first name"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full py-4 px-4 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-2xl text-stone-600 dark:text-stone-200 placeholder-stone-300 dark:placeholder-stone-500 focus:outline-none focus:border-stone-400 dark:focus:border-stone-500 focus:ring-1 focus:ring-stone-300 dark:focus:ring-stone-600 font-light"
+              className="w-full py-4 px-4 bg-card border-2 border-ink rounded-2xl text-ink placeholder-sub/60 focus:border-deep retint"
               autoComplete="given-name"
               required
             />
@@ -116,7 +116,7 @@ export default function Signup() {
               placeholder="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full py-4 px-4 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-2xl text-stone-600 dark:text-stone-200 placeholder-stone-300 dark:placeholder-stone-500 focus:outline-none focus:border-stone-400 dark:focus:border-stone-500 focus:ring-1 focus:ring-stone-300 dark:focus:ring-stone-600 font-light"
+              className="w-full py-4 px-4 bg-card border-2 border-ink rounded-2xl text-ink placeholder-sub/60 focus:border-deep retint"
               autoComplete="username"
               required
             />
@@ -129,7 +129,7 @@ export default function Signup() {
               placeholder="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full py-4 px-4 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-2xl text-stone-600 dark:text-stone-200 placeholder-stone-300 dark:placeholder-stone-500 focus:outline-none focus:border-stone-400 dark:focus:border-stone-500 focus:ring-1 focus:ring-stone-300 dark:focus:ring-stone-600 font-light"
+              className="w-full py-4 px-4 bg-card border-2 border-ink rounded-2xl text-ink placeholder-sub/60 focus:border-deep retint"
               autoComplete="new-password"
               required
             />
@@ -138,17 +138,17 @@ export default function Signup() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-4 bg-stone-700 hover:bg-stone-800 dark:bg-stone-600 dark:hover:bg-stone-500 text-white rounded-2xl font-light text-lg transition-all shadow-sm mt-6 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full py-4 bg-deep text-canvas rounded-[18px] font-rounded font-semibold text-lg shadow-ledge retint transition-all hover:translate-y-[2px] hover:shadow-ledge-sm mt-6 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {submitting ? 'creating account…' : 'create account'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-stone-400 dark:text-stone-500 font-light">
+        <p className="mt-6 text-center text-sm text-sub retint">
           already have an account?{' '}
           <button
             onClick={() => navigate('/login')}
-            className="text-stone-600 dark:text-stone-300 hover:text-stone-800 dark:hover:text-stone-100 underline"
+            className="text-deep font-rounded font-semibold hover:opacity-75 underline retint"
           >
             sign in
           </button>

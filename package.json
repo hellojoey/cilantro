@@ -8,9 +8,12 @@
     "build": "vite build",
     "preview": "vite preview",
     "questions:validate": "node scripts/validate-questions.mjs",
-    "questions:stats": "node scripts/question-stats.mjs"
+    "questions:stats": "node scripts/question-stats.mjs",
+    "theme:build": "node scripts/generate-palettes.mjs",
+    "theme:validate": "node scripts/validate-theme.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
     "@supabase/supabase-js": "^2.110.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

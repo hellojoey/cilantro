@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { vibeColor, gardens } from '../data/questions';
+import { gardens } from '../data/questions';
+import { vibeAccent } from '../theme/palettes';
 import { getFinePrint } from '../data/finePrint';
 import { getQuestionMeta } from '../data/questionMeta';
 import { useCilantro } from '../context/CilantroContext';
 
 export default function GardenContentCard({ item, gardenColor, gardenLabel, isTransitioning, onYes, onNo, onContinue, onSkip }) {
   const { isGardenUnlocked } = useCilantro();
-  const dotColor = gardenColor || vibeColor(item.vibe) || '#a8a29e';
+  // Garden identity color when present (it always is today); the vibe's family
+  // accent is the fallback for any caller that doesn't carry one.
+  const dotColor = gardenColor || vibeAccent(item.vibe);
   const isQuestion = item.contentType === 'question';
   const finePrint = isQuestion ? getFinePrint(item.text) : null;
   const meta = isQuestion ? getQuestionMeta(item.text) : { tags: [], gardens: [] };
@@ -32,10 +35,7 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
       {/* Garden label */}
       {gardenLabel && (
         <div className="flex justify-center mb-6">
-          <div
-            className="px-3 py-1 rounded-full text-xs font-medium"
-            style={{ backgroundColor: dotColor + '20', color: dotColor }}
-          >
+          <div className="bg-soft text-deep font-rounded font-bold rounded-full px-3 py-1 text-xs retint">
             {gardenLabel}
           </div>
         </div>
@@ -44,7 +44,7 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
       {/* Content based on type */}
       {item.contentType === 'question' && (
         <>
-          <h2 className="text-2xl md:text-3xl font-light text-stone-700 dark:text-stone-200 text-center leading-relaxed mb-12 px-4">
+          <h2 className="text-2xl md:text-3xl font-rounded font-semibold text-ink text-center leading-relaxed mb-12 px-4">
             {item.text}
           </h2>
 
@@ -52,14 +52,14 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
           <div className="flex gap-4 px-4" role="group" aria-label="Answer options">
             <button
               onClick={onYes}
-              className="flex-1 py-5 bg-white dark:bg-stone-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 border border-stone-200 dark:border-stone-600 hover:border-emerald-200 dark:hover:border-emerald-700 rounded-2xl text-stone-600 dark:text-stone-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-light text-lg transition-all duration-200 shadow-sm hover:shadow active:scale-95"
+              className="flex-1 py-5 border-2 border-ink bg-card hover:bg-mid text-ink rounded-[14px] font-rounded font-bold text-lg transition-all duration-200 active:scale-95 retint"
               aria-label="Answer yes"
             >
               yes
             </button>
             <button
               onClick={onNo}
-              className="flex-1 py-5 bg-white dark:bg-stone-800 hover:bg-rose-50 dark:hover:bg-rose-900/30 border border-stone-200 dark:border-stone-600 hover:border-rose-200 dark:hover:border-rose-700 rounded-2xl text-stone-600 dark:text-stone-300 hover:text-rose-400 dark:hover:text-rose-400 font-light text-lg transition-all duration-200 shadow-sm hover:shadow active:scale-95"
+              className="flex-1 py-5 border-2 border-ink bg-card hover:bg-negate text-ink rounded-[14px] font-rounded font-bold text-lg transition-all duration-200 active:scale-95 retint"
               aria-label="Answer no"
             >
               no
@@ -73,14 +73,14 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
               <button
                 onClick={() => setShowFinePrint((v) => !v)}
                 aria-expanded={showFinePrint}
-                className="text-[10px] uppercase tracking-[0.2em] text-stone-300 dark:text-stone-600 hover:text-stone-400 dark:hover:text-stone-400 font-medium transition-colors"
+                className="text-[10px] uppercase tracking-[0.2em] font-rounded font-semibold text-sub opacity-55 hover:opacity-100 transition-opacity"
               >
                 fine print {showFinePrint ? '−' : '+'}
               </button>
               {showFinePrint && (
                 <div className="mt-1.5">
                   {finePrint && (
-                    <p className="text-xs font-light text-stone-400 dark:text-stone-500 leading-relaxed">
+                    <p className="text-xs text-sub leading-relaxed">
                       {finePrint}
                     </p>
                   )}
@@ -89,7 +89,7 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
                       {meta.tags.map((t) => (
                         <span
                           key={t}
-                          className="text-[10px] font-light px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-400 dark:text-stone-500"
+                          className="bg-soft text-deep font-bold rounded-full px-2.5 py-0.5 text-[11px] retint"
                         >
                           #{t}
                         </span>
@@ -102,7 +102,7 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
                         <Link
                           key={g.id}
                           to={isGardenUnlocked(g.id) ? `/gardens/${g.id}` : '/gardens'}
-                          className="flex items-center gap-1.5 text-[11px] font-light text-stone-500 dark:text-stone-400 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-xl px-2.5 py-1.5 hover:border-stone-300 dark:hover:border-stone-500 transition-colors"
+                          className="flex items-center gap-1.5 text-[11px] font-rounded font-bold text-ink bg-card border-2 border-ink rounded-xl shadow-chunk-sm retint px-2.5 py-1.5 transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-chunk-xs"
                           aria-label={`Explore the ${g.name} garden`}
                         >
                           <span
@@ -128,13 +128,13 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
         <>
           <div className="px-6 mb-12">
             <div className="text-center mb-3">
-              <span className="text-3xl text-stone-200 dark:text-stone-600 font-serif" aria-hidden="true">"</span>
+              <span className="text-3xl text-sub/40 font-rounded" aria-hidden="true">"</span>
             </div>
-            <p className="text-xl md:text-2xl font-light text-stone-700 dark:text-stone-200 text-center leading-relaxed italic">
+            <p className="text-xl md:text-2xl font-rounded font-semibold text-ink text-center leading-relaxed italic">
               {item.text}
             </p>
             {item.attribution && (
-              <p className="text-sm text-stone-400 dark:text-stone-500 text-center mt-4 font-light">
+              <p className="text-sm text-sub text-center mt-4">
                 — {item.attribution}
               </p>
             )}
@@ -144,7 +144,7 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
           <div className="px-4">
             <button
               onClick={onContinue}
-              className="w-full py-5 bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-600 hover:border-stone-300 dark:hover:border-stone-500 rounded-2xl text-stone-600 dark:text-stone-300 font-light text-lg transition-all duration-200 shadow-sm hover:shadow active:scale-95"
+              className="w-full py-5 border-2 border-ink bg-card hover:bg-soft text-ink rounded-[14px] font-rounded font-bold text-lg transition-all duration-200 active:scale-95 retint"
               aria-label="Continue to next"
             >
               continue
@@ -161,7 +161,7 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
               style={{ backgroundColor: dotColor }}
               aria-hidden="true"
             />
-            <p className="text-xl md:text-2xl font-light text-stone-700 dark:text-stone-200 text-center leading-relaxed">
+            <p className="text-xl md:text-2xl font-rounded font-semibold text-ink text-center leading-relaxed">
               {item.text}
             </p>
           </div>
@@ -170,7 +170,7 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
           <div className="px-4">
             <button
               onClick={onContinue}
-              className="w-full py-5 bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-600 hover:border-stone-300 dark:hover:border-stone-500 rounded-2xl text-stone-600 dark:text-stone-300 font-light text-lg transition-all duration-200 shadow-sm hover:shadow active:scale-95"
+              className="w-full py-5 border-2 border-ink bg-card hover:bg-soft text-ink rounded-[14px] font-rounded font-bold text-lg transition-all duration-200 active:scale-95 retint"
               aria-label="Continue to next"
             >
               continue
@@ -184,7 +184,7 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
         <div className="flex justify-center mt-6">
           <button
             onClick={onSkip}
-            className="text-xs text-stone-300 dark:text-stone-500 hover:text-stone-400 dark:hover:text-stone-400 transition-colors font-light"
+            className="text-sub text-xs font-rounded font-semibold opacity-55 hover:opacity-100 transition-opacity"
             aria-label="Skip this item"
           >
             skip

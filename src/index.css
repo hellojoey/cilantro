@@ -1,29 +1,37 @@
+/* Greenhouse theme tokens — generated from src/theme/palettes.js.
+   Values are space-separated RGB triplets so Tailwind's `<alpha-value>` works
+   (`bg-canvas/50`). useVibeTheme swaps the active family via <html data-palette>. */
+@import './theme/palettes.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Hide scrollbar but keep functionality */
 body {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  background-color: rgb(var(--c-bg));
+  color: rgb(var(--c-ink));
+  /* The re-tint. Token values swap instantly; the properties reading them ease. */
+  transition: background-color 1.1s ease, color 1.1s ease;
 }
 
-/* Remove tap highlight on mobile */
 * {
   -webkit-tap-highlight-color: transparent;
-}
-
-/* Smooth animations */
-* {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Modal animations */
+/* Anything painted from a palette token eases when the palette changes, so the
+   whole scene re-tints together instead of snapping element by element. */
+.retint {
+  transition: background-color 1.1s ease, border-color 1.1s ease, color 1.1s ease,
+    box-shadow 1.1s ease;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -48,15 +56,25 @@ body {
   animation: slideUp 0.3s ease-out;
 }
 
-/* Focus visible for accessibility */
 :focus-visible {
-  outline: 2px solid #78716c;
+  outline: 2px solid rgb(var(--c-deep));
   outline-offset: 2px;
   border-radius: 8px;
 }
 
-/* Disabled button style */
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  /* Kill the re-tint crossfade too — for vestibular triggers a slow full-page
+     color wash is the problem, not just moving shapes. */
+  body,
+  .retint {
+    transition: none;
+  }
 }

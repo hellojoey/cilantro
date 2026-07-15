@@ -29,16 +29,16 @@ function GuestRoute({ children }) {
 // Full-screen notice shown when Supabase env keys are missing.
 function NotConfigured() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 dark:from-stone-900 dark:to-stone-800 flex flex-col items-center justify-center px-6 text-center">
-      <div className="max-w-sm">
-        <h1 className="text-4xl font-light tracking-wide text-stone-600 dark:text-stone-300 mb-3">cilantro</h1>
-        <p className="text-stone-500 dark:text-stone-400 font-light mb-2">
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
+      <div className="max-w-sm bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-7">
+        <h1 className="text-4xl font-rounded font-bold tracking-tight text-deep mb-3 retint">cilantro</h1>
+        <p className="text-ink mb-2 retint">
           Cilantro needs its backend keys.
         </p>
-        <p className="text-sm text-stone-400 dark:text-stone-500 font-light">
-          Add <code className="text-stone-500 dark:text-stone-300">VITE_SUPABASE_URL</code> and{' '}
-          <code className="text-stone-500 dark:text-stone-300">VITE_SUPABASE_ANON_KEY</code> to your
-          environment — see <code className="text-stone-500 dark:text-stone-300">.env.example</code>.
+        <p className="text-sm text-sub retint">
+          Add <code className="text-ink">VITE_SUPABASE_URL</code> and{' '}
+          <code className="text-ink">VITE_SUPABASE_ANON_KEY</code> to your
+          environment — see <code className="text-ink">.env.example</code>.
         </p>
       </div>
     </div>
@@ -48,12 +48,12 @@ function NotConfigured() {
 // Minimal centered loading state shown while the session is restored.
 function LoadingScreen() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-stone-50 to-amber-50 dark:from-stone-900 dark:to-stone-800 flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen flex flex-col items-center justify-center px-6">
       <div className="text-center">
-        <h1 className="text-4xl font-light tracking-wide text-stone-400 dark:text-stone-500 mb-4 animate-pulse">
+        <h1 className="text-4xl font-rounded font-bold tracking-tight text-deep mb-4 animate-pulse retint">
           cilantro
         </h1>
-        <p className="text-sm text-stone-300 dark:text-stone-600 font-light">loading…</p>
+        <p className="text-sm text-sub retint">loading…</p>
       </div>
     </div>
   );

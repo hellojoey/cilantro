@@ -49,7 +49,7 @@ export default function RadarChart({ dimensions, scores, compareScores, size = 2
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
-      className="mx-auto"
+      className="mx-auto retint"
       role="img"
       aria-label="Character radar chart"
     >
@@ -61,7 +61,7 @@ export default function RadarChart({ dimensions, scores, compareScores, size = 2
             key={level}
             points={polygonPoints(r)}
             fill="none"
-            className="stroke-stone-200 dark:stroke-stone-600"
+            className="stroke-mid"
             strokeWidth={0.5}
           />
         );
@@ -77,7 +77,7 @@ export default function RadarChart({ dimensions, scores, compareScores, size = 2
             y1={center}
             x2={p.x}
             y2={p.y}
-            className="stroke-stone-200 dark:stroke-stone-600"
+            className="stroke-mid"
             strokeWidth={0.5}
           />
         );
@@ -88,7 +88,7 @@ export default function RadarChart({ dimensions, scores, compareScores, size = 2
         <polygon
           points={comparePolygon}
           fill="none"
-          className="stroke-stone-400 dark:stroke-stone-500"
+          className="stroke-sub"
           strokeWidth={1.5}
           strokeDasharray="4 4"
           strokeLinejoin="round"
@@ -99,7 +99,7 @@ export default function RadarChart({ dimensions, scores, compareScores, size = 2
       {hasAnyData && (
         <polygon
           points={scorePolygon}
-          className="fill-amber-400/20 stroke-amber-500 dark:fill-amber-400/15 dark:stroke-amber-400"
+          className="fill-accent/20 stroke-accent"
           strokeWidth={2}
           strokeLinejoin="round"
         />
@@ -115,7 +115,7 @@ export default function RadarChart({ dimensions, scores, compareScores, size = 2
             cx={p.x}
             cy={p.y}
             r={3}
-            className="fill-amber-500 dark:fill-amber-400"
+            className="fill-accent"
           />
         );
       })}
@@ -131,13 +131,13 @@ export default function RadarChart({ dimensions, scores, compareScores, size = 2
             y={p.y}
             textAnchor="middle"
             dominantBaseline="central"
-            className="fill-stone-500 dark:fill-stone-400 text-[10px] font-light"
+            className="fill-sub text-[10px] font-rounded font-medium"
           >
             <tspan x={p.x} dy="-0.4em">{label}</tspan>
             <tspan
               x={p.x}
               dy="1.2em"
-              className={score !== null ? 'fill-stone-400 dark:fill-stone-500' : 'fill-stone-300 dark:fill-stone-600'}
+              className={score !== null ? 'fill-sub' : 'fill-sub/50'}
             >
               {score !== null ? `${score}%` : '—'}
             </tspan>

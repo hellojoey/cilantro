@@ -23,7 +23,7 @@ export default function PeekModal({ garden, items, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/30 backdrop-blur-sm animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-canvas/80 backdrop-blur-sm retint animate-fadeIn"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -32,7 +32,7 @@ export default function PeekModal({ garden, items, onClose }) {
       <div
         ref={modalRef}
         tabIndex={-1}
-        className="bg-white dark:bg-stone-800 rounded-2xl p-6 max-w-sm w-full shadow-xl animate-slideUp"
+        className="bg-card border-2 border-ink rounded-chunk shadow-chunk p-6 max-w-sm w-full retint animate-slideUp"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -44,8 +44,8 @@ export default function PeekModal({ garden, items, onClose }) {
             {garden.icon}
           </div>
           <div>
-            <h3 className="text-stone-700 dark:text-stone-200 font-medium">{garden.name}</h3>
-            <p className="text-xs text-stone-400 dark:text-stone-500 font-light">{garden.description}</p>
+            <h3 className="text-ink font-rounded font-semibold retint">{garden.name}</h3>
+            <p className="text-xs text-sub retint">{garden.description}</p>
           </div>
         </div>
 
@@ -54,15 +54,15 @@ export default function PeekModal({ garden, items, onClose }) {
           {items.map((item, i) => (
             <div key={i} className="flex items-start gap-2">
               <span className="text-xs mt-0.5" aria-hidden="true">{contentTypeLabel(item.contentType)}</span>
-              <p className="text-sm text-stone-600 dark:text-stone-300 font-light">
+              <p className="text-sm text-ink retint">
                 {item.text}
                 {item.attribution && (
-                  <span className="text-stone-400 dark:text-stone-500"> — {item.attribution}</span>
+                  <span className="text-sub"> — {item.attribution}</span>
                 )}
               </p>
             </div>
           ))}
-          <p className="text-xs text-stone-300 dark:text-stone-500 font-light italic pl-6">
+          <p className="text-xs text-sub italic pl-6 retint">
             ...and {garden.items.length - items.length} more
           </p>
         </div>
@@ -70,7 +70,7 @@ export default function PeekModal({ garden, items, onClose }) {
         {/* Close button */}
         <button
           onClick={onClose}
-          className="w-full py-3 bg-stone-100 dark:bg-stone-700 hover:bg-stone-200 dark:hover:bg-stone-600 text-stone-600 dark:text-stone-300 rounded-xl text-sm font-light transition-all"
+          className="w-full py-3 bg-soft hover:bg-mid text-deep rounded-xl text-sm font-rounded font-semibold transition-all retint"
           aria-label="Close preview"
         >
           close
