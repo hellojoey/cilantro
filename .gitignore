@@ -4,6 +4,9 @@ node_modules/
 # Build output
 dist/
 
+# Fine-print batch generator output (review artifacts, not source)
+scripts/output/
+
 # Local env files
 .env
 .env.local
