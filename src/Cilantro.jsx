@@ -10,6 +10,7 @@ import Gardens from './components/Gardens';
 import GardenDetail from './components/GardenDetail';
 import Daily30 from './components/Daily30';
 import Insights from './components/Insights';
+import Graphs from './components/Graphs';
 import Welcome from './components/Welcome';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -79,6 +80,7 @@ export default function Cilantro() {
       <Route path="/gardens/:gardenId" element={<ProtectedRoute><GardenDetail /></ProtectedRoute>} />
       <Route path="/daily30" element={<ProtectedRoute><Daily30 /></ProtectedRoute>} />
       <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
+      <Route path="/graphs" element={<ProtectedRoute><Graphs /></ProtectedRoute>} />
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -2,7 +2,7 @@
 // Reads your answers back to you: contradictions, character drift, echoes.
 // All functions are pure — they take the answers array and return data.
 
-import { radarDimensions, vibeToDimensions, calculateRadarScores } from '../data/questions';
+import { radarDimensions, calculateRadarScores } from '../data/questions';
 import contradictionData from '../data/contradictions.json' with { type: 'json' };
 
 export const contradictionPairs = contradictionData.pairs;
@@ -108,51 +108,4 @@ export const getEchoCandidate = (answers, questions, minAgeDays = ECHO_MIN_AGE_D
     previousAnswer: previous.answer,
     previousTime: previous.effectiveTime,
   };
-};
-
-// ── Noticing: gentle template observations from the data ──
-export const noticings = (answers) => {
-  const lines = [];
-  if (answers.length < 10) return lines;
-
-  const { trends, hasComparison } = radarComparison(answers);
-
-  // Biggest character drift
-  if (hasComparison) {
-    const moved = trends.filter((t) => t.delta !== null && Math.abs(t.delta) >= 10);
-    if (moved.length) {
-      const top = moved.reduce((a, b) => (Math.abs(b.delta) > Math.abs(a.delta) ? b : a));
-      lines.push(
-        top.delta > 0
-          ? `Your ${top.dimension.toLowerCase()} has been growing lately.`
-          : `Your ${top.dimension.toLowerCase()} answers have softened lately — worth sitting with.`
-      );
-    } else {
-      lines.push('Your character has been steady lately — you answer today the way you answered before.');
-    }
-  }
-
-  // Where your attention goes
-  const dimCounts = {};
-  answers.forEach((a) => {
-    (vibeToDimensions[a.vibe] || []).forEach((d) => {
-      dimCounts[d] = (dimCounts[d] || 0) + 1;
-    });
-  });
-  const ranked = Object.entries(dimCounts).sort((x, y) => y[1] - x[1]);
-  if (ranked.length >= 2) {
-    lines.push(
-      `You spend the most time with questions of ${ranked[0][0].toLowerCase()}, and the least with ${ranked[ranked.length - 1][0].toLowerCase()}.`
-    );
-  }
-
-  // Changed answers = growth, not inconsistency
-  const changed = answers.filter((a) => a.history && a.history.length > 0).length;
-  if (changed > 0) {
-    lines.push(
-      `You've changed your mind ${changed} ${changed === 1 ? 'time' : 'times'}. That's not inconsistency — that's growth.`
-    );
-  }
-
-  return lines;
 };

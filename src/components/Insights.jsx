@@ -1,20 +1,20 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCilantro } from '../context/CilantroContext';
-import { questions, formatTime } from '../data/questions';
-import { findMirrorMoments, radarComparison, noticings } from '../utils/insights';
+import { questions, formatTime, gardens } from '../data/questions';
+import { findMirrorMoments } from '../utils/insights';
+import { portrait } from '../utils/portrait';
 
 // Bank lookup for re-answering mirror questions
 const questionById = new Map(questions.map(q => [q.id, q]));
 
 export default function Insights() {
   const navigate = useNavigate();
-  const { answers, seeds, dailyStreak, gardenCompletions, reanswer } = useCilantro();
+  const { answers, skippedQuestions, seeds, dailyStreak, gardenCompletions, reanswer } = useCilantro();
 
   // ── The Mirror ──
   const mirrorMoments = findMirrorMoments(answers);
-  const { trends, hasComparison } = radarComparison(answers);
-  const noticingLines = noticings(answers);
+  const portraitLines = portrait(answers, skippedQuestions);
 
   const handleRevisit = (questionId, fallbackEntry, newAnswer) => {
     const q = questionById.get(questionId) || fallbackEntry;
@@ -48,8 +48,9 @@ export default function Insights() {
   }
   const maxDayCount = Math.max(...dayActivity.map(d => d.count), 1);
 
-  // Gardens completed count
-  const gardensCompleted = Object.values(gardenCompletions).filter(v => v >= 10).length;
+  // Gardens completed count — only current gardens (stale garden_states rows for
+  // retired gardens must not count); a garden is complete when every item is done.
+  const gardensCompleted = gardens.filter(g => (gardenCompletions[g.id] || 0) >= g.items.length).length;
 
   // Mood tendency
   const moodLabel = yesPercent >= 70 ? 'optimistic' :
@@ -144,40 +145,24 @@ export default function Insights() {
           )}
 
           {/* ── Noticing ── */}
-          {noticingLines.length > 0 && (
+          {portraitLines.length > 0 && (
             <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
               <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-4">Noticing</h3>
               <div className="space-y-3">
-                {noticingLines.map((line, i) => (
+                {portraitLines.map((line, i) => (
                   <p key={i} className="text-sm text-sub leading-relaxed">
                     {line}
                   </p>
                 ))}
               </div>
-            </div>
-          )}
-
-          {/* ── Character Drift ── */}
-          {hasComparison && (
-            <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
-              <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-1">Character Drift</h3>
-              <p className="text-xs text-sub mb-4">
-                last 30 days against everything before
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {trends.map((t) => (
-                  <div key={t.dimension} className="flex items-center justify-between bg-soft rounded-xl px-3 py-2 retint">
-                    <span className="text-xs text-sub">{t.dimension}</span>
-                    {t.delta === null ? (
-                      <span className="text-xs text-sub opacity-60">—</span>
-                    ) : (
-                      <span className="text-xs font-bold text-deep">
-                        {t.delta > 0 ? '+' : ''}{t.delta}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
+              {/* Quiet door to the opt-in graphs page (where Character Drift lived) */}
+              <button
+                onClick={() => navigate('/graphs')}
+                className="mt-4 text-xs text-sub opacity-55 hover:opacity-100 transition-opacity font-rounded font-semibold retint"
+                aria-label="Open your graphs"
+              >
+                graphs →
+              </button>
             </div>
           )}
 

@@ -1,12 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCilantro } from '../context/CilantroContext';
-import { formatTime, radarDimensions } from '../data/questions';
+import { formatTime, gardens } from '../data/questions';
 import { vibeAccent } from '../theme/palettes';
-import { radarComparison } from '../utils/insights';
+import { portrait } from '../utils/portrait';
 import { getQuestionMeta } from '../data/questionMeta';
 import SeedBadge from './SeedBadge';
-import RadarChart from './RadarChart';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -42,15 +41,16 @@ export default function Profile() {
     return true;
   });
 
-  const gardensUnlockedCount = Object.values(gardenUnlocks).filter(Boolean).length;
+  // Count only unlocks for gardens that still exist (stale garden_states rows
+  // for retired gardens must not inflate the count past the current total).
+  const gardensUnlockedCount = gardens.filter((g) => gardenUnlocks[g.id]).length;
   const memberSince = user?.memberSince
     ? new Date(user.memberSince).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
     : null;
 
-  // Radar chart: once enough history exists, show who you are now (last 30
-  // days) against who you were (everything before) — otherwise all-time
-  const { allTime, baseline, current, hasComparison } = radarComparison(answers);
-  const radarScores = hasComparison ? current : allTime;
+  // Portrait: a few plain sentences about where you lean and where your
+  // attention goes — no scores, no verdict. Empty until ~10 reflections.
+  const portraitLines = portrait(answers, skippedQuestions);
 
   return (
     <div className="min-h-screen bg-canvas text-ink flex flex-col retint">
@@ -109,7 +109,7 @@ export default function Profile() {
                   <p className="text-[10px] uppercase tracking-wider text-sub">reflections</p>
                 </div>
                 <div>
-                  <p className="text-lg font-rounded font-semibold text-ink">{gardensUnlockedCount}<span className="text-sub">/8</span></p>
+                  <p className="text-lg font-rounded font-semibold text-ink">{gardensUnlockedCount}<span className="text-sub">/{gardens.length}</span></p>
                   <p className="text-[10px] uppercase tracking-wider text-sub">gardens</p>
                 </div>
                 <div>
@@ -120,31 +120,31 @@ export default function Profile() {
             </div>
           )}
 
-          {/* Radar Chart — Your Character */}
+          {/* Your Portrait — plain sentences, no scores */}
           {answers.length > 0 && (
             <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6 mb-6">
-              <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-2 text-center">your character</h3>
-              <RadarChart
-                dimensions={radarDimensions}
-                scores={radarScores}
-                compareScores={hasComparison ? baseline : null}
-                size={280}
-              />
-              {hasComparison && (
-                <div className="flex items-center justify-center gap-4 mt-2">
-                  <span className="flex items-center gap-1.5 text-xs text-sub">
-                    <span className="inline-block w-4 border-t-2 border-accent" aria-hidden="true" /> now
-                  </span>
-                  <span className="flex items-center gap-1.5 text-xs text-sub">
-                    <span className="inline-block w-4 border-t-2 border-dashed border-sub" aria-hidden="true" /> then
-                  </span>
+              <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-4">your portrait</h3>
+              {portraitLines.length > 0 ? (
+                <div className="space-y-3">
+                  {portraitLines.map((line, i) => (
+                    <p key={i} className="text-sm text-sub leading-relaxed">
+                      {line}
+                    </p>
+                  ))}
                 </div>
-              )}
-              {radarScores.every(s => s === null) && (
-                <p className="text-xs text-sub text-center mt-2">
-                  answer more questions to reveal your character
+              ) : (
+                <p className="text-sm text-sub leading-relaxed">
+                  answer more questions and a portrait starts to form
                 </p>
               )}
+              {/* Quiet door to the opt-in graphs page */}
+              <button
+                onClick={() => navigate('/graphs')}
+                className="mt-4 text-xs text-sub opacity-55 hover:opacity-100 transition-opacity font-rounded font-semibold retint"
+                aria-label="Open your graphs"
+              >
+                graphs →
+              </button>
             </div>
           )}
 
