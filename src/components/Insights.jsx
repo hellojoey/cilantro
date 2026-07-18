@@ -10,7 +10,7 @@ const questionById = new Map(questions.map(q => [q.id, q]));
 
 export default function Insights() {
   const navigate = useNavigate();
-  const { answers, skippedQuestions, seeds, dailyStreak, gardenCompletions, reanswer } = useCilantro();
+  const { answers, skippedQuestions, dailyStreak, gardenCompletions, reanswer } = useCilantro();
 
   // ── The Mirror ──
   const mirrorMoments = findMirrorMoments(answers);
@@ -23,15 +23,11 @@ export default function Insights() {
 
   // ── Compute stats ──
   const totalAnswered = answers.length;
-  const yesCount = answers.filter(a => a.answer === 'yes').length;
-  const noCount = answers.filter(a => a.answer === 'no').length;
-  const yesPercent = totalAnswered > 0 ? Math.round((yesCount / totalAnswered) * 100) : 0;
 
   // Recent activity (last 7 days)
   const now = new Date();
   const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const recentAnswers = answers.filter(a => new Date(a.timestamp) >= weekAgo);
-  const recentYes = recentAnswers.filter(a => a.answer === 'yes').length;
 
   // Day-by-day activity (last 7 days)
   const dayActivity = [];
@@ -48,15 +44,9 @@ export default function Insights() {
   }
   const maxDayCount = Math.max(...dayActivity.map(d => d.count), 1);
 
-  // Gardens completed count — only current gardens (stale garden_states rows for
-  // retired gardens must not count); a garden is complete when every item is done.
-  const gardensCompleted = gardens.filter(g => (gardenCompletions[g.id] || 0) >= g.items.length).length;
-
-  // Mood tendency
-  const moodLabel = yesPercent >= 70 ? 'optimistic' :
-    yesPercent >= 55 ? 'balanced-positive' :
-    yesPercent >= 45 ? 'balanced' :
-    yesPercent >= 30 ? 'contemplative' : 'introspective';
+  // Gardens explored count — started or completed. Only current gardens count
+  // (stale garden_states rows for retired gardens must not inflate it).
+  const gardensExplored = gardens.filter(g => (gardenCompletions[g.id] || 0) > 0).length;
 
   if (totalAnswered === 0) {
     return (
@@ -166,32 +156,6 @@ export default function Insights() {
             </div>
           )}
 
-          {/* ── Overview Card ── */}
-          <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
-            <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-4">Your Reflection Style</h3>
-            <div className="text-center mb-4">
-              <div className="text-5xl font-rounded font-semibold text-ink">{yesPercent}%</div>
-              <div className="text-sm text-sub mt-1">yes responses</div>
-              <div className="mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-soft text-deep retint">
-                {moodLabel}
-              </div>
-            </div>
-            <div className="flex justify-around text-center mt-4 pt-4 border-t border-mid">
-              <div>
-                <div className="text-2xl font-rounded font-semibold text-ink">{totalAnswered}</div>
-                <div className="text-xs text-sub">total</div>
-              </div>
-              <div>
-                <div className="text-2xl font-rounded font-semibold text-ink">{yesCount}</div>
-                <div className="text-xs text-sub">yes</div>
-              </div>
-              <div>
-                <div className="text-2xl font-rounded font-semibold text-ink">{noCount}</div>
-                <div className="text-xs text-sub">no</div>
-              </div>
-            </div>
-          </div>
-
           {/* ── Weekly Activity ── */}
           <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
             <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-4">This Week</h3>
@@ -222,20 +186,18 @@ export default function Insights() {
                 </div>
               ))}
             </div>
-            <div className="mt-3 pt-3 border-t border-mid flex justify-between text-xs text-sub">
+            <div className="mt-3 pt-3 border-t border-mid text-xs text-sub">
               <span>{recentAnswers.length} answers this week</span>
-              <span>{recentAnswers.length > 0 ? Math.round((recentYes / recentAnswers.length) * 100) : 0}% yes</span>
             </div>
           </div>
 
           {/* ── Milestones ── */}
           <div className="bg-card border-2 border-ink rounded-chunk shadow-chunk retint p-6">
             <h3 className="text-xs text-sub font-rounded font-semibold uppercase tracking-wide mb-4">Milestones</h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               {[
-                { icon: '🌱', label: 'Seeds', value: seeds, sub: 'earned' },
                 { icon: '🔥', label: 'Streak', value: dailyStreak.count, sub: 'days' },
-                { icon: '🌿', label: 'Gardens', value: gardensCompleted, sub: 'completed' },
+                { icon: '🌿', label: 'Gardens', value: gardensExplored, sub: 'explored' },
                 { icon: '💭', label: 'Reflections', value: totalAnswered, sub: 'total' },
               ].map((m, i) => (
                 <div key={i} className="border-2 border-ink bg-card rounded-xl shadow-chunk-sm retint p-3 text-center">

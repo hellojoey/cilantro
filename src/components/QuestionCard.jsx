@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import { formatTime, gardens } from '../data/questions';
 import { getFinePrint } from '../data/finePrint';
 import { getQuestionMeta } from '../data/questionMeta';
-import { useCilantro } from '../context/CilantroContext';
 
 export default function QuestionCard({ question, vibe, color, label, echo, resurfaced, isTransitioning, onYes, onNo, onSkip, skipLabel = 'skip' }) {
-  const { isGardenUnlocked } = useCilantro();
   const finePrint = getFinePrint(question);
   const meta = getQuestionMeta(question);
   const relatedGardens = meta.gardens
@@ -138,7 +136,7 @@ export default function QuestionCard({ question, vibe, color, label, echo, resur
                   {relatedGardens.map((g) => (
                     <Link
                       key={g.id}
-                      to={isGardenUnlocked(g.id) ? `/gardens/${g.id}` : '/gardens'}
+                      to={`/gardens/${g.id}`}
                       className="flex items-center gap-1.5 text-xs font-rounded font-bold text-ink bg-card border-2 border-ink rounded-xl px-2.5 py-1.5 shadow-chunk-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-chunk-xs transition-[transform,box-shadow] retint"
                       aria-label={`Explore the ${g.name} garden`}
                     >

@@ -4,10 +4,8 @@ import { gardens } from '../data/questions';
 import { vibeAccent } from '../theme/palettes';
 import { getFinePrint } from '../data/finePrint';
 import { getQuestionMeta } from '../data/questionMeta';
-import { useCilantro } from '../context/CilantroContext';
 
 export default function GardenContentCard({ item, gardenColor, gardenLabel, isTransitioning, onYes, onNo, onContinue, onSkip }) {
-  const { isGardenUnlocked } = useCilantro();
   // Garden identity color when present (it always is today); the vibe's family
   // accent is the fallback for any caller that doesn't carry one.
   const dotColor = gardenColor || vibeAccent(item.vibe);
@@ -101,7 +99,7 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
                       {relatedGardens.map((g) => (
                         <Link
                           key={g.id}
-                          to={isGardenUnlocked(g.id) ? `/gardens/${g.id}` : '/gardens'}
+                          to={`/gardens/${g.id}`}
                           className="flex items-center gap-1.5 text-[11px] font-rounded font-bold text-ink bg-card border-2 border-ink rounded-xl shadow-chunk-sm retint px-2.5 py-1.5 transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-chunk-xs"
                           aria-label={`Explore the ${g.name} garden`}
                         >

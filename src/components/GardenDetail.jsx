@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useCilantro } from '../context/CilantroContext';
 import { gardens } from '../data/questions';
+import { getPostsByTopic } from '../data/blog';
 import GardenContentCard from './GardenContentCard';
 
 export default function GardenDetail() {
   const navigate = useNavigate();
   const { gardenId } = useParams();
-  const { handleGardenAnswer, handleGardenContinue, isGardenUnlocked } = useCilantro();
+  const { handleGardenAnswer, handleGardenContinue } = useCilantro();
 
   const garden = gardens.find(g => g.id === gardenId);
   const [itemIndex, setItemIndex] = useState(0);
   const [localTransitioning, setLocalTransitioning] = useState(false);
 
-  // Guard: if garden not found or not unlocked, redirect
-  if (!garden || !isGardenUnlocked(gardenId)) {
+  // Guard: unknown garden id → redirect back to the gardens list.
+  if (!garden) {
     return (
       <div className="min-h-screen bg-canvas flex flex-col items-center justify-center px-6">
         <p className="text-sub mb-4">Garden not available</p>
@@ -30,6 +31,11 @@ export default function GardenDetail() {
 
   const progress = ((itemIndex + 1) / garden.items.length) * 100;
   const currentItem = garden.items[itemIndex];
+
+  // Cross-link to the blog when notes exist for this garden's topic.
+  // Exactly one post → link straight to it; more than one → the blog list.
+  const relatedPosts = getPostsByTopic(garden.id);
+  const notesHref = relatedPosts.length === 1 ? `/blog/${relatedPosts[0].slug}` : '/blog';
 
   const onAnswer = (answer) => {
     setLocalTransitioning(true);
@@ -101,6 +107,17 @@ export default function GardenDetail() {
               style={{ width: `${progress}%`, backgroundColor: garden.color }}
             />
           </div>
+          {relatedPosts.length > 0 && (
+            <div className="mt-3">
+              <Link
+                to={notesHref}
+                className="text-xs text-sub opacity-55 hover:opacity-100 transition-opacity font-rounded font-semibold retint"
+                aria-label="Read the notes on this topic"
+              >
+                read the notes →
+              </Link>
+            </div>
+          )}
         </div>
       </header>
 

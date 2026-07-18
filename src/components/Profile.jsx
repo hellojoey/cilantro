@@ -5,7 +5,6 @@ import { formatTime, gardens } from '../data/questions';
 import { vibeAccent } from '../theme/palettes';
 import { portrait } from '../utils/portrait';
 import { getQuestionMeta } from '../data/questionMeta';
-import SeedBadge from './SeedBadge';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ export default function Profile() {
     user, logout,
     answers, changeAnswer,
     skippedQuestions, answerSkipped,
-    gardenUnlocks,
+    gardenCompletions,
     dailyAnswered, dailyStreak,
     darkMode,
   } = useCilantro();
@@ -41,9 +40,10 @@ export default function Profile() {
     return true;
   });
 
-  // Count only unlocks for gardens that still exist (stale garden_states rows
-  // for retired gardens must not inflate the count past the current total).
-  const gardensUnlockedCount = gardens.filter((g) => gardenUnlocks[g.id]).length;
+  // Gardens the user has actually explored (started or completed). Only current
+  // gardens count — stale garden_states rows for retired gardens must not inflate
+  // the total.
+  const gardensExplored = gardens.filter((g) => (gardenCompletions[g.id] || 0) > 0).length;
   const memberSince = user?.memberSince
     ? new Date(user.memberSince).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
     : null;
@@ -97,11 +97,6 @@ export default function Profile() {
                 </button>
               </div>
 
-              {/* Seeds display */}
-              <div className="mt-4 pt-4 border-t border-mid">
-                <SeedBadge size="lg" />
-              </div>
-
               {/* Quick stats */}
               <div className="mt-4 pt-4 border-t border-mid grid grid-cols-3 gap-2 text-center">
                 <div>
@@ -109,8 +104,8 @@ export default function Profile() {
                   <p className="text-[10px] uppercase tracking-wider text-sub">reflections</p>
                 </div>
                 <div>
-                  <p className="text-lg font-rounded font-semibold text-ink">{gardensUnlockedCount}<span className="text-sub">/{gardens.length}</span></p>
-                  <p className="text-[10px] uppercase tracking-wider text-sub">gardens</p>
+                  <p className="text-lg font-rounded font-semibold text-ink">{gardensExplored}<span className="text-sub">/{gardens.length}</span></p>
+                  <p className="text-[10px] uppercase tracking-wider text-sub">gardens explored</p>
                 </div>
                 <div>
                   <p className="text-lg font-rounded font-semibold text-ink">{dailyStreak.count}</p>
@@ -310,7 +305,7 @@ export default function Profile() {
                               <button
                                 onClick={() => changeAnswer(actualIndex)}
                                 className="text-xs font-bold px-3 py-1 rounded-full bg-soft text-deep hover:bg-mid transition-colors retint"
-                                aria-label={`Change answer from ${a.answer} (costs 5 seeds)`}
+                                aria-label={`Change answer from ${a.answer}`}
                               >
                                 {a.answer}
                               </button>

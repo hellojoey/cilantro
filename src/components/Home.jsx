@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useCilantro } from '../context/CilantroContext';
 import { useVibeTheme } from '../theme/useVibeTheme';
 import QuestionCard from './QuestionCard';
-import SeedBadge from './SeedBadge';
 import ShapesBackground from './ShapesBackground';
 
 // Shared by the four nav buttons in the header.
@@ -24,7 +23,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col relative">
-      <ShapesBackground />
+      <ShapesBackground seed={currentQuestion.text} />
 
       {/* Header with nav */}
       <header className="pt-8 pb-4 px-6 relative">
@@ -33,8 +32,6 @@ export default function Home() {
             cilantro
           </h1>
           <nav className="flex items-center gap-2" aria-label="Main navigation">
-            <SeedBadge />
-
             {/* Insights button */}
             <button
               onClick={() => navigate('/insights')}

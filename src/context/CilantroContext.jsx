@@ -583,17 +583,11 @@ export function CilantroProvider({ children }) {
     deleteSkip(text);
   }, [skippedQuestions, earnSeeds, insertAnswerRow, deleteSkip]);
 
-  // ── Change an answer (costs seeds) ──
+  // ── Change an answer (free) ──
+  // Simplification (Jul 2026): flipping an answer no longer costs seeds.
   const changeAnswer = useCallback((index) => {
-    if (seeds < SEEDS.CHANGE_ANSWER_COST) {
-      showSeedAnimation('Not enough seeds!');
-      return;
-    }
     const target = answers[index];
     if (!target) return;
-
-    setSeeds((prev) => prev - SEEDS.CHANGE_ANSWER_COST);
-    showSeedAnimation(`-${SEEDS.CHANGE_ANSWER_COST}`);
 
     const historyEntry = {
       answer: target.answer,
@@ -608,7 +602,7 @@ export function CilantroProvider({ children }) {
 
     setAnswers((prev) => prev.map((a, i) => (i === index ? updated : a)));
     updateAnswerRow(updated);
-  }, [answers, seeds, showSeedAnimation, updateAnswerRow]);
+  }, [answers, updateAnswerRow]);
 
   // ── Re-answer a question today (Mirror Moments) ──
   // Free, earns no seeds: revisiting a tension is reflection, not farming.
@@ -629,9 +623,13 @@ export function CilantroProvider({ children }) {
   }, [insertAnswerRow]);
 
   // ── Garden methods ──
-  const isGardenUnlocked = useCallback((gardenId) => {
-    return gardenUnlocks[gardenId] === true;
-  }, [gardenUnlocks]);
+  // Simplification (Jul 2026): every garden is open — no unlock gate in the UI.
+  // The gardenUnlocks state + unlockGarden/peekGarden + garden_states.unlocked
+  // plumbing are kept intact (reversible by design), but nothing gates on them,
+  // so this always reports unlocked.
+  const isGardenUnlocked = useCallback(() => {
+    return true;
+  }, []);
 
   const getGardenProgress = useCallback((gardenId) => {
     return gardenCompletions[gardenId] || 0;
