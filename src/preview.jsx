@@ -51,7 +51,7 @@ function Harness() {
 
   return (
     <div className="min-h-screen relative flex flex-col">
-      <ShapesBackground />
+      <ShapesBackground seed={q.text} />
       <div className="relative p-4 flex gap-2 flex-wrap items-center">
         {SAMPLES.map((s, n) => (
           <button
