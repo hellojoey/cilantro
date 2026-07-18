@@ -11,6 +11,8 @@ import GardenDetail from './components/GardenDetail';
 import Daily30 from './components/Daily30';
 import Insights from './components/Insights';
 import Graphs from './components/Graphs';
+import Blog from './components/Blog';
+import BlogPost from './components/BlogPost';
 import Welcome from './components/Welcome';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -81,6 +83,10 @@ export default function Cilantro() {
       <Route path="/daily30" element={<ProtectedRoute><Daily30 /></ProtectedRoute>} />
       <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
       <Route path="/graphs" element={<ProtectedRoute><Graphs /></ProtectedRoute>} />
+
+      {/* Public routes (the app's editorial voice — readable logged-out) */}
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
