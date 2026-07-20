@@ -16,10 +16,19 @@
 // sorted by slug (category then number) so the diff is stable and reviewable.
 //
 // Idempotent: re-running after a successful bake adds nothing (all texts are now
-// keys → all skipped → both files left untouched).
+// keys → all skipped/already-object → both files left untouched).
 //
-// Sourced entries carry notes + sources, but there is no UI slot for those yet,
-// so they are NOT baked — the script prints a reminder listing their slugs.
+// SOURCED entries (needs === 'sourced', carrying notes + sources) bake into
+// finePrint.js as the OBJECT form:
+//   { note, notes, sources: [{ title, publisher, url, perspective }] }
+// where `note` is the same one-line clarifier a string entry would carry. Their
+// sources are carried through verbatim from the approved drafts — never
+// hand-authored or edited here. If a sourced text already exists as a plain
+// string entry (an earlier bake), it is UPGRADED in place to the object form,
+// keeping its clarifier text as `note`. Everything else bakes as a string.
+//
+// Optional slug filter: `--only=slug1,slug2` restricts the run to those drafts
+// (used to bake just the approved sourced entries without touching anything else).
 //
 // Constraints honoured: does not touch scripts/output/*, does not commit, and
 // modifies only the two data files above. No new dependencies.
@@ -44,6 +53,40 @@ const SECTION_MARKER = `  // ── Baked from batch run (${BAKE_DATE}) ──`;
 // Escape backslashes, then single quotes. Double quotes are left raw (the files
 // carry "Recently" etc. unescaped inside single quotes).
 const q = (s) => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+
+// Same, but also escapes real newlines to `\n` so multi-paragraph notes stay a
+// valid single-quoted literal (a raw newline inside '' is a JS syntax error).
+const qm = (s) => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n')}'`;
+
+// ── Sourced entry → object-form literal, house style, hand-editable ──
+// Emits (key already written by the caller, value indented 4 spaces):
+//   {
+//     note:
+//       '…',
+//     notes:
+//       '…\n\n…',
+//     sources: [
+//       { title: '…', publisher: '…', url: '…', perspective: '…' },
+//     ],
+//   },
+function objectFormValue(note, notes, sources) {
+  const lines = ['    {'];
+  lines.push(`      note:\n        ${qm(note)},`);
+  if (notes && notes.trim()) {
+    lines.push(`      notes:\n        ${qm(notes)},`);
+  }
+  if (Array.isArray(sources) && sources.length) {
+    lines.push('      sources: [');
+    for (const s of sources) {
+      lines.push(
+        `        { title: ${qm(s.title)}, publisher: ${qm(s.publisher)}, url: ${qm(s.url)}, perspective: ${qm(s.perspective)} },`,
+      );
+    }
+    lines.push('      ],');
+  }
+  lines.push('    },');
+  return lines.join('\n');
+}
 
 // ── Slug sort: category prefix (alpha) then zero-padded number ──
 function slugKey(slug) {
@@ -84,7 +127,17 @@ function spliceEntries(source, filePath, anchor, headerNeedle, headerLine, entri
 
 function main() {
   const drafts = JSON.parse(readFileSync(DRAFTS_JSON, 'utf8'));
-  const all = Object.values(drafts);
+  let all = Object.values(drafts);
+
+  // Optional `--only=slug1,slug2` filter — restrict the run to these slugs.
+  const onlyArg = process.argv.find((a) => a.startsWith('--only='));
+  const onlySlugs = onlyArg
+    ? new Set(onlyArg.slice('--only='.length).split(',').map((s) => s.trim()).filter(Boolean))
+    : null;
+  if (onlySlugs) {
+    all = all.filter((e) => onlySlugs.has(e.slug));
+    console.log(`  (--only filter active: ${[...onlySlugs].join(', ')} → ${all.length} draft(s))`);
+  }
 
   // Valid question-bank texts (exact match required).
   const bankTexts = new Set();
@@ -97,14 +150,18 @@ function main() {
     skippedUnmatched: 0,
     skippedExistingFP: 0,
     skippedExistingMeta: 0,
+    skippedSourcedObject: 0,
     addedFP: 0,
     addedMeta: 0,
+    addedSourced: 0,
+    upgradedSourced: 0,
   };
-  const sourcedReminder = [];
   const unmatchedSlugs = [];
 
-  const newFP = [];   // { slug, text, clarifier }
-  const newMeta = []; // { slug, text, tags }
+  const newFP = [];       // { slug, text, clarifier }
+  const newMeta = [];     // { slug, text, tags }
+  const newSourced = [];  // { slug, text, note, notes, sources } — object-form adds
+  const upgradeSourced = []; // { slug, text, note, notes, sources } — string → object in place
 
   for (const e of all) {
     // 1) Skip errored drafts.
@@ -120,12 +177,32 @@ function main() {
       continue;
     }
 
-    if (e.needs === 'sourced') sourcedReminder.push(e.slug);
-
     const clarifier = String(e.clarifier ?? '').trim();
+    const isSourced =
+      e.needs === 'sourced' &&
+      ((e.notes && String(e.notes).trim()) || (Array.isArray(e.sources) && e.sources.length));
 
-    // 3) finePrint — only non-empty clarifiers, never overwrite an existing key.
-    if (clarifier) {
+    // 3) finePrint.
+    if (isSourced) {
+      // Object form. sources carried through verbatim — never edited here.
+      const record = {
+        slug: e.slug,
+        text: e.text,
+        note: clarifier,
+        notes: String(e.notes ?? ''),
+        sources: Array.isArray(e.sources) ? e.sources : [],
+      };
+      const cur = finePrint[e.text];
+      if (cur === undefined) {
+        newSourced.push(record);
+      } else if (typeof cur === 'string') {
+        // Upgrade in place, preserving the existing clarifier as `note`.
+        upgradeSourced.push({ ...record, note: cur });
+      } else {
+        counts.skippedSourcedObject++; // already object form → idempotent
+      }
+    } else if (clarifier) {
+      // String form — only non-empty clarifiers, never overwrite an existing key.
       if (e.text in finePrint) {
         counts.skippedExistingFP++;
       } else {
@@ -143,27 +220,49 @@ function main() {
 
   newFP.sort(bySlug);
   newMeta.sort(bySlug);
+  newSourced.sort(bySlug);
+  upgradeSourced.sort(bySlug);
   counts.addedFP = newFP.length;
   counts.addedMeta = newMeta.length;
+  counts.addedSourced = newSourced.length;
+  counts.upgradedSourced = upgradeSourced.length;
 
   // ── Write finePrint.js ──
-  if (newFP.length) {
-    const src = readFileSync(FINE_PRINT_JS, 'utf8');
-    const block = [
-      SECTION_MARKER,
-      ...newFP.map((e) => `  ${q(e.text)}:\n    ${q(e.clarifier)},`),
-    ].join('\n') + '\n';
-    const headerLine =
-      `// Batch bake ${BAKE_DATE}: entries below the "Baked from batch run" marker were added by scripts/bake-fine-print.mjs.`;
-    const next = spliceEntries(
-      src,
-      FINE_PRINT_JS,
-      'export const getFinePrint',
-      'export const finePrint = {',
-      headerLine,
-      block,
-    );
-    writeFileSync(FINE_PRINT_JS, next);
+  if (newFP.length || newSourced.length || upgradeSourced.length) {
+    let src = readFileSync(FINE_PRINT_JS, 'utf8');
+
+    // (a) In-place upgrades: replace an existing string entry with its object
+    // form, keeping the exact clarifier as `note`. Matches the exact baked
+    // block so only that one entry is touched.
+    for (const e of upgradeSourced) {
+      const oldBlock = `  ${q(e.text)}:\n    ${q(e.note)},`;
+      const newBlock = `  ${q(e.text)}:\n${objectFormValue(e.note, e.notes, e.sources)}`;
+      if (!src.includes(oldBlock)) {
+        throw new Error(`Could not find existing string entry to upgrade for ${e.slug}: ${JSON.stringify(e.text)}`);
+      }
+      src = src.replace(oldBlock, newBlock);
+    }
+
+    // (b) Appends (new string + new sourced object entries) under the dated marker.
+    if (newFP.length || newSourced.length) {
+      const block = [
+        SECTION_MARKER,
+        ...newFP.map((e) => `  ${q(e.text)}:\n    ${q(e.clarifier)},`),
+        ...newSourced.map((e) => `  ${q(e.text)}:\n${objectFormValue(e.note, e.notes, e.sources)}`),
+      ].join('\n') + '\n';
+      const headerLine =
+        `// Batch bake ${BAKE_DATE}: entries below the "Baked from batch run" marker were added by scripts/bake-fine-print.mjs.`;
+      src = spliceEntries(
+        src,
+        FINE_PRINT_JS,
+        'export const getFinePrint',
+        'export const finePrint = {',
+        headerLine,
+        block,
+      );
+    }
+
+    writeFileSync(FINE_PRINT_JS, src);
   }
 
   // ── Write questionMeta.js ──
@@ -188,12 +287,12 @@ function main() {
     writeFileSync(QUESTION_META_JS, next);
   }
 
-  // ── Reminder: sourced notes/sources are not baked (no UI slot yet). ──
-  if (sourcedReminder.length) {
+  // ── Note the sourced entries that were baked as object form. ──
+  if (newSourced.length || upgradeSourced.length) {
     console.log('');
-    console.log('REMINDER — these "sourced" drafts carry notes + sources that were NOT baked');
-    console.log('(no UI slot yet). Their clarifier + tags ARE baked; revisit notes/sources later:');
-    for (const slug of sourcedReminder) console.log(`  · ${slug}`);
+    console.log('SOURCED — baked as object form (note + notes + sources, verbatim):');
+    for (const e of upgradeSourced) console.log(`  · ${e.slug} (upgraded string → object)`);
+    for (const e of newSourced) console.log(`  · ${e.slug} (new object entry)`);
   }
 
   // ── Summary ──
@@ -203,15 +302,18 @@ function main() {
   console.log('══════════════════════════════════════════════════════');
   console.log(`  drafts read              : ${all.length}`);
   console.log(`  added to finePrint.js    : ${counts.addedFP}`);
+  console.log(`  sourced added (object)   : ${counts.addedSourced}`);
+  console.log(`  sourced upgraded (str→obj): ${counts.upgradedSourced}`);
   console.log(`  added to questionMeta.js : ${counts.addedMeta}`);
   console.log(`  skipped (already in FP)  : ${counts.skippedExistingFP}`);
+  console.log(`  skipped (sourced, already object): ${counts.skippedSourcedObject}`);
   console.log(`  skipped (already in Meta): ${counts.skippedExistingMeta}`);
   console.log(`  skipped (error)          : ${counts.skippedError}`);
   console.log(`  skipped (unmatched text) : ${counts.skippedUnmatched}${unmatchedSlugs.length ? ` [${unmatchedSlugs.join(', ')}]` : ''}`);
   console.log('──────────────────────────────────────────────────────');
   console.log(`  finePrint.js    : ${statSync(FINE_PRINT_JS).size} bytes`);
   console.log(`  questionMeta.js : ${statSync(QUESTION_META_JS).size} bytes`);
-  if (!newFP.length && !newMeta.length) {
+  if (!newFP.length && !newMeta.length && !newSourced.length && !upgradeSourced.length) {
     console.log('  (no new entries — files left untouched; bake is idempotent)');
   }
   console.log('══════════════════════════════════════════════════════');

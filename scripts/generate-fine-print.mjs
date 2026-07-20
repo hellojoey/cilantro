@@ -33,12 +33,27 @@
 //   --dry-run        print the selection + planned calls and exit. No API calls.
 //   --help
 //
+// ─── Garden mode ──────────────────────────────────────────────────────────────
+//   --gardens [ids]  index garden questions from src/data/gardens/*.json instead
+//                    of the 2,000-question bank. Value is a comma list of garden
+//                    ids (ai,goat,afterlife,gaza) or "all" (bare --gardens == all).
+//                    Indexes the root question plus every branch item whose
+//                    contentType is "question"; item ids (ai-root, ai-seed-04…)
+//                    are the stable slugs, question text is the fine-print key —
+//                    exactly like the bank. With no --slugs/--pilot, garden mode
+//                    processes ALL indexed garden questions. Garden runs are
+//                    contested-topic questions, so the 'sourced' tier is EXPECTED
+//                    to fire often (nothing caps it). Garden drafts get their own
+//                    resume files so a garden run never touches the bank's:
+//                      scripts/output/fine-print-garden-drafts.json
+//                      scripts/output/FINE_PRINT_GARDEN_DRAFTS.md
+//
 // Robustness: ModelOutputError and SDK errors are caught per batch/question,
 // recorded in the JSON under `error`, and the run continues. The drafts JSON is
 // the resume state — rerun and it skips slugs already done (errored entries are
 // retried; use --force to redo everything).
 
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -58,8 +73,11 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(ROOT, 'scripts', 'output');
-const DRAFTS_JSON = join(OUT_DIR, 'fine-print-drafts.json');
-const DRAFTS_MD = join(OUT_DIR, 'FINE_PRINT_DRAFTS.md');
+const GARDENS_DIR = join(ROOT, 'src', 'data', 'gardens');
+// Bank-run defaults. Garden mode reassigns these (below) so a garden run keeps
+// its own resume state and never clobbers the bank's drafts.
+let DRAFTS_JSON = join(OUT_DIR, 'fine-print-drafts.json');
+let DRAFTS_MD = join(OUT_DIR, 'FINE_PRINT_DRAFTS.md');
 
 // Opus 4.8 token pricing. Web-search server-tool fees are NOT modelled here.
 const PRICE = { input: 5 / 1e6, output: 25 / 1e6 };
@@ -227,7 +245,8 @@ const STRUCTURE_SCHEMA = {
 // Small utilities
 // ─────────────────────────────────────────────────────────────────────────────
 function parseArgs(argv) {
-  const args = { pilot: null, slugs: null, seed: DEFAULT_SEED, force: false, dryRun: false, help: false };
+  const args = { pilot: null, slugs: null, seed: DEFAULT_SEED, force: false, dryRun: false, help: false, gardens: null };
+  const splitList = (s) => String(s ?? '').split(',').map((x) => x.trim()).filter(Boolean);
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--help' || a === '-h') args.help = true;
@@ -235,10 +254,17 @@ function parseArgs(argv) {
     else if (a === '--dry-run') args.dryRun = true;
     else if (a === '--pilot') args.pilot = parseInt(argv[++i], 10);
     else if (a === '--seed') args.seed = parseInt(argv[++i], 10);
-    else if (a === '--slugs') args.slugs = String(argv[++i] ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+    else if (a === '--slugs') args.slugs = splitList(argv[++i]);
+    else if (a === '--gardens') {
+      // Optional value: `--gardens ai,goat` or bare `--gardens` (== all).
+      const nxt = argv[i + 1];
+      if (nxt && !nxt.startsWith('--')) { args.gardens = splitList(nxt); i++; }
+      else args.gardens = ['all'];
+    }
     else if (a.startsWith('--pilot=')) args.pilot = parseInt(a.slice(8), 10);
     else if (a.startsWith('--seed=')) args.seed = parseInt(a.slice(7), 10);
-    else if (a.startsWith('--slugs=')) args.slugs = a.slice(8).split(',').map((s) => s.trim()).filter(Boolean);
+    else if (a.startsWith('--slugs=')) args.slugs = splitList(a.slice(8));
+    else if (a.startsWith('--gardens=')) args.gardens = splitList(a.slice(10));
     else console.warn(`(ignoring unknown flag: ${a})`);
   }
   return args;
@@ -290,6 +316,59 @@ function buildIndex() {
     }
   }
   return { byId, byCatSlug };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Garden index — same entry shape as the bank, sourced from src/data/gardens/*.
+// categorySlug = garden id, category = garden name; slug = item id; the question
+// text is the fine-print key exactly like the bank. Indexes the root question
+// plus every branch item whose contentType is "question". `covered` uses the
+// same finePrint/questionMeta check, so a garden question that already has fine
+// print (keyed by identical text) skips just like a covered bank question.
+// ─────────────────────────────────────────────────────────────────────────────
+function resolveGardenIds(requested) {
+  const available = readdirSync(GARDENS_DIR)
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => f.slice(0, -5))
+    .sort();
+  if (!requested || requested.includes('all')) return available;
+  const known = [];
+  for (const id of requested) {
+    if (available.includes(id)) known.push(id);
+    else console.warn(`(no garden "${id}" in src/data/gardens — skipping)`);
+  }
+  return known;
+}
+
+function buildGardenIndex(gardenIds) {
+  const byId = new Map();
+  const byCatSlug = new Map();
+  const allInOrder = [];
+  for (const gid of gardenIds) {
+    const garden = JSON.parse(readFileSync(join(GARDENS_DIR, `${gid}.json`), 'utf8'));
+    const catSlug = garden.id;
+    const catName = garden.name;
+    const items = [];
+    if (garden.root && garden.root.text) items.push(garden.root); // the root question
+    for (const branch of garden.branches ?? []) {
+      for (const it of branch.items ?? []) {
+        if (it.contentType === 'question') items.push(it);
+      }
+    }
+    for (const q of items) {
+      // Garden coverage = having FINE PRINT only. (The bank also counts tags,
+      // because its tags are written by this pipeline — but garden tags arrive
+      // with the question BAKE, so tags here say nothing about fine print and
+      // counting them would silently skip every baked garden question.)
+      const covered = getFinePrint(q.text) !== null;
+      const entry = { slug: q.id, text: q.text, vibe: q.vibe, category: catName, categorySlug: catSlug, covered };
+      byId.set(q.id, entry);
+      if (!byCatSlug.has(catSlug)) byCatSlug.set(catSlug, []);
+      byCatSlug.get(catSlug).push(entry);
+      allInOrder.push(entry);
+    }
+  }
+  return { byId, byCatSlug, allInOrder };
 }
 
 // Deterministic pilot selection: N uncovered questions spanning all categories,
@@ -431,7 +510,24 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help) { printHelp(); return; }
 
-  const index = buildIndex();
+  // ── Universe: the bank (default) or gardens (--gardens). ──
+  const gardenMode = Array.isArray(args.gardens);
+  let index;
+  if (gardenMode) {
+    const gardenIds = resolveGardenIds(args.gardens);
+    if (!gardenIds.length) {
+      console.error('No gardens to index. Pass --gardens all or --gardens ai,goat. See --help.');
+      process.exitCode = 1;
+      return;
+    }
+    index = buildGardenIndex(gardenIds);
+    // Garden runs resume from — and write review markdown to — their own files.
+    DRAFTS_JSON = join(OUT_DIR, 'fine-print-garden-drafts.json');
+    DRAFTS_MD = join(OUT_DIR, 'FINE_PRINT_GARDEN_DRAFTS.md');
+    log(`Garden mode: ${gardenIds.join(', ')} — indexed ${index.byId.size} question(s) (root + contentType:"question" items).`);
+  } else {
+    index = buildIndex();
+  }
 
   // ── Selection ──
   let selection;
@@ -444,6 +540,9 @@ async function main() {
     }
   } else if (Number.isInteger(args.pilot) && args.pilot > 0) {
     selection = selectPilot(index, args.pilot, args.seed);
+  } else if (gardenMode) {
+    // Default in garden mode: process every indexed garden question, in file order.
+    selection = index.allInOrder;
   } else {
     console.error('Nothing to do. Pass --pilot N or --slugs a,b,c. See --help.');
     process.exitCode = 1;
@@ -684,7 +783,10 @@ async function main() {
   // ── Final cost report ──
   saveDrafts(drafts);
   writeMarkdown(drafts);
-  printCostReport({ planned, tierBySlug, runUsage, clarifierQ, sourcedQ });
+  printCostReport({
+    planned, tierBySlug, runUsage, clarifierQ, sourcedQ,
+    ...(gardenMode ? { projTarget: index.byId.size, projNoun: 'all indexed garden questions' } : {}),
+  });
 }
 
 function draftBase(e, extra) {
@@ -705,7 +807,7 @@ function draftBase(e, extra) {
   };
 }
 
-function printCostReport({ planned, tierBySlug, runUsage, clarifierQ, sourcedQ }) {
+function printCostReport({ planned, tierBySlug, runUsage, clarifierQ, sourcedQ, projTarget = TOTAL_BANK, projNoun = 'the full uncovered bank' }) {
   const noneCount = planned.filter((e) => tierBySlug.get(e.slug)?.needs === 'none').length;
   const total = addUsage(addUsage(runUsage.triage, runUsage.clarifier), runUsage.sourced);
   const line = (label, u) => `  ${label.padEnd(12)} ${String(u.input).padStart(9)} in  ${String(u.output).padStart(9)} out   ${fmt$(costOf(u))}`;
@@ -730,11 +832,11 @@ function printCostReport({ planned, tierBySlug, runUsage, clarifierQ, sourcedQ }
       clarifier: clarifierQ.length / planned.length,
       sourced: sourcedQ.length / planned.length,
     };
-    const flat = perQ * TOTAL_BANK;
-    console.log('\n  ── Extrapolation to the full uncovered bank (~' + TOTAL_BANK + ') ──');
+    const flat = perQ * projTarget;
+    console.log('\n  ── Extrapolation to ' + projNoun + ' (~' + projTarget + ') ──');
     console.log(`  Observed tier mix: none ${(ratio.none * 100).toFixed(0)}% · clarifier ${(ratio.clarifier * 100).toFixed(0)}% · sourced ${(ratio.sourced * 100).toFixed(0)}%`);
     console.log(`  Avg cost/question: ${fmt$(perQ)}`);
-    console.log(`  Naive projection : ${fmt$(flat)} for ${TOTAL_BANK} questions`);
+    console.log(`  Naive projection : ${fmt$(flat)} for ${projTarget} questions`);
     if (sourcedQ.length) {
       const perSourced = costOf(runUsage.sourced) / sourcedQ.length;
       console.log(`  (Sourced questions average ${fmt$(perSourced)} each — the dominant cost driver; watch the sourced %.)`);
@@ -757,13 +859,21 @@ Flags:
   --seed S         PRNG seed for --pilot (default ${DEFAULT_SEED}).
   --force          Reprocess even if already covered or already drafted.
   --dry-run        Print selection + planned calls and exit (no API calls).
+  --gardens [ids]  Index garden questions (src/data/gardens/*.json) instead of
+                   the bank. Value = comma list of garden ids or "all" (bare
+                   --gardens == all). Roots + contentType:"question" items; item
+                   ids are the slugs. No --slugs/--pilot ⇒ ALL garden questions.
+                   Contested by nature, so the 'sourced' tier fires often.
   --help
 
 Outputs (git-ignored):
-  scripts/output/fine-print-drafts.json   machine-usable + resume state
-  scripts/output/FINE_PRINT_DRAFTS.md      Joey's review surface
+  scripts/output/fine-print-drafts.json          bank: machine-usable + resume state
+  scripts/output/FINE_PRINT_DRAFTS.md            bank: Joey's review surface
+  scripts/output/fine-print-garden-drafts.json   --gardens: resume state
+  scripts/output/FINE_PRINT_GARDEN_DRAFTS.md     --gardens: Joey's review surface
 
-Never writes to src/data. Rerun to resume; errored entries are retried.`);
+Never writes to src/data. Rerun to resume; errored entries are retried.
+--gardens uses separate output files, so a garden run never touches bank drafts.`);
 }
 
 main().catch((err) => {

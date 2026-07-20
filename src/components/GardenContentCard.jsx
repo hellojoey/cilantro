@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { gardens } from '../data/questions';
 import { vibeAccent } from '../theme/palettes';
-import { getFinePrint } from '../data/finePrint';
+import { resolveFinePrint } from '../data/finePrint';
 import { getQuestionMeta } from '../data/questionMeta';
+import FinePrintBody from './FinePrintBody';
 
 export default function GardenContentCard({ item, gardenColor, gardenLabel, isTransitioning, onYes, onNo, onContinue, onSkip }) {
   // Garden identity color when present (it always is today); the vibe's family
   // accent is the fallback for any caller that doesn't carry one.
   const dotColor = gardenColor || vibeAccent(item.vibe);
   const isQuestion = item.contentType === 'question';
-  const finePrint = isQuestion ? getFinePrint(item.text) : null;
+  const finePrint = isQuestion ? resolveFinePrint(item.text) : null;
   const meta = isQuestion ? getQuestionMeta(item.text) : { tags: [], gardens: [] };
   const relatedGardens = meta.gardens
     .map((id) => gardens.find((g) => g.id === id))
@@ -78,9 +79,10 @@ export default function GardenContentCard({ item, gardenColor, gardenLabel, isTr
               {showFinePrint && (
                 <div className="mt-1.5">
                   {finePrint && (
-                    <p className="text-xs text-sub leading-relaxed">
-                      {finePrint}
-                    </p>
+                    <FinePrintBody
+                      fp={finePrint}
+                      noteClass="text-xs text-sub leading-relaxed"
+                    />
                   )}
                   {meta.tags.length > 0 && (
                     <div className="flex flex-wrap justify-center gap-1.5 mt-2.5">

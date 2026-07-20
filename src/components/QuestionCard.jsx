@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { formatTime, gardens } from '../data/questions';
-import { getFinePrint } from '../data/finePrint';
+import { resolveFinePrint } from '../data/finePrint';
 import { getQuestionMeta } from '../data/questionMeta';
+import FinePrintBody from './FinePrintBody';
 
 export default function QuestionCard({ question, vibe, color, label, echo, resurfaced, isTransitioning, onYes, onNo, onSkip, skipLabel = 'skip' }) {
-  const finePrint = getFinePrint(question);
+  const finePrint = resolveFinePrint(question);
   const meta = getQuestionMeta(question);
   const relatedGardens = meta.gardens
     .map((id) => gardens.find((g) => g.id === id))
@@ -115,9 +116,10 @@ export default function QuestionCard({ question, vibe, color, label, echo, resur
           {showFinePrint && (
             <div className="mt-2">
               {finePrint && (
-                <p className="text-[13px] text-sub leading-relaxed retint">
-                  {finePrint}
-                </p>
+                <FinePrintBody
+                  fp={finePrint}
+                  noteClass="text-[13px] text-sub leading-relaxed retint"
+                />
               )}
               {meta.tags.length > 0 && (
                 <div className="flex flex-wrap justify-center gap-1.5 mt-3">

@@ -1,6 +1,16 @@
 // Cilantro — Fine Print: neutral one-line clarifiers, keyed by exact question text.
 // Drafted by AI on Jul 13, 2026; pending Joey's review (see FINE_PRINT_REVIEW.md).
 // Not every question has one — only where a term, scope, or rule needs clarity.
+//
+// A value is EITHER:
+//   • a string — the one-line clarifier (the shape of nearly every entry), OR
+//   • an object — for "sourced" entries that carry a research layer:
+//       { note: string, notes?: string, sources?: [{ title, publisher, url, perspective }] }
+//     where `note` is the same one-line clarifier a string entry would carry,
+//     `notes` is a longer paragraph block (paragraphs split on a blank line),
+//     and `sources` are real, attributable references (never hand-authored —
+//     baked verbatim from the approved research drafts).
+// Use resolveFinePrint(text) below for a single, normalized read path.
 
 // Batch bake Jul 15, 2026: entries below the "Baked from batch run" marker were added by scripts/bake-fine-print.mjs.
 export const finePrint = {
@@ -3094,7 +3104,20 @@ export const finePrint = {
   'Could you survive a weekend without electricity?':
     'Assume you have food and water but no power at home for two days.',
   'Do you know how to treat a bee sting?':
-    '"Treat" here means standard first aid for an ordinary local reaction, not the emergency care (epinephrine, calling 911) required for a severe allergic reaction.',
+    {
+      note:
+        '"Treat" here means standard first aid for an ordinary local reaction, not the emergency care (epinephrine, calling 911) required for a severe allergic reaction.',
+      notes:
+        'Reputable medical sources broadly agree on a core protocol: remove the stinger quickly, wash the area, apply a cold compress, and use over-the-counter pain relievers, antihistamines, or hydrocortisone as needed, while watching for signs of a severe allergic reaction. Only honeybees leave a stinger embedded, so the removal step does not apply to wasp or hornet stings.\n\nThe main point of disagreement concerns how to remove the stinger. The long-standing rule, stated by the American Academy of Dermatology, is to scrape it out and never pinch or use tweezers, on the theory that squeezing injects more venom. A 1996 Lancet experiment found no difference between scraping and pinching after two seconds, concluding that speed of removal matters more than method. A 2020 systematic review found only two qualifying studies, and a 2023 AAFP letter argued the evidence is too weak to change practice, continuing to favor rapid scraping or flicking. Home remedies such as baking soda paste and honey appear widely but rest on thin evidence.',
+      sources: [
+        { title: 'How to treat a bee sting', publisher: 'American Academy of Dermatology', url: 'https://www.aad.org/public/everyday-care/injured-skin/bites/treat-bee-sting', perspective: 'Traditional first-aid protocol: scrape the stinger out and never pinch or use tweezers.' },
+        { title: 'Be wise about bee and wasp stings', publisher: 'Harvard Health', url: 'https://www.health.harvard.edu/immune-and-infectious-diseases/be-wise-about-bee-and-wasp-stings', perspective: 'Two-track model: cold packs, hydrocortisone, and antihistamines for most; epinephrine and 911 for severe reactions.' },
+        { title: 'Removing bee stings', publisher: 'PubMed (The Lancet, 1996)', url: 'https://pubmed.ncbi.nlm.nih.gov/8709689/', perspective: 'Experimental study finding no difference between scraping and pinching, emphasizing speed over method.' },
+        { title: 'Rapid Removal of a Bee Stinger', publisher: 'American Family Physician (AAFP)', url: 'https://www.aafp.org/pubs/afp/issues/2023/0200/letter-bee-stinger-removal.html', perspective: 'Cautious clinical rebuttal: evidence is too limited to change practice, still favors scraping or flicking.' },
+        { title: 'Methods of Honey Bee Stinger Removal: A Systematic Review of the Literature', publisher: 'NCBI/PMC', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7292703/', perspective: 'Notes the standard advice rests on only two qualifying studies, underscoring how thin the evidence is.' },
+        { title: 'Bee Sting Treatment and Home Remedies: What Works?', publisher: 'Healthline', url: 'https://www.healthline.com/health/outdoor-health/home-remedies-for-bee-stings', perspective: 'Surveys popular home remedies like baking soda with deliberately tentative, hedged language.' },
+      ],
+    },
   'Could you set up a hammock between two trees?':
     'Assume you have a hammock and two suitable trees — this is about whether you\'d know how.',
   'Have you ever paddled a canoe or kayak?':
@@ -3134,7 +3157,20 @@ export const finePrint = {
   'Can you recognize at least one bird by its song?':
     'Recognizing means you could name it or match the song to the bird.',
   'Do you know what makes fireflies glow?':
-    '"What makes fireflies glow" can mean the chemistry that produces the light or the physiological mechanism that switches each flash on and off; the two are at very different stages of scientific certainty.',
+    {
+      note:
+        '"What makes fireflies glow" can mean the chemistry that produces the light or the physiological mechanism that switches each flash on and off; the two are at very different stages of scientific certainty.',
+      notes:
+        'The light-producing chemistry is long-established: fireflies use bioluminescence, in which the compound luciferin, aided by the enzyme luciferase and requiring oxygen, ATP, and magnesium, is oxidized and releases energy as light with almost no heat ("cold light"). This account is consistent across textbook, educator, and primary sources.\n\nA narrower question—how a firefly controls the precise timing of its flashes—remains an active research topic. One line of work proposes that nitric oxide briefly inhibits mitochondrial respiration so oxygen can reach the light-producing cells; a related view emphasizes physical gating of oxygen through the tracheoles. Later studies testing the nitric-oxide model have reported results that complicate it, and reviews as recent as the 2010s describe the flash-control mechanism as not fully resolved. General-audience sources tend to present this control story as more settled than the primary literature does.',
+      sources: [
+        { title: 'How Do Fireflies Light Up?', publisher: 'Britannica', url: 'https://www.britannica.com/science/How-Do-Fireflies-Light-Up', perspective: 'Mainstream textbook account of the luciferin/luciferase oxidation reaction producing cold light.' },
+        { title: 'How do fireflies produce light?', publisher: 'RSC Education', url: 'https://edu.rsc.org/everyday-chemistry/how-do-fireflies-produce-light/4017472.article', perspective: 'Educator-facing summary of the settled chemistry that also flags oxygen control as the on/off mechanism.' },
+        { title: 'Biosynthesis of Firefly Luciferin in Adult Lantern', publisher: 'PLOS ONE (PMC)', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3877152/', perspective: 'Primary research confirming the enzymatic light reaction and detailing how fireflies make luciferin.' },
+        { title: 'How and why do fireflies light up?', publisher: 'Scientific American', url: 'https://www.scientificamerican.com/article/how-and-why-do-fireflies/', perspective: 'Popular-science endorsement of the nitric-oxide oxygen-gating model of flash control.' },
+        { title: 'Firefly Flashing is Controlled by Gating Oxygen to Light-Emitting Cells', publisher: 'Journal of Experimental Biology', url: 'https://journals.biologists.com/jeb/article-abstract/204/16/2795/32847/FIREFLY-FLASHING-IS-CONTROLLED-BY-GATING-OXYGEN-TO?redirectedFrom=fulltext', perspective: 'Proposes physical oxygen gating in the tracheoles as the flash-control mechanism.' },
+        { title: 'Expression of the nos gene and firefly flashing: a test of the nitric-oxide-mediated flash control model', publisher: 'Journal of Insect Science (PMC)', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4207525/', perspective: 'Skeptical test whose data complicate the nitric-oxide model and describe the flash mechanism as still unknown.' },
+      ],
+    },
   'Did you ever touch a starfish?':
     'Any starfish counts — in a tide pool, an aquarium, or held in your hand.',
   'Have you ever watched a meteor shower at its peak?':
@@ -3904,4 +3940,20 @@ export const finePrint = {
 
 };
 
+// Raw lookup: string | object | null. Kept for callers that only need presence
+// (e.g. preview filters) — a truthy value means "this question has fine print".
 export const getFinePrint = (text) => finePrint[text] ?? null;
+
+// Normalized lookup: null, or always { note, notes, sources } regardless of
+// whether the stored entry was a string or the sourced object form. Both card
+// components render off this so string and sourced entries share one call path.
+export const resolveFinePrint = (text) => {
+  const value = finePrint[text];
+  if (value == null) return null;
+  if (typeof value === 'string') return { note: value, notes: '', sources: [] };
+  return {
+    note: value.note ?? '',
+    notes: value.notes ?? '',
+    sources: Array.isArray(value.sources) ? value.sources : [],
+  };
+};
