@@ -1,0 +1,134 @@
+{
+  "id": "ai",
+  "name": "AI",
+  "description": "Tool or trash, helper or hazard — where do you actually stand?",
+  "icon": "🤖",
+  "color": "#6B7280",
+  "seedCost": 200,
+  "tier": 2,
+  "root": {
+    "id": "ai-root",
+    "text": "Do you want the world AI is building?",
+    "vibe": "decision",
+    "difficulty": 3
+  },
+  "branches": [
+    {
+      "key": "daily",
+      "name": "daily life",
+      "items": [
+        {
+          "id": "ai-seed-04",
+          "contentType": "question",
+          "text": "Has AI already changed how you think, not just how you work?",
+          "vibe": "reflection",
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "work",
+      "name": "work",
+      "items": [
+        {
+          "id": "ai-seed-06",
+          "contentType": "question",
+          "text": "Is using AI for your work different from using a calculator?",
+          "vibe": "perspective",
+          "difficulty": 3
+        },
+        {
+          "id": "ai-seed-09",
+          "contentType": "question",
+          "text": "Is there a part of your work you'd refuse to hand to AI, even if it did it better?",
+          "vibe": "identity",
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "art",
+      "name": "art",
+      "items": [
+        {
+          "id": "ai-seed-05",
+          "contentType": "question",
+          "text": "Would you want to know if art that moved you was made by a machine?",
+          "vibe": "truth",
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "truth",
+      "name": "truth",
+      "items": [
+        {
+          "id": "ai-seed-01",
+          "contentType": "question",
+          "text": "Do you trust yourself to tell AI writing from human writing?",
+          "vibe": "knowledge",
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "people",
+      "name": "people",
+      "items": [
+        {
+          "id": "ai-seed-08",
+          "contentType": "question",
+          "text": "Would you let a child you love grow up with an AI best friend?",
+          "vibe": "decision",
+          "difficulty": 3
+        },
+        {
+          "id": "ai-seed-10",
+          "contentType": "question",
+          "text": "Do you talk to AI more honestly than you talk to some people?",
+          "vibe": "honesty",
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "power",
+      "name": "power",
+      "items": [
+        {
+          "id": "ai-seed-02",
+          "contentType": "question",
+          "text": "Would you let an AI make a medical decision for you if it outperformed doctors?",
+          "vibe": "decision",
+          "difficulty": 3
+        },
+        {
+          "id": "ai-seed-03",
+          "contentType": "question",
+          "text": "Do you think the people building AI understand what they're building?",
+          "vibe": "perspective",
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "fear",
+      "name": "fear",
+      "items": [
+        {
+          "id": "ai-seed-07",
+          "contentType": "question",
+          "text": "Do you believe AI will take more from your life than it gives?",
+          "vibe": "fear",
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "hope",
+      "name": "hope",
+      "items": []
+    }
+  ]
+}

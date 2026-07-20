@@ -1,0 +1,88 @@
+{
+  "id": "goat",
+  "name": "The GOAT",
+  "description": "LeBron or Jordan is the surface. What does 'best' even mean?",
+  "icon": "🐐",
+  "color": "#D97706",
+  "seedCost": 150,
+  "tier": 1,
+  "root": null,
+  "branches": [
+    {
+      "key": "opening",
+      "name": "the questions",
+      "items": [
+        {
+          "id": "goat-seed-01",
+          "contentType": "question",
+          "text": "Is the greatest of all time simply whoever won the most?",
+          "vibe": "perspective",
+          "difficulty": 3
+        },
+        {
+          "id": "goat-seed-02",
+          "contentType": "question",
+          "text": "Can you be the GOAT without being the most talented player?",
+          "vibe": "perspective",
+          "difficulty": 3
+        },
+        {
+          "id": "goat-seed-03",
+          "contentType": "question",
+          "text": "Does dominating a weaker era count for less?",
+          "vibe": "knowledge",
+          "difficulty": 3
+        },
+        {
+          "id": "goat-seed-04",
+          "contentType": "question",
+          "text": "Would six-for-six in the Finals settle it for you?",
+          "vibe": "decision",
+          "difficulty": 3
+        },
+        {
+          "id": "goat-seed-05",
+          "contentType": "question",
+          "text": "Is twenty great years better than five perfect ones?",
+          "vibe": "perspective",
+          "difficulty": 3
+        },
+        {
+          "id": "goat-seed-06",
+          "contentType": "question",
+          "text": "Do the stats tell you more than watching ever could?",
+          "vibe": "truth",
+          "difficulty": 3
+        },
+        {
+          "id": "goat-seed-07",
+          "contentType": "question",
+          "text": "Can the GOAT be someone you'd never want as a teammate?",
+          "vibe": "perspective",
+          "difficulty": 3
+        },
+        {
+          "id": "goat-seed-08",
+          "contentType": "question",
+          "text": "Does what a player does off the court belong in the conversation?",
+          "vibe": "decision",
+          "difficulty": 3
+        },
+        {
+          "id": "goat-seed-09",
+          "contentType": "question",
+          "text": "Is your GOAT pick really about who you grew up watching?",
+          "vibe": "honesty",
+          "difficulty": 3
+        },
+        {
+          "id": "goat-seed-10",
+          "contentType": "question",
+          "text": "Will someone alive today make this whole debate obsolete?",
+          "vibe": "perspective",
+          "difficulty": 3
+        }
+      ]
+    }
+  ]
+}

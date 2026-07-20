@@ -1,0 +1,88 @@
+{
+  "id": "afterlife",
+  "name": "Life After Death",
+  "description": "What happens after — and what does your life say you believe?",
+  "icon": "🕯️",
+  "color": "#6366F1",
+  "seedCost": 300,
+  "tier": 3,
+  "root": null,
+  "branches": [
+    {
+      "key": "opening",
+      "name": "the questions",
+      "items": [
+        {
+          "id": "afterlife-seed-01",
+          "contentType": "question",
+          "text": "Do you believe some part of you continues after your body dies?",
+          "vibe": "mortality",
+          "difficulty": 3
+        },
+        {
+          "id": "afterlife-seed-02",
+          "contentType": "question",
+          "text": "Do you live as if this life is the only one you get?",
+          "vibe": "mortality",
+          "difficulty": 3
+        },
+        {
+          "id": "afterlife-seed-03",
+          "contentType": "question",
+          "text": "Would you want to know, for certain, what happens after death?",
+          "vibe": "truth",
+          "difficulty": 3
+        },
+        {
+          "id": "afterlife-seed-04",
+          "contentType": "question",
+          "text": "Have you ever felt the presence of someone who's gone?",
+          "vibe": "wonder",
+          "difficulty": 3
+        },
+        {
+          "id": "afterlife-seed-05",
+          "contentType": "question",
+          "text": "Does the idea of simply not existing frighten you?",
+          "vibe": "fear",
+          "difficulty": 3
+        },
+        {
+          "id": "afterlife-seed-06",
+          "contentType": "question",
+          "text": "Would your life change if you knew there was nothing after?",
+          "vibe": "decision",
+          "difficulty": 3
+        },
+        {
+          "id": "afterlife-seed-07",
+          "contentType": "question",
+          "text": "Do you talk to people you've lost?",
+          "vibe": "solace",
+          "difficulty": 3
+        },
+        {
+          "id": "afterlife-seed-08",
+          "contentType": "question",
+          "text": "Is your belief about the afterlife the one you were raised with?",
+          "vibe": "identity",
+          "difficulty": 3
+        },
+        {
+          "id": "afterlife-seed-09",
+          "contentType": "question",
+          "text": "Is being remembered enough of an afterlife for you?",
+          "vibe": "legacy",
+          "difficulty": 3
+        },
+        {
+          "id": "afterlife-seed-10",
+          "contentType": "question",
+          "text": "Have you made peace with not knowing?",
+          "vibe": "acceptance",
+          "difficulty": 3
+        }
+      ]
+    }
+  ]
+}

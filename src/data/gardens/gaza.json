@@ -1,0 +1,88 @@
+{
+  "id": "gaza",
+  "name": "War on Gaza",
+  "description": "Where do you stand — and do you know why?",
+  "icon": "🌍",
+  "color": "#475569",
+  "seedCost": 400,
+  "tier": 3,
+  "root": null,
+  "branches": [
+    {
+      "key": "opening",
+      "name": "the questions",
+      "items": [
+        {
+          "id": "gaza-seed-01",
+          "contentType": "question",
+          "text": "Do you know enough about this war to defend your opinion of it?",
+          "vibe": "knowledge",
+          "difficulty": 3
+        },
+        {
+          "id": "gaza-seed-02",
+          "contentType": "question",
+          "text": "Have you changed your mind about anything in this war since it began?",
+          "vibe": "reflection",
+          "difficulty": 3
+        },
+        {
+          "id": "gaza-seed-03",
+          "contentType": "question",
+          "text": "Does where you get your news decide what you believe about Gaza?",
+          "vibe": "truth",
+          "difficulty": 3
+        },
+        {
+          "id": "gaza-seed-04",
+          "contentType": "question",
+          "text": "Can you hold grief for both peoples at once?",
+          "vibe": "empathy",
+          "difficulty": 3
+        },
+        {
+          "id": "gaza-seed-05",
+          "contentType": "question",
+          "text": "Have you stayed quiet about this war to keep the peace somewhere in your life?",
+          "vibe": "courage",
+          "difficulty": 3
+        },
+        {
+          "id": "gaza-seed-06",
+          "contentType": "question",
+          "text": "Does this war belong in your voting decisions?",
+          "vibe": "decision",
+          "difficulty": 3
+        },
+        {
+          "id": "gaza-seed-07",
+          "contentType": "question",
+          "text": "Do you separate a people from their government?",
+          "vibe": "perspective",
+          "difficulty": 3
+        },
+        {
+          "id": "gaza-seed-08",
+          "contentType": "question",
+          "text": "Is \"it's complicated\" an honest answer for you, or an escape?",
+          "vibe": "honesty",
+          "difficulty": 3
+        },
+        {
+          "id": "gaza-seed-09",
+          "contentType": "question",
+          "text": "Would you feel differently about this war if you knew someone living it?",
+          "vibe": "empathy",
+          "difficulty": 3
+        },
+        {
+          "id": "gaza-seed-10",
+          "contentType": "question",
+          "text": "Do you believe peace there is possible in your lifetime?",
+          "vibe": "perspective",
+          "difficulty": 3
+        }
+      ]
+    }
+  ]
+}

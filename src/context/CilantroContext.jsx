@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { questions, gardens, getDailyQuestions, SEEDS } from '../data/questions';
+import { gardenCoverage } from '../utils/gardenCoverage';
 import { getEchoCandidate, ECHO_FREQUENCY } from '../utils/insights';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { migrateLocalData } from '../lib/migrateLocal';
@@ -660,13 +661,61 @@ export function CilantroProvider({ children }) {
     return garden.items.slice(0, 3);
   }, [seeds, showSeedAnimation]);
 
+  // ── Garden coverage (branch-based, derived from answers) ──
+  // One coverage object per garden, recomputed only when answers change.
+  const gardenCoverageMap = useMemo(() => {
+    const map = {};
+    for (const g of gardens) map[g.id] = gardenCoverage(g, answers);
+    return map;
+  }, [answers]);
+
+  const getGardenCoverage = useCallback(
+    (gardenId) => gardenCoverageMap[gardenId] || null,
+    [gardenCoverageMap]
+  );
+
+  // Shared completion accounting for a freshly-recorded garden item answer.
+  // Progress + completion derive from coverage (not an index), so it is correct
+  // no matter which branch/order the item was answered in. The completion seed
+  // bonus fires exactly once, when the LAST remaining item of a ROOTLESS garden
+  // becomes answered; rooted gardens pay out on the root answer instead (see
+  // handleGardenRootAnswer). "Was complete before" is derived from coverage
+  // prior to the new answer so a bonus is never double-awarded.
+  const finishGardenItem = useCallback((garden, newAnswer) => {
+    const before = gardenCoverage(garden, answers);
+    const after = gardenCoverage(garden, [...answers, newAnswer]);
+
+    setGardenCompletions((prev) => ({ ...prev, [garden.id]: after.answered }));
+
+    const rootless = !garden.root;
+    const wasComplete = before.total > 0 && before.answered === before.total;
+    const nowComplete = after.total > 0 && after.answered === after.total;
+
+    upsertGardenState(garden.id, {
+      unlocked: true,
+      progress: after.answered,
+      completed_at: rootless && nowComplete ? new Date().toISOString() : null,
+    });
+
+    if (rootless && nowComplete && !wasComplete) {
+      const totalDifficulty = garden.items.reduce((sum, item) => sum + item.difficulty, 0);
+      const bonus = totalDifficulty * SEEDS.GARDEN_COMPLETION_MULTIPLIER;
+      setSeeds((prev) => prev + bonus);
+      showSeedAnimation(`+${bonus} bonus!`);
+      return true;
+    }
+    return false;
+  }, [answers, showSeedAnimation, upsertGardenState]);
+
   // ── Garden answer (for question items) ──
-  const handleGardenAnswer = useCallback((garden, itemIndex, answer) => {
-    const currentItem = garden.items[itemIndex];
+  const handleGardenAnswer = useCallback((garden, item, answer) => {
+    // TODO(garden-roots UI): remove shim — GardenDetail still calls with an index.
+    const currentItem = typeof item === 'number' ? garden.items[item] : item;
     earnSeeds(currentItem.difficulty);
 
     const newAnswer = {
       id: crypto.randomUUID(),
+      questionSlug: currentItem.id,
       text: currentItem.text,
       vibe: currentItem.vibe || garden.name.toLowerCase(),
       difficulty: currentItem.difficulty,
@@ -678,36 +727,18 @@ export function CilantroProvider({ children }) {
     setAnswers((prev) => [...prev, newAnswer]);
     insertAnswerRow(newAnswer, 'garden');
 
-    const newProgress = Math.max(gardenCompletions[garden.id] || 0, itemIndex + 1);
-    setGardenCompletions((prev) => ({
-      ...prev,
-      [garden.id]: Math.max((prev[garden.id] || 0), itemIndex + 1),
-    }));
-
-    const completed = itemIndex >= garden.items.length - 1;
-    upsertGardenState(garden.id, {
-      unlocked: true,
-      progress: newProgress,
-      completed_at: completed ? new Date().toISOString() : null,
-    });
-
-    if (completed) {
-      const totalDifficulty = garden.items.reduce((sum, item) => sum + item.difficulty, 0);
-      const bonus = totalDifficulty * SEEDS.GARDEN_COMPLETION_MULTIPLIER;
-      setSeeds((prev) => prev + bonus);
-      showSeedAnimation(`+${bonus} bonus!`);
-      return true;
-    }
-    return false;
-  }, [earnSeeds, gardenCompletions, showSeedAnimation, insertAnswerRow, upsertGardenState]);
+    return finishGardenItem(garden, newAnswer);
+  }, [earnSeeds, insertAnswerRow, finishGardenItem]);
 
   // ── Garden continue (for quote/vibe items) ──
-  const handleGardenContinue = useCallback((garden, itemIndex) => {
-    const currentItem = garden.items[itemIndex];
+  const handleGardenContinue = useCallback((garden, item) => {
+    // TODO(garden-roots UI): remove shim — GardenDetail still calls with an index.
+    const currentItem = typeof item === 'number' ? garden.items[item] : item;
     earnSeeds(1);
 
     const newAnswer = {
       id: crypto.randomUUID(),
+      questionSlug: currentItem.id,
       text: currentItem.text,
       vibe: currentItem.vibe || garden.name.toLowerCase(),
       difficulty: currentItem.difficulty,
@@ -719,28 +750,48 @@ export function CilantroProvider({ children }) {
     setAnswers((prev) => [...prev, newAnswer]);
     insertAnswerRow(newAnswer, 'garden');
 
-    const newProgress = Math.max(gardenCompletions[garden.id] || 0, itemIndex + 1);
-    setGardenCompletions((prev) => ({
-      ...prev,
-      [garden.id]: Math.max((prev[garden.id] || 0), itemIndex + 1),
-    }));
+    return finishGardenItem(garden, newAnswer);
+  }, [earnSeeds, insertAnswerRow, finishGardenItem]);
 
-    const completed = itemIndex >= garden.items.length - 1;
+  // ── Garden root answer (the earned final question; yes/no only, no skip) ──
+  // The rooted-garden payoff: recorded like any answer but awards the completion
+  // bonus here instead of on the last branch item. Guarded on prior root state
+  // so re-answering never re-pays the bonus.
+  const handleGardenRootAnswer = useCallback((garden, answer) => {
+    if (!garden.root) return false;
+    const root = garden.root;
+    earnSeeds(root.difficulty);
+
+    const newAnswer = {
+      id: crypto.randomUUID(),
+      questionSlug: root.id,
+      text: root.text,
+      vibe: root.vibe || garden.name.toLowerCase(),
+      difficulty: root.difficulty,
+      gardenId: garden.id,
+      gardenName: garden.name,
+      answer,
+      timestamp: new Date().toISOString(),
+    };
+    setAnswers((prev) => [...prev, newAnswer]);
+    insertAnswerRow(newAnswer, 'garden');
+
+    const before = gardenCoverage(garden, answers);
     upsertGardenState(garden.id, {
       unlocked: true,
-      progress: newProgress,
-      completed_at: completed ? new Date().toISOString() : null,
+      progress: before.answered,
+      completed_at: new Date().toISOString(),
     });
 
-    if (completed) {
-      const totalDifficulty = garden.items.reduce((sum, item) => sum + item.difficulty, 0);
+    if (before.rootAnswer == null) {
+      const totalDifficulty = garden.items.reduce((sum, it) => sum + it.difficulty, 0);
       const bonus = totalDifficulty * SEEDS.GARDEN_COMPLETION_MULTIPLIER;
       setSeeds((prev) => prev + bonus);
       showSeedAnimation(`+${bonus} bonus!`);
       return true;
     }
     return false;
-  }, [earnSeeds, gardenCompletions, showSeedAnimation, insertAnswerRow, upsertGardenState]);
+  }, [answers, earnSeeds, insertAnswerRow, showSeedAnimation, upsertGardenState]);
 
   // ── Daily 30 methods ──
   const handleDaily30Answer = useCallback((questionIndex, answer) => {
@@ -816,9 +867,9 @@ export function CilantroProvider({ children }) {
     seeds, seedAnimation, earnSeeds, showSeedAnimation,
     // Gardens
     gardens, gardenUnlocks, gardenCompletions,
-    isGardenUnlocked, getGardenProgress,
+    isGardenUnlocked, getGardenProgress, getGardenCoverage,
     unlockGarden, peekGarden,
-    handleGardenAnswer, handleGardenContinue,
+    handleGardenAnswer, handleGardenContinue, handleGardenRootAnswer,
     // Daily 30
     dailyQuestions, dailyAnswered, dailyStreak,
     handleDaily30Answer,
