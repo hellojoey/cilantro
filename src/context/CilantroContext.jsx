@@ -709,8 +709,7 @@ export function CilantroProvider({ children }) {
 
   // ── Garden answer (for question items) ──
   const handleGardenAnswer = useCallback((garden, item, answer) => {
-    // TODO(garden-roots UI): remove shim — GardenDetail still calls with an index.
-    const currentItem = typeof item === 'number' ? garden.items[item] : item;
+    const currentItem = item;
     earnSeeds(currentItem.difficulty);
 
     const newAnswer = {
@@ -732,8 +731,7 @@ export function CilantroProvider({ children }) {
 
   // ── Garden continue (for quote/vibe items) ──
   const handleGardenContinue = useCallback((garden, item) => {
-    // TODO(garden-roots UI): remove shim — GardenDetail still calls with an index.
-    const currentItem = typeof item === 'number' ? garden.items[item] : item;
+    const currentItem = item;
     earnSeeds(1);
 
     const newAnswer = {

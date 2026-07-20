@@ -5,7 +5,7 @@ import { gardens } from '../data/questions';
 
 export default function Gardens() {
   const navigate = useNavigate();
-  const { getGardenProgress } = useCilantro();
+  const { getGardenCoverage } = useCilantro();
 
   return (
     <div className="min-h-screen bg-canvas flex flex-col">
@@ -33,11 +33,15 @@ export default function Gardens() {
 
           <div className="space-y-4">
             {gardens.map((garden) => {
-              const progress = getGardenProgress(garden.id);
-              const total = garden.items.length;
+              // Rooted gardens count the root as a +1 item at both ends of the
+              // ratio; rootless gardens are just answered/total.
+              const coverage = getGardenCoverage(garden.id);
+              const rooted = Boolean(garden.root);
+              const progress = coverage.answered + (rooted && coverage.rootAnswer ? 1 : 0);
+              const total = coverage.total + (rooted ? 1 : 0);
               const started = progress > 0;
-              const complete = progress >= total;
-              const progressPercent = (progress / total) * 100;
+              const complete = total > 0 && progress >= total;
+              const progressPercent = total > 0 ? (progress / total) * 100 : 0;
 
               return (
                 <button

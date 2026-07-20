@@ -124,6 +124,32 @@ const baseAnswers = [
   );
 }
 
+// ── Case: a COMPLETE small branch never reads "just started" — counts only ──
+{
+  const tiny = {
+    id: 'tiny',
+    root: null,
+    branches: [
+      {
+        key: 'small',
+        name: 'small',
+        items: [
+          { id: 'tiny-1', text: 't1' },
+          { id: 'tiny-2', text: 't2' },
+        ],
+      },
+    ],
+  };
+  const answers = [ans('tiny', 'tiny-1', 'yes', 't1'), ans('tiny', 'tiny-2', 'no', 't2')];
+  const { branchLines } = gardenVerdict(tiny, answers);
+  ok(
+    'complete small branch → count-only line, no "just started", no majority word',
+    branchLines[0].line === 'On small, you said 1 yes and 1 no.' &&
+      !branchLines[0].line.includes('started') &&
+      !branchLines[0].line.includes('mostly')
+  );
+}
+
 // ── Case: reflected covers coverage but is excluded from yes/no counts ──
 {
   // yeslean: 3 yes + 2 reflected → answered 5/5, n=3, 100% yes → yes-lean "3 out of 3"

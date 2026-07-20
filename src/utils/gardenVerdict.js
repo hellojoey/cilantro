@@ -48,8 +48,10 @@ function branchLine(b) {
   const { name, answered, total, yes, no } = b;
   const n = yes + no;
 
-  // Too little answered to weigh — report progress, not a lean.
-  if (answered < MIN_YN) {
+  // Too little answered to weigh — report progress, not a lean. Only while the
+  // branch is genuinely unfinished: a COMPLETE two-question branch has not
+  // "only just started", however small it is.
+  if (answered < MIN_YN && answered < total) {
     return `On ${name}, you've only just started (${answered} of ${total}).`;
   }
   // "mostly" only when the direction is a strict majority (>= 65%, n >= 3).
@@ -60,9 +62,12 @@ function branchLine(b) {
     return `On ${name}, you said no ${no} times out of ${n} — you've mostly been saying no to this.`;
   }
   // Split — no strict majority. Counts stand on their own, no majority word.
-  // (In the pathological all-reflected branch, n is 0 and this reads
-  //  "0 yes, 0 no"; still literally true, and unreachable from real content.)
-  return `On ${name}, you're split — ${yes} yes, ${no} no.`;
+  if (n >= MIN_YN) {
+    return `On ${name}, you're split — ${yes} yes, ${no} no.`;
+  }
+  // Too few yes/no answers to call anything (tiny branch, or mostly
+  // reflections): the counts alone, which are always literally true.
+  return `On ${name}, you said ${yes} yes and ${no} no.`;
 }
 
 function buildPreRootLine(total) {
